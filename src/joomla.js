@@ -2,7 +2,7 @@ const joomlaCommands = () => {
     const installJoomla = (config) => {
         cy.log(`**Install Joomla**`)
         // Load installation page and check for language dropdown
-        cy.visit('installation/index.php')
+        cy.visit('installation/index.php', {headers: {'Accept-Language':'de-DE,de;q=0.8,en-US;q=0.5,en;q=0.3'}})
         cy.get('#jform_language').should('be.visible')
 
         // Select en-GB as installation language
@@ -30,6 +30,7 @@ const joomlaCommands = () => {
         cy.get('#jform_db_prefix').clear().type(config.db_prefix)
         cy.intercept('index.php?task=installation.*').as('ajax_requests')
         cy.get('#setupButton').click()
+        cy.wait('@ajax_requests')
         cy.wait('@ajax_requests')
         cy.wait('@ajax_requests')
         cy.wait('@ajax_requests')
