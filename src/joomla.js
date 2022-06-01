@@ -2,7 +2,7 @@ const joomlaCommands = () => {
     const installJoomla = (config) => {
         cy.log(`**Install Joomla**`)
         // Load installation page and check for language dropdown
-        cy.visit('installation/index.php', {headers: {'Accept-Language':'de-DE,de;q=0.8,en-US;q=0.5,en;q=0.3'}})
+        cy.visit('installation/index.php')
         cy.get('#jform_language').should('be.visible')
 
         // Select en-GB as installation language
@@ -37,8 +37,7 @@ const joomlaCommands = () => {
         cy.wait('@ajax_requests')
         cy.wait('@ajax_requests')
         cy.wait('@ajax_requests')
-        cy.wait('@ajax_requests')
-        cy.contains('Congratulations! Your Joomla site is ready.')
+        cy.get('#installCongrat').should('be.visible')
     }
 
     Cypress.Commands.add('installJoomla', installJoomla)
