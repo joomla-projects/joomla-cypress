@@ -23,7 +23,7 @@ const userCommands = () => {
     const doAdministratorLogout = () => {
         cy.get('.header-item .header-profile > .dropdown-toggle').click()
         cy.get('.header-item .header-profile a.dropdown-item:last-child').click()
-        cy.contains('#mod-login-username')
+        cy.get('#mod-login-username').should('exist')
     }
 
     Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout)
@@ -37,7 +37,7 @@ const userCommands = () => {
         cy.get('#username').type(user)
         cy.get('#password').type(password)
         cy.get('.com-users-login__form button[type=submit]').click()
-        cy.contains('.mod-login-logout button[type=submit]').should('contain', 'Log Out')
+        cy.get('.mod-login-logout button[type=submit]').should('exist').should('contain', 'Log out')
     }
 
     Cypress.Commands.add('doFrontendLogin', doFrontendLogin)
@@ -48,7 +48,7 @@ const userCommands = () => {
         // if (!password) password = this.joomlaconfig.password
 
         cy.visit('index.php?option=com_users&view=login')
-        cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log Out').click()
+        cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log out').click()
     }
 
     Cypress.Commands.add('doFrontendLogout', doFrontendLogout)
