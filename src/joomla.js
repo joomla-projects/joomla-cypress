@@ -61,6 +61,61 @@ const joomlaCommands = () => {
   }
 
   Cypress.Commands.add('setErrorReportingToDevelopment', setErrorReportingToDevelopment)
+
+    /**
+     * Installs Joomla with Multilingual Feature active
+     *
+     * @param   array  $languages  Array containing the language names to be installed
+     *
+     * @return  void
+     *
+     * @since   3.0.0
+     * @throws Exception
+     * @example : $this->installJoomlaMultilingualSite(['Spanish', 'French']);
+     *
+     */
+    public function installJoomlaMultilingualSite($languages = array())
+    {
+        if (!$languages)
+        {
+            // If no language is passed French will be installed by default
+            $languages[] = 'French';
+        }
+
+        $this->installJoomla();
+
+        $this->debug('I go to Install Languages page');
+        $this->click(['id' => 'instLangs']);
+        $this->waitForText('Install Language packages', $this->config['timeout'], ['xpath' => '//h3']);
+
+        foreach ($languages as $language)
+        {
+            $this->debug('I mark the checkbox of the language: ' . $language);
+            $this->click(['xpath' => "//label[contains(text()[normalize-space()], '$language')]"]);
+        }
+
+        $this->click(['link' => 'Next']);
+        $this->waitForText('Multilingual', $this->config['timeout'], ['xpath' => '//h3']);
+        $this->selectOptionInRadioField('Activate the multilingual feature', 'Yes');
+        $this->waitForElementVisible(['id' => 'jform_activatePluginLanguageCode-lbl']);
+        $this->selectOptionInRadioField('Install localised content', 'Yes');
+        $this->selectOptionInRadioField('Enable the language code plugin', 'Yes');
+        $this->click(['link' => 'Next']);
+
+        $this->waitForText('Congratulations! Joomla! is now installed.', $this->config['timeout'], ['xpath' => '//h2']);
+
+        if ($this->haveVisible('#removeInstallationFolder'))
+        {
+            $this->debug('Removing Installation Folder');
+            $this->click(['xpath' => "//input[@value='Remove \"installation\" folder']"]);
+
+            // Wait until the installation folder is gone and the "customize installation" box has been removed
+            $this->waitForElementNotVisible(['id' => 'installAddFeatures']);
+        }
+
+        $this->debug('Joomla is now installed');
+        $this->see('Congratulations! Joomla! is now installed.', ['xpath' => '//h2']);
+    }
 }
 
 module.exports = {
