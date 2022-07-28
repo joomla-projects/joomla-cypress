@@ -66,34 +66,25 @@ const userCommands = () => {
 
         cy.checkForPhpNoticesOrWarnings()
 
+        cy.contains('button', 'Account Details').click()
         cy.get('#jform_name').clear().type(name)
         cy.get('#jform_username').clear().type(username)
         cy.get('#jform_email').clear().type(email)
         cy.get('#jform_password').clear().type(password)
         cy.get('#jform_password2').clear().type(password)
 
-        $this->click($this->locator->adminManageUsersAccountDetailsTab);
-        $this->fillField(array('id' => 'jform_name'), $name);
-        $this->fillField(array('id' => 'jform_username'), $username);
-        $this->fillField(array('id' => 'jform_password'), $password);
-        $this->fillField(array('id' => 'jform_password2'), $password);
-        $this->fillField(array('id' => 'jform_email'), $email);
-
-        if (!empty($userGroup))
+        if (!userGroup)
         {
-            $this->debug('I open the Assigned User Groups Tab and assign the user group');
-            $this->click($this->locator->adminManageUsersUserGroupAssignmentTab);
-            $this->click($this->locator->adminManageUsersUserGroupAssignmentCheckbox($userGroup));
+            cy.contains('button', 'Assigned User Groups').click()
+            cy.contains('#groups label', userGroup).click()
         }
 
-        $this->debug('Click new user apply button');
-        $this->click($this->locator->adminToolbarButtonApply);
+        cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit2')
+        cy.clickToolbarButton('save')
+        cy.wait('@useredit2')
 
-        $this->debug('see a success message after saving the user');
-        $this->waitForText('User saved', $this->config['timeout'], '#system-message-container');
-        $this->see('User saved', '#system-message-container');
-        $this->checkForPhpNoticesOrWarnings();
-
+        cy.get('#system-message-container').contains('User saved').should('exist')
+        cy.checkForPhpNoticesOrWarnings()
     }
 
     Cypress.Commands.add('createUser', createUser)

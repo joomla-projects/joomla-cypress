@@ -130,20 +130,12 @@ const supportCommands = () => {
     $this->see($name, ['xpath' => "//form[@id='adminForm']/div/table/tbody"]);
   }
 
-  /**
-   * Function to select all the item in the Search results in Administrator List
-   *
-   * Note: We recommend use of checkAllResults function only after searchForItem to be sure you are selecting only the desired result set
-   *
-   * @return void
-   */
-  public function checkAllResults()
-  {
-    $this->debug("Selecting Checkall button");
-    $this->click(['xpath' => "//thead//input[@name='checkall-toggle' or @name='toggle']"]);
+  const checkAllResults = () => {
+    cy.log("Selecting Checkall button")
+    cy.get('thead input[name=\'checkall-toggle\']').click()
   }
 
-
+  Cypress.Commands.add('checkAllResults', checkAllResults)
 
 
 
