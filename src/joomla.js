@@ -42,7 +42,7 @@ const joomlaCommands = () => {
 
   Cypress.Commands.add('installJoomla', installJoomla)
 
-  const disableStatistics = (config) => {
+  const disableStatistics = () => {
     cy.log(`**Disable Statistics**`)
     cy.get('.js-pstats-btn-allow-never').click()
     cy.wait(1)
@@ -50,7 +50,7 @@ const joomlaCommands = () => {
 
   Cypress.Commands.add('disableStatistics', disableStatistics)
 
-  const setErrorReportingToDevelopment = (config) => {
+  const setErrorReportingToDevelopment = () => {
     cy.visit('administrator/index.php?option=com_config')
     cy.contains('.page-title', 'Global Configuration').scrollIntoView()
     cy.get("div[role='tablist'] button[aria-controls='page-server']").click()
