@@ -101,30 +101,14 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkAllResults', checkAllResults)
 
+  /**const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
+    cy.log('I open the menus page');
+    cy.visit('administrator/index.php?option=com_menus&view=menus')
+    cy.checkForPhpNoticesOrWarnings();
 
-
-
-  /**
-   * Creates a menu item with the Joomla menu manager, only working for menu items without additional required fields
-   *
-   * @param   string  $menuTitle     The menu item title
-   * @param   string  $menuCategory  The category of the menu type (for example Weblinks)
-   * @param   string  $menuItem      The menu item type / link text (for example List all Web Link Categories)
-   * @param   string  $menu          The menu where the item should be created
-   * @param   string  $language      If you are using Multilingual feature, the language for the menu
-   *
-   * @return  void
-   *
-   * @since   3.0.0
-   * @throws Exception
-   */
-  public function createMenuItem($menuTitle, $menuCategory, $menuItem, $menu = 'Main Menu', $language = 'All')
-  {
-    $this->debug("I open the menus page");
-    $this->amOnPage('administrator/index.php?option=com_menus&view=menus');
-    $this->waitForText('Menus', $this->config['timeout'], ['css' => 'H1']);
-    $this->checkForPhpNoticesOrWarnings();
-
+    cy.log('I click in the menu: ' + menu)
+    cy.intercept('administrator/index.php?option=com_menus&view=items*').as('menu_itens')
+    cy.get('table a').contains(menu).click()
     $this->debug("I click in the menu: $menu");
     $this->click(['link' => $menu]);
     $this->waitForText('Menus: Items', $this->config['timeout'], ['css' => 'H1']);
@@ -165,84 +149,34 @@ const supportCommands = () => {
     $this->waitForText('Menu item successfully saved', $this->config['timeout'], ['id' => 'system-message-container']);
   }
 
-  /**
-   * Function to filter results in Joomla! Administrator.
-   *
-   * @param   string  $label  Label of the Filter you want to use.
-   * @param   string  $value  Value you want to set in the filters.
-   *
-   * @return  void
-   *
-   * @since   3.0.0
-   */
-  public function setFilter($label, $value)
+  Cypress.Commands.add('createMenuItem', createMenuItem)**/
+
+  const createCategory = (title, extension = '') =>
   {
-    $label = strtolower($label);
+    cy.log('I\'m creating a category')
 
-    $filters = array(
-        "select status" 	=> "filter_published",
-      "select access"		=> "filter_access",
-      "select language" 	=> "filter_language",
-      "select tag"		=> "filter_tag",
-      "select max levels"	=> "filter_level"
-  );
-
-    $this->click(['xpath' => "//button[@data-original-title='Filter the list items.']"]);
-    $this->debug('I try to select the filters');
-
-    foreach ($filters as $fieldName => $id)
+    if (extension)
     {
-      if ($fieldName == $label)
-      {
-        $this->selectOptionInChosenByIdUsingJs($id, $value);
-      }
+      extension = '&extension=' + extension;
     }
 
-    $this->debug('Applied filters');
+    cy.visit('administrator/index.php?option=com_categories' + extension)
+    cy.checkForPhpNoticesOrWarnings()
+
+    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit*').as('category')
+    cy.clickToolbarButton('New')
+    cy.wait('@category')
+    cy.checkForPhpNoticesOrWarnings()
+    cy.get('#jform_title').clear().type(title)
+
+    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit&id=*').as('category_save')
+    cy.clickToolbarButton('Save')
+    cy.wait('@category_save')
+    cy.get('#system-message-container').contains('Category saved').should('exist')
+    cy.checkForPhpNoticesOrWarnings()
   }
 
-  /**
-   * Create a new category
-   *
-   * @param   string  $title      Title of the new category
-   * @param   string  $extension  Optional extension to use
-   *
-   * @return  void
-   *
-   * @since   3.7.5
-   * @throws Exception
-   */
-  public function createCategory($title, $extension = '')
-  {
-    $this->debug('Category creation in /administrator/');
-    $this->doAdministratorLogin();
-
-    if (!empty($extension))
-    {
-      $extension = '&extension=' . $extension;
-    }
-
-    $this->amOnPage('administrator/index.php?option=com_categories' . $extension);
-
-    $this->waitForElement(['class' => 'page-title']);
-    $this->checkForPhpNoticesOrWarnings();
-
-    $this->debug('Click new category button');
-    $this->click($this->locator->adminToolbarButtonNew);
-
-    $this->waitForElement(['class' => 'page-title']);
-
-    $this->checkForPhpNoticesOrWarnings();
-    $this->fillField(['id' => 'jform_title'], $title);
-
-    $this->debug('Click new category apply button');
-    $this->click($this->locator->adminToolbarButtonApply);
-
-    $this->debug('see a success message after saving the category');
-
-    $this->waitForText('Category saved', $this->config['timeout'], ['id' => 'system-message-container']);
-    $this->checkForPhpNoticesOrWarnings();
-  }
+  Cypress.Commands.add('createCategory', createCategory)
 }
 
 module.exports = {
