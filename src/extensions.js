@@ -124,7 +124,9 @@ const extensionsCommands = () => {
         $this->checkForPhpNoticesOrWarnings();
         $this->searchForItem($pluginName);
         $this->waitForElement($this->searchResultPluginName($pluginName), 30);
-        $this->checkExistenceOf($pluginName);
+        $this->debug("Verifying if $pluginName exist in search result");
+        $this->seeElement(['xpath' => "//form[@id='adminForm']/div/table/tbody"]);
+        $this->see($pluginName, ['xpath' => "//form[@id='adminForm']/div/table/tbody"]);
         $this->click(['xpath' => "//input[@id='cb0']"]);
         $this->click(['xpath' => "//div[@id='toolbar-publish']/button"]);
         $this->waitForText(' enabled', $this->config['timeout'], ['id' => 'system-message-container']);

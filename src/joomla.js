@@ -79,28 +79,9 @@ const joomlaCommands = () => {
     })
 
     cy.get('#installLanguagesButton').click()
+    cy.get('#installCongrat').should('be.visible')
 
-      $this->click(['link' => 'Next']);
-      $this->waitForText('Multilingual', $this->config['timeout'], ['xpath' => '//h3']);
-      $this->selectOptionInRadioField('Activate the multilingual feature', 'Yes');
-      $this->waitForElementVisible(['id' => 'jform_activatePluginLanguageCode-lbl']);
-      $this->selectOptionInRadioField('Install localised content', 'Yes');
-      $this->selectOptionInRadioField('Enable the language code plugin', 'Yes');
-      $this->click(['link' => 'Next']);
-
-      $this->waitForText('Congratulations! Joomla! is now installed.', $this->config['timeout'], ['xpath' => '//h2']);
-
-      if ($this->haveVisible('#removeInstallationFolder'))
-      {
-          $this->debug('Removing Installation Folder');
-          $this->click(['xpath' => "//input[@value='Remove \"installation\" folder']"]);
-
-          // Wait until the installation folder is gone and the "customize installation" box has been removed
-          $this->waitForElementNotVisible(['id' => 'installAddFeatures']);
-      }
-
-      $this->debug('Joomla is now installed');
-      $this->see('Congratulations! Joomla! is now installed.', ['xpath' => '//h2']);
+    cy.log('Joomla is now installed')
   }
 
   Cypress.Commands.add('installJoomlaMultilingualSite', installJoomlaMultilingualSite)

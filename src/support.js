@@ -75,25 +75,6 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
 
-  /**
-   * Selects an option in a Joomla Radio Field based on its label
-   *
-   * @param   string  $label   The text in the <label> with for attribute that links to the radio element
-   * @param   string  $option  The text in the <option> to be selected in the chosen radio button
-   *
-   * @return  void
-   *
-   * @since   3.0.0
-   */
-  public function selectOptionInRadioField($label, $option)
-  {
-    $this->debug("Trying to select the $option from the $label");
-    $label = $this->findField(['xpath' => "//label[contains(normalize-space(string(.)), '$label')]"]);
-    $radioId = $label->getAttribute('for');
-
-    $this->click("//fieldset[@id='$radioId']/label[contains(normalize-space(string(.)), '$option')]");
-  }
-
   const searchForItem = (name = null) => {
     if (name)
     {
@@ -112,23 +93,6 @@ const supportCommands = () => {
   }
 
   Cypress.Commands.add('searchForItem', searchForItem)
-
-  /**
-   * Function to Check of the Item Exist in Search Results in Administrator List.
-   *
-   * note: on long lists of items the item that your are looking for may not appear in the first page. We recommend
-   * the usage of searchForItem method before using the current method.
-   *
-   * @param   String  $name  Name of the Item which we are Searching For
-   *
-   * @return void
-   */
-  public function checkExistenceOf($name)
-  {
-    $this->debug("Verifying if $name exist in search result");
-    $this->seeElement(['xpath' => "//form[@id='adminForm']/div/table/tbody"]);
-    $this->see($name, ['xpath' => "//form[@id='adminForm']/div/table/tbody"]);
-  }
 
   const checkAllResults = () => {
     cy.log("Selecting Checkall button")
@@ -235,26 +199,6 @@ const supportCommands = () => {
     }
 
     $this->debug('Applied filters');
-  }
-
-  /**
-   * Function to Verify the Tabs on a Joomla! screen
-   *
-   * @param   array  $expectedTabs  Expected Tabs on the Page
-   * @param   Mixed  $tabsLocator   Locator for the Tabs in Edit View
-   *
-   * @return  void
-   *
-   * @since   3.0.0
-   */
-  public function verifyAvailableTabs($expectedTabs, $tabsLocator = ['xpath' => "//ul[@id='myTabTabs']/li/a"])
-  {
-    $actualArrayOfTabs = $this->grabMultiple($tabsLocator);
-
-    $this->debug("Fetch the current list of Tabs in the edit view which is: " . implode(", ", $actualArrayOfTabs));
-    $url = $this->grabFromCurrentUrl();
-    $this->assertEquals($expectedTabs, $actualArrayOfTabs, "Tab Labels do not match on edit view of" . $url);
-    $this->debug('Verify the Tabs');
   }
 
   /**
