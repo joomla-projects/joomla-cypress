@@ -1,95 +1,131 @@
 const userCommands = () => {
-    const doAdministratorLogin = (user, password, useSnapshot = true) => {
-        // Aint working either...
-        // if (!user) user = this.joomlaconfig.username
-        // if (!password) password = this.joomlaconfig.password
 
-        // How does snapshotting work in cypress?
-        // if ($useSnapshot && $this->loadSessionSnapshot($user))
-        // { return; }
+  // Do administrator login
+  const doAdministratorLogin = (user, password, useSnapshot = true) => {
+    cy.log('**Do administrator login**')
+    cy.log('User: ' + user)
+    cy.log('Password: ' + password)
 
-        cy.visit('administrator/index.php')
-        cy.get('#mod-login-username').type(user)
-        cy.get('#mod-login-password').type(password)
-        cy.get('#btn-login-submit').click()
-        cy.get('h1.page-title').should('contain', 'Home Dashboard')
+    // Aint working either...
+    // if (!user) user = this.joomlaconfig.username
+    // if (!password) password = this.joomlaconfig.password
 
-        // How does snapshotting work in cypress?
-        // if ($useSnapshot) {$this->saveSessionSnapshot($user);}
-    }
+    // How does snapshotting work in cypress?
+    // if ($useSnapshot && $this->loadSessionSnapshot($user))
+    // { return; }
 
-    Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin)
+    cy.visit('administrator/index.php')
+    cy.get('#mod-login-username').type(user)
+    cy.get('#mod-login-password').type(password)
+    cy.get('#btn-login-submit').click()
+    cy.get('h1.page-title').should('contain', 'Home Dashboard')
 
-    const doAdministratorLogout = () => {
-        cy.get('.header-item .header-profile > .dropdown-toggle').click()
-        cy.get('.header-item .header-profile a.dropdown-item:last-child').click()
-        cy.get('#mod-login-username').should('exist')
-    }
+    // How does snapshotting work in cypress?
+    // if ($useSnapshot) {$this->saveSessionSnapshot($user);}
 
-    Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout)
+    cy.log('--Do administrator login--')
+  }
 
-    const doFrontendLogin = (user, password) => {
-        // Aint working either...
-        // if (!user) user = this.joomlaconfig.username
-        // if (!password) password = this.joomlaconfig.password
+  Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin)
 
-        cy.visit('index.php?option=com_users&view=login')
-        cy.get('#username').type(user)
-        cy.get('#password').type(password)
-        cy.get('.com-users-login__form button[type=submit]').click()
-        cy.get('.mod-login-logout button[type=submit]').should('exist').should('contain', 'Log out')
-    }
 
-    Cypress.Commands.add('doFrontendLogin', doFrontendLogin)
+  // Do administrator logout
+  const doAdministratorLogout = () => {
+    cy.log('**Do administrator logout**')
 
-    const doFrontendLogout = () => {
-        // Aint working either...
-        // if (!user) user = this.joomlaconfig.username
-        // if (!password) password = this.joomlaconfig.password
+    cy.get('.header-item .header-profile > .dropdown-toggle').click()
+    cy.get('.header-item .header-profile a.dropdown-item:last-child').click()
+    cy.get('#mod-login-username').should('exist')
 
-        cy.visit('index.php?option=com_users&view=login')
-        cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log out').click()
-    }
+    cy.log('--Do administrator logout--')
+  }
 
-    Cypress.Commands.add('doFrontendLogout', doFrontendLogout)
+  Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout)
 
-    const createUser = (name, username, password, email, userGroup = 'Super Users') => {
-        cy.visit('administrator/index.php?option=com_users')
 
-        cy.get('h1.page-title').should('contain.text', 'Users')
+  // Do frontend login
+  const doFrontendLogin = (user, password) => {
+    cy.log('**Do frontend login**')
+    cy.log('User: ' + user)
+    cy.log('Password: ' + password)
 
-        cy.checkForPhpNoticesOrWarnings()
+    // Aint working either...
+    // if (!user) user = this.joomlaconfig.username
+    // if (!password) password = this.joomlaconfig.password
 
-        cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit')
-        cy.clickToolbarButton('New')
-        cy.wait('@useredit')
+    cy.visit('index.php?option=com_users&view=login')
+    cy.get('#username').type(user)
+    cy.get('#password').type(password)
+    cy.get('.com-users-login__form button[type=submit]').click()
+    cy.get('.mod-login-logout button[type=submit]').should('exist').should('contain', 'Log out')
 
-        cy.checkForPhpNoticesOrWarnings()
+    cy.log('--Do frontend login--')
+  }
 
-        cy.contains('button', 'Account Details').click()
-        cy.get('#jform_name').clear().type(name)
-        cy.get('#jform_username').clear().type(username)
-        cy.get('#jform_email').clear().type(email)
-        cy.get('#jform_password').clear().type(password)
-        cy.get('#jform_password2').clear().type(password)
+  Cypress.Commands.add('doFrontendLogin', doFrontendLogin)
 
-        if (!userGroup)
-        {
-            cy.contains('button', 'Assigned User Groups').click()
-            cy.contains('#groups label', userGroup).click()
-        }
 
-        cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit2')
-        cy.clickToolbarButton('save')
-        cy.wait('@useredit2')
+  // Do frontend logout
+  const doFrontendLogout = () => {
+    cy.log('**Do frontend logout**')
 
-        cy.get('#system-message-container').contains('User saved').should('exist')
-        cy.checkForPhpNoticesOrWarnings()
-    }
+    // Aint working either...
+    // if (!user) user = this.joomlaconfig.username
+    // if (!password) password = this.joomlaconfig.password
 
-    Cypress.Commands.add('createUser', createUser)
+    cy.visit('index.php?option=com_users&view=login')
+    cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log out').click()
+
+    cy.log('--Do frontend logout--')
+  }
+
+  Cypress.Commands.add('doFrontendLogout', doFrontendLogout)
+
+
+  // Create a user
+  const createUser = (name, username, password, email, userGroup = 'Super Users') => {
+    cy.log('**Create a user**')
+    cy.log('Name: ' + name)
+    cy.log('Username: ' + username)
+    cy.log('Password: ' + password)
+    cy.log('Email: ' + email)
+    cy.log('Usergroup: ' + userGroup)
+
+    cy.visit('administrator/index.php?option=com_users')
+
+    cy.get('h1.page-title').should('contain.text', 'Users')
+
+    cy.checkForPhpNoticesOrWarnings()
+
+    cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit')
+    cy.clickToolbarButton('New')
+    cy.wait('@useredit')
+
+    cy.checkForPhpNoticesOrWarnings()
+
+    cy.contains('button', 'Account Details').click()
+    cy.get('#jform_name').clear().type(name)
+    cy.get('#jform_username').clear().type(username)
+    cy.get('#jform_email').clear().type(email)
+    cy.get('#jform_password').clear().type(password)
+    cy.get('#jform_password2').clear().type(password)
+
+    cy.contains('button', 'Assigned User Groups').click()
+    cy.contains('#groups label', userGroup).click()
+
+    cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit2')
+    cy.clickToolbarButton('save')
+    cy.wait('@useredit2')
+
+    cy.get('#system-message-container').contains('User saved').should('exist')
+    cy.checkForPhpNoticesOrWarnings()
+
+    cy.log('--Create a user--')
+  }
+
+  Cypress.Commands.add('createUser', createUser)
 }
 
 module.exports = {
-    userCommands
+  userCommands
 }

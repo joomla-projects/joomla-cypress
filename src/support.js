@@ -1,11 +1,15 @@
 const supportCommands = () => {
+
+  // Clicks on a button in the toolbar
   const clickToolbarButton = (button, subselector = null) => {
-    cy.log('**Click ' + button + ' toolbar button**')
+    cy.log('**Click on a toolbar button**')
+    cy.log('Button: ' + button)
+    cy.log('Subselector: ' + subselector)
 
     switch (button.toLowerCase())
     {
       case "new":
-        cy.get("button.button-new").click()
+        cy.get("#toolbar-new").click()
         break
       case "publish":
         cy.get("#status-group-children-publish").click()
@@ -44,6 +48,7 @@ const supportCommands = () => {
         cy.get("#toolbar-options").click()
         break
       case "empty trash":
+      case "delete":
         cy.get("#toolbar-delete").click()
         break
       case "feature":
@@ -59,30 +64,45 @@ const supportCommands = () => {
         cy.get(".button-transition.transition-" + subselector).click()
         break
     }
+
+    cy.log('--Click on a toolbar button--')
   }
 
   Cypress.Commands.add('clickToolbarButton', clickToolbarButton)
 
+
+  // Check for notices and warnings
   const checkForPhpNoticesOrWarnings = () => {
-    // $this->dontSeeInPageSource('Notice:');
-    // $this->dontSeeInPageSource('<b>Notice</b>:');
-    // $this->dontSeeInPageSource('Warning:');
-    // $this->dontSeeInPageSource('<b>Warning</b>:');
-    // $this->dontSeeInPageSource('Strict standards:');
-    // $this->dontSeeInPageSource('<b>Strict standards</b>:');
-    // $this->dontSeeInPageSource('The requested page can\'t be found');
+    cy.log('**Check for PHP notices and warnings**')
+
+    cy.contains('Notice:').should('not.exists')
+    cy.contains('<b>Notice</b>:').should('not.exists')
+    cy.contains('Warning:').should('not.exists')
+    cy.contains('<b>Warning</b>:').should('not.exists')
+    cy.contains('Strict standards:').should('not.exists')
+    cy.contains('<b>Strict standards</b>:').should('not.exists')
+    cy.contains('The requested page can\'t be found').should('not.exists')
+
+    cy.log('--Check for PHP notices and warnings--')
   }
 
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
 
+  // Search for an item
+  // TODO: deletes search field doesn't make sense to me in this context; RD)
   const searchForItem = (name = null) => {
+    cy.log('**Search for an item**')
+    cy.log('Name: ' + name)
+
     if (name)
     {
-      cy.debug("Searching for " + name)
+      cy.log("Searching for " + name)
       cy.get('#filter_search').clear().type(name)
       cy.intercept('get', 'administrator/index.php').as('filterByName')
       cy.get('.filter-search-bar__button').click()
       cy.wait('@filterByName')
+
+      cy.log('--Search for an item--')
 
       return
     }
@@ -90,80 +110,80 @@ const supportCommands = () => {
     cy.intercept('get', 'administrator/index.php').as('clearFilter')
     cy.get('.js-stools-btn-clear').click()
     cy.wait('@clearFilter')
+
+    cy.log('--Search for an item--')
   }
 
   Cypress.Commands.add('searchForItem', searchForItem)
 
+
+  // Check all filtered results
   const checkAllResults = () => {
-    cy.log("Selecting Checkall button")
+    cy.log("**Check all results**")
+
     cy.get('thead input[name=\'checkall-toggle\']').click()
+
+    cy.log("--Check all results--")
   }
 
   Cypress.Commands.add('checkAllResults', checkAllResults)
 
-  /**const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
-    cy.log('I open the menus page');
+  // Create a menu item
+  const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
+    cy.log('**Create a menu item**');
+    cy.log('Menu title: ' + menuTitle)
+    cy.log('Menu category: ' + menuCategory)
+    cy.log('Menu Item: ' + menuItem)
+    cy.log('Menu: ' + menu)
+    cy.log('Language: ' + language)
+
+    // Make sure the menu exists
     cy.visit('administrator/index.php?option=com_menus&view=menus')
     cy.checkForPhpNoticesOrWarnings();
+    cy.searchForItem(menu)
+    cy.get('#system-message-container .alert').should('not.exist')
 
-    cy.log('I click in the menu: ' + menu)
-    cy.intercept('administrator/index.php?option=com_menus&view=items*').as('menu_itens')
-    cy.get('table a').contains(menu).click()
-    $this->debug("I click in the menu: $menu");
-    $this->click(['link' => $menu]);
-    $this->waitForText('Menus: Items', $this->config['timeout'], ['css' => 'H1']);
-    $this->checkForPhpNoticesOrWarnings();
+    // Go to the menu
+    cy.get('a').contains('Menu Items').click()
+    cy.clickToolbarButton('new')
+    cy.checkForPhpNoticesOrWarnings();
 
-    $this->debug("I click new");
-    $this->click("New");
-    $this->waitForText('Menus: New Item', $this->config['timeout'], ['css' => 'h1']);
-    $this->checkForPhpNoticesOrWarnings();
-    $this->fillField(['id' => 'jform_title'], $menuTitle);
+    // Select a type for the new menu item
+    cy.get('.controls > .input-group > .btn').click();
+    cy.get('menuTypeModal').should('be.visible')
 
-    $this->debug("Open the menu types iframe");
-    $this->click(['link' => "Select"]);
-    $this->waitForElement(['id' => 'menuTypeModal'], $this->config['timeout']);
-    $this->wait(1);
-    $this->switchToIFrame("Menu Item Type");
+    cy.get('#collapseTypes button').contains(menuCategory).click()
+    cy.get('.accordion-collapse').should('be.visible')
 
-    $this->debug("Open the menu category: $menuCategory");
+    cy.get('.accordion-body a').contains(menuItem).click()
 
-    // Open the category
-    $this->wait(1);
-    $this->waitForElement(['link' => $menuCategory], $this->config['timeout']);
-    $this->click(['link' => $menuCategory]);
+    cy.get('#jform_title').click();
+    cy.get('#jform_title').type(menuTitle);
 
-    $this->debug("Choose the menu item type: $menuItem");
-    $this->wait(1);
-    $this->waitForElement(['xpath' => "//a[contains(text()[normalize-space()], '$menuItem')]"], $this->config['timeout']);
-    $this->click(['xpath' => "//div[@id='collapseTypes']//a[contains(text()[normalize-space()], '$menuItem')]"]);
-    $this->debug('I switch back to the main window');
-    $this->switchToIFrame();
-    $this->debug('I leave time to the iframe to close');
-    $this->wait(2);
-    $this->selectOptionInChosen('Language', $language);
-    $this->waitForText('Menus: New Item', '30', ['css' => 'h1']);
-    $this->debug('I save the menu');
-    $this->click("Save");
+    // TODO: Language settings
 
-    $this->waitForText('Menu item successfully saved', $this->config['timeout'], ['id' => 'system-message-container']);
+    cy.clickToolbarButton('save & close')
+    cy.get('#system-message-container').contains('saved').should('be.visible')
+
+    cy.log('--Create a menu item--');
   }
 
-  Cypress.Commands.add('createMenuItem', createMenuItem)**/
+  Cypress.Commands.add('createMenuItem', createMenuItem)
 
-  const createCategory = (title, extension = '') =>
+
+  // Create a category
+  const createCategory = (title, extension = 'com_content') =>
   {
-    cy.log('I\'m creating a category')
+    cy.log('**Create a category**')
+    cy.log('Title:' + title)
+    cy.log('Extension: ' + extension)
 
-    if (extension)
-    {
-      extension = '&extension=' + extension;
-    }
+    extension = '&extension=' + extension;
 
     cy.visit('administrator/index.php?option=com_categories' + extension)
     cy.checkForPhpNoticesOrWarnings()
 
-    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit*').as('category')
+    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit').as('category')
     cy.clickToolbarButton('New')
     cy.wait('@category')
     cy.checkForPhpNoticesOrWarnings()
@@ -172,8 +192,10 @@ const supportCommands = () => {
     cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit&id=*').as('category_save')
     cy.clickToolbarButton('Save')
     cy.wait('@category_save')
-    cy.get('#system-message-container').contains('Category saved').should('exist')
+    cy.get('#system-message-container').contains('Category saved').should('be.visible')
     cy.checkForPhpNoticesOrWarnings()
+
+    cy.log('--Create a category--')
   }
 
   Cypress.Commands.add('createCategory', createCategory)

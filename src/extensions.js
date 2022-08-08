@@ -1,227 +1,230 @@
 const extensionsCommands = () => {
 
-    // Installs a Extension in Joomla that is located in a folder inside the server
-    const installExtensionFromFolder = (path, type = 'Extension') => {
-        cy.log('**Install an extension from folder**')
-        cy.log('Path: ' + path)
-        cy.log('Type: ' + type)
+  // Installs a Extension in Joomla that is located in a folder inside the server
+  const installExtensionFromFolder = (path, type = 'Extension') => {
+    cy.log('**Install an extension from folder**')
+    cy.log('Path: ' + path)
+    cy.log('Type: ' + type)
 
-        cy.visit('/administrator/index.php?option=com_installer')
+    cy.visit('/administrator/index.php?option=com_installer')
 
-        cy.contains('Install from Folder').click()
+    cy.contains('Install from Folder').click()
 
-        cy.get('#install_directory').fill(path)
-        cy.get('#installbutton_directory').click()
+    cy.get('#install_directory').fill(path)
+    cy.get('#installbutton_directory').click()
 
-        cy.get('#system-message-container').contains('was successful')
+    cy.get('#system-message-container').contains('was successful').should('be.visible')
 
-        cy.log('--Install an extension from folder--')
-    }
+    cy.log('--Install an extension from folder--')
+  }
 
-    Cypress.Commands.add('installExtensionFromFolder', installExtensionFromFolder)
+  Cypress.Commands.add('installExtensionFromFolder', installExtensionFromFolder)
 
 
-    // Installs a Extension in Joomla that is located in a url
-    const installExtensionFromUrl = (url, type = 'Extension') => {
-        cy.log('**Install an extension from Url**')
-        cy.log('Url: ' + url)
-        cy.log('Type: ' + type)
+  // Installs a Extension in Joomla that is located in a url
+  const installExtensionFromUrl = (url, type = 'Extension') => {
+    cy.log('**Install an extension from Url**')
+    cy.log('Url: ' + url)
+    cy.log('Type: ' + type)
 
-        cy.visit('/administrator/index.php?option=com_installer')
+    cy.visit('/administrator/index.php?option=com_installer')
 
-        cy.contains('Install from URL').click()
+    cy.contains('Install from URL').click()
 
-        cy.get('#install_url').fill(url)
-        cy.get('#installbutton_url').click()
+    cy.get('#install_url').fill(url)
+    cy.get('#installbutton_url').click()
 
-        cy.get('#system-message-container').contains('was successful')
+    cy.get('#system-message-container').contains('was successful').should('be.visible')
 
-        cy.log('--Install an extension from Url--')
-    }
+    cy.log('--Install an extension from Url--')
+  }
 
-    Cypress.Commands.add('installExtensionFromUrl', installExtensionFromUrl)
+  Cypress.Commands.add('installExtensionFromUrl', installExtensionFromUrl)
 
 
-    // Installs a Extension in Joomla using the file upload option
-    const installExtensionFromFileUpload = (file, type = 'Extension') =>
-    {
-        cy.log('**Install an extension from file upload**')
-        cy.log('File: ' + file)
-        cy.log('Type: ' + type)
+  // Installs a Extension in Joomla using the file upload option
+  const installExtensionFromFileUpload = (file, type = 'Extension') =>
+  {
+    cy.log('**Install an extension from file upload**')
+    cy.log('File: ' + file)
+    cy.log('Type: ' + type)
 
-        cy.visit('/administrator/index.php?option=com_installer')
+    cy.visit('/administrator/index.php?option=com_installer')
 
-        cy.contains('Upload Package File').click()
+    cy.contains('Upload Package File').click()
 
-        document.getElementById('legacy-uploader').classList.remove('hidden')
+    document.getElementById('legacy-uploader').classList.remove('hidden')
 
-        cy.get('#install_package').attachFile(file)
+    cy.get('#install_package').attachFile(file)
 
-        cy.get('#system-message-container').contains('was successful')
+    cy.get('#system-message-container').contains('was successful').should('be.visible')
 
-        cy.log('--Install an extension from file upload--')
-    }
+    cy.log('--Install an extension from file upload--')
+  }
 
-    Cypress.Commands.add('installExtensionFromFileUpload', installExtensionFromFileUpload)
+  Cypress.Commands.add('installExtensionFromFileUpload', installExtensionFromFileUpload)
 
 
-    // Function to Enable a Plugin
-    const enablePlugin = (pluginName) =>
-    {
-        cy.log('**Enable Plugin**')
-        cy.log('Plugin Name: ' + pluginName)
+  // Uninstall Extension based on a name
+  const uninstallExtension = (extensionName) =>
+  {
+    cy.log('**Uninstall an extension**')
+    cy.log('Extension Name: ' + extensionName)
 
-        cy.visit('/administrator/index.php?option=com_plugins')
+    cy.visit('/administrator/index.php?option=com_installer&view=manage')
 
-        // TODO: Do we need this?
-        cy.checkForPhpNoticesOrWarnings()
+    cy.searchForItem(extensionName)
 
-        cy.searchForItem(pluginName)
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    cy.get('#cb0').click()
+    cy.clickToolbarButton('delete')
+    cy.get('#system-message-container').contains('was successful')
 
-        cy.get('#cb0').click()
-        cy.get('#toolbar-publish button').click()
-        cy.get('#system-message-container').contains('enabeld')
+    // Check for warnings during install
+    cy.get('joomla-alert[@type="warning"]').should('not.be.visible')
 
-        cy.log('--Enable Plugin--')
-    }
+    cy.searchForItem(extensionName)
+    cy.get('#system-message-container .alert').contains(' No Matching Results ').should('exist')
 
-    Cypress.Commands.add('enablePlugin', enablePlugin)
+    cy.log('--Uninstall an extension--')
+  }
 
+  Cypress.Commands.add('uninstallExtension', uninstallExtension)
 
-    // Uninstall Extension based on a name
-    const uninstallExtension = (extensionName) =>
-    {
-        cy.log('**Uninstall an extension**')
-        cy.log('Extension Name: ' + extensionName)
 
-        cy.visit('/administrator/index.php?option=com_installer&view=manage')
+  // Function to install a language through the interface
+  const installLanguage = (languageName) =>
+  {
+    cy.log('**Install a language**')
+    cy.log('Language Name: ' + languageName)
 
-        cy.searchForItem(extensionName)
+    cy.visit('/administrator/index.php?option=com_installer&view=manage')
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    // TODO: Do we need this?
+    cy.checkForPhpNoticesOrWarnings()
 
-        cy.get('#cb0').click()
-        cy.get('#toolbar-delete button').click()
-        cy.get('#system-message-container').contains('was successful')
+    cy.searchForItem(languageName)
 
-        // Check for warnings during install
-        cy.get('joomla-alert[@type="warning"]').should('not.be.visible')
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        cy.searchForItem(extensionName)
-        cy.get('#system-message-container .alert').contains(' No Matching Results ').should('exist')
+    cy.get('tr.row0 input').click()
+    cy.get('#system-message-container').contains('was successful').should('be.visible')
 
-        cy.log('--Uninstall an extension--')
-    }
+    cy.log('--Install a language--')
+  }
 
-    Cypress.Commands.add('uninstallExtension', uninstallExtension)
+  Cypress.Commands.add('installLanguage', installLanguage)
 
-    // Function to install a language through the interface
-    const installLanguage = (languageName) =>
-    {
-        cy.log('**Install a language**')
-        cy.log('Language Name: ' + languageName)
 
-        cy.visit('/administrator/index.php?option=com_installer&view=manage')
+  // Function to Enable a Plugin
+  const enablePlugin = (pluginName) =>
+  {
+    cy.log('**Enable Plugin**')
+    cy.log('Plugin Name: ' + pluginName)
 
-        // TODO: Do we need this?
-        cy.checkForPhpNoticesOrWarnings()
+    cy.visit('/administrator/index.php?option=com_plugins')
 
-        cy.searchForItem(languageName)
+    // TODO: Do we need this?
+    cy.checkForPhpNoticesOrWarnings()
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    cy.searchForItem(pluginName)
 
-        cy.get('tr.row0 input').click()
-        cy.get('#system-message-container').contains('was successful')
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        cy.log('--Install a language--')
-    }
+    cy.get('#cb0').click()
+    // cy.get('#toolbar-publish button').click()
+    cy.clickToolbarButton('publish')
+    cy.get('#system-message-container').contains('enabeld').should('be.visible')
 
-    Cypress.Commands.add('installLanguage', installLanguage)
+    cy.log('--Enable Plugin--')
+  }
 
+  Cypress.Commands.add('enablePlugin', enablePlugin)
 
-    // Publishes a module on frontend in given position
-    const setModulePosition = (module, position = 'position-7') =>
-    {
-        cy.log('**Set module position**')
-        cy.log('Module: ' + module)
-        cy.log('Position: ' + position)
 
-        cy.visit('administrator/index.php?option=com_modules')
+  // Publishes a module on frontend in given position
+  const setModulePosition = (module, position = 'position-7') =>
+  {
+    cy.log('**Set module position**')
+    cy.log('Module: ' + module)
+    cy.log('Position: ' + position)
 
-        cy.searchForItem(module)
+    cy.visit('administrator/index.php?option=com_modules')
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    cy.searchForItem(module)
 
-        cy.get('tr.row0 .has-context a').click()
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        // TODO: herausfinden wie ich das mit dem select mache
-        // $this->selectOptionInChosen('Position', $position);
+    cy.get('tr.row0 .has-context a').click()
 
-        cy.get('#toolbar-dropdown-save-group .button-save').click()
-        cy.get('#system-message-container').contains('saved')
+    // TODO: herausfinden wie ich das mit dem select mache
+    // $this->selectOptionInChosen('Position', $position);
 
-        cy.log('--Set module position--')
-    }
+    // cy.get('#toolbar-dropdown-save-group .button-save').click()
+    cy.clickToolbarButton('save & close')
+    cy.get('#system-message-container').contains('saved').should('be.visible')
 
-    Cypress.Commands.add('setModulePosition', setModulePosition)
+    cy.log('--Set module position--')
+  }
 
+  Cypress.Commands.add('setModulePosition', setModulePosition)
 
-    // Publishes modules
-    const publishModule = (module) =>
-    {
-        cy.log('**Publish all modules**')
-        cy.log('Module: ' + module)
 
-        cy.visit('administrator/index.php?option=com_modules')
+  // Publishes modules
+  const publishModule = (module) =>
+  {
+    cy.log('**Publish all modules**')
+    cy.log('Module: ' + module)
 
-        cy.searchForItem(module)
+    cy.visit('administrator/index.php?option=com_modules')
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    cy.searchForItem(module)
 
-        cy.get('#moduleList input[name="checkall-toggle"]').click()
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        // Make sure modules are unpublished
-        cy.get('#toolbar .button-unpublish').click()
+    cy.checkAllResults()
 
-        cy.get('#toolbar .button-publish').click()
+    // Make sure modules are unpublished, if we don't do this we don't get a publish message
+    cy.clickToolbarButton('unpublish')
 
-        cy.get('#system-message-container').contains('published')
+    cy.clickToolbarButton('publish')
 
-        cy.log('--Publish all modules--')
-    }
+    cy.get('#system-message-container').contains('published').should('be.visible')
 
-    Cypress.Commands.add('publishModule', publishModule)
+    cy.log('--Publish all modules--')
+  }
 
+  Cypress.Commands.add('publishModule', publishModule)
 
-    // Changes the module Menu assignment to be shown on all the pages of the website
-    const displayModuleOnAllPages = (module) =>
-    {
-        cy.log('**Display module on all pages**')
-        cy.log('Module: ' + module)
 
-        cy.visit('administrator/index.php?option=com_modules')
+  // Changes the module Menu assignment to be shown on all the pages of the website
+  const displayModuleOnAllPages = (module) =>
+  {
+    cy.log('**Display module on all pages**')
+    cy.log('Module: ' + module)
 
-        cy.searchForItem(module)
+    cy.visit('administrator/index.php?option=com_modules')
 
-        cy.get('#system-message-container .alert').should('not.exist')
+    cy.searchForItem(module)
 
-        cy.get('tr.row0 .has-context a').click()
+    cy.get('#system-message-container .alert').should('not.exist')
 
-        cy.get('div[role="tablist"] button[aria-controls="assignment"]').click()
+    cy.get('tr.row0 .has-context a').click()
 
-        cy.get('#jform_assignment').select(0)
+    cy.get('div[role="tablist"] button[aria-controls="assignment"]').click()
 
-        cy.get('#toolbar-dropdown-save-group .button-save').click()
-        cy.get('#system-message-container').contains('saved')
+    cy.get('#jform_assignment').select(0)
 
-        cy.log('--Display module on all pages--')
-    }
+    cy.clickToolbarButton('save & close')
+    cy.get('#system-message-container').contains('saved').should('be.visible')
 
-    Cypress.Commands.add('displayModuleOnAllPages', displayModuleOnAllPages)
+    cy.log('--Display module on all pages--')
+  }
+
+  Cypress.Commands.add('displayModuleOnAllPages', displayModuleOnAllPages)
 }
 
 module.exports = {
-    extensionsCommands
+  extensionsCommands
 }
