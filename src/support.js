@@ -135,14 +135,12 @@ const supportCommands = () => {
 
     // Make sure the menu exists
     cy.visit('administrator/index.php?option=com_menus&view=menus')
-    cy.checkForPhpNoticesOrWarnings();
     cy.searchForItem(menu)
     cy.get('#system-message-container .alert').should('not.exist')
 
     // Go to the menu
     cy.get('#menuList a[href*="menutype"]:first').click()
     cy.clickToolbarButton('new')
-    cy.checkForPhpNoticesOrWarnings();
 
     // Select a type for the new menu item
     cy.get('.controls > .input-group > .btn').click();
@@ -157,9 +155,7 @@ const supportCommands = () => {
     // TODO: Language settings
 
     cy.clickToolbarButton('save & close')
-
-    cy.get('#system-message-container').contains('Save failed').should('not.exist')
-    cy.get('#system-message-container').contains('saved').should('be.visible')
+    cy.get('#system-message-container .alert-message').contains('saved').should('be.visible')
 
     cy.log('--Create a menu item--');
   }
@@ -177,19 +173,12 @@ const supportCommands = () => {
     extension = '&extension=' + extension;
 
     cy.visit('administrator/index.php?option=com_categories' + extension)
-    cy.checkForPhpNoticesOrWarnings()
 
-    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit').as('category')
     cy.clickToolbarButton('New')
-    cy.wait('@category')
-    cy.checkForPhpNoticesOrWarnings()
     cy.get('#jform_title').clear().type(title)
 
-    cy.intercept('administrator/index.php?option=com_categories&view=category&layout=edit&id=*').as('category_save')
-    cy.clickToolbarButton('Save')
-    cy.wait('@category_save')
-    cy.get('#system-message-container').contains('Category saved').should('be.visible')
-    cy.checkForPhpNoticesOrWarnings()
+    cy.clickToolbarButton('save & close')
+    cy.get('#system-message-container .alert-message').contains('saved').should('be.visible')
 
     cy.log('--Create a category--')
   }

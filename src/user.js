@@ -76,12 +76,7 @@ const userCommands = () => {
 
     cy.get('h1.page-title').should('contain.text', 'Users')
 
-    cy.checkForPhpNoticesOrWarnings()
-
     cy.clickToolbarButton('New')
-
-    cy.checkForPhpNoticesOrWarnings()
-
     cy.contains('button', 'Account Details').click()
     cy.get('#jform_name').clear().type(name)
     cy.get('#jform_username').clear().type(username)
@@ -94,8 +89,6 @@ const userCommands = () => {
     cy.clickToolbarButton('save & close')
 
     cy.get('#system-message-container').contains('User saved').should('exist')
-    cy.checkForPhpNoticesOrWarnings()
-
     cy.log('--Create a user--')
   }
 
