@@ -6,22 +6,11 @@ const userCommands = () => {
     cy.log('User: ' + user)
     cy.log('Password: ' + password)
 
-    // Aint working either...
-    // if (!user) user = this.joomlaconfig.username
-    // if (!password) password = this.joomlaconfig.password
-
-    // How does snapshotting work in cypress?
-    // if ($useSnapshot && $this->loadSessionSnapshot($user))
-    // { return; }
-
     cy.visit('administrator/index.php')
     cy.get('#mod-login-username').type(user)
     cy.get('#mod-login-password').type(password)
     cy.get('#btn-login-submit').click()
     cy.get('h1.page-title').should('contain', 'Home Dashboard')
-
-    // How does snapshotting work in cypress?
-    // if ($useSnapshot) {$this->saveSessionSnapshot($user);}
 
     cy.log('--Do administrator login--')
   }
@@ -49,10 +38,6 @@ const userCommands = () => {
     cy.log('User: ' + user)
     cy.log('Password: ' + password)
 
-    // Aint working either...
-    // if (!user) user = this.joomlaconfig.username
-    // if (!password) password = this.joomlaconfig.password
-
     cy.visit('index.php?option=com_users&view=login')
     cy.get('#username').type(user)
     cy.get('#password').type(password)
@@ -68,10 +53,6 @@ const userCommands = () => {
   // Do frontend logout
   const doFrontendLogout = () => {
     cy.log('**Do frontend logout**')
-
-    // Aint working either...
-    // if (!user) user = this.joomlaconfig.username
-    // if (!password) password = this.joomlaconfig.password
 
     cy.visit('index.php?option=com_users&view=login')
     cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log out').click()
@@ -97,9 +78,7 @@ const userCommands = () => {
 
     cy.checkForPhpNoticesOrWarnings()
 
-    cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit')
     cy.clickToolbarButton('New')
-    cy.wait('@useredit')
 
     cy.checkForPhpNoticesOrWarnings()
 
@@ -112,10 +91,7 @@ const userCommands = () => {
 
     cy.contains('button', 'Assigned User Groups').click()
     cy.contains('#groups label', userGroup).click()
-
-    cy.intercept('administrator/index.php?option=com_users&view=user').as('useredit2')
-    cy.clickToolbarButton('save')
-    cy.wait('@useredit2')
+    cy.clickToolbarButton('save & close')
 
     cy.get('#system-message-container').contains('User saved').should('exist')
     cy.checkForPhpNoticesOrWarnings()
