@@ -36,7 +36,7 @@ const supportCommands = () => {
         cy.get("#toolbar-apply").click()
         break
       case "save & close":
-        cy.get("#save-group-children-save").click()
+        cy.get(".button-save").click()
         break
       case "save & new":
         cy.get("#save-group-children-save-new").click()
@@ -98,7 +98,9 @@ const supportCommands = () => {
     {
       cy.log("Searching for " + name)
       cy.get('#filter_search').clear().type(name)
+      cy.intercept('index.php*').as('list_page')
       cy.get('.filter-search-bar__button').click()
+      cy.wait('@list_page')
 
       cy.log('--Search for an item--')
 
