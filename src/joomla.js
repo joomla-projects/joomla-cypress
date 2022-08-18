@@ -37,13 +37,13 @@ const joomlaCommands = () => {
     cy.get('#jform_db_prefix').clear().type(config.db_prefix)
     cy.intercept('index.php?task=installation.*').as('ajax_requests')
     cy.get('#setupButton').click()
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
-    cy.wait('@ajax_requests')
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait('@ajax_requests', {timeout: 20000})
     cy.get('#installCongrat').should('be.visible')
 
     cy.log('--Install Joomla--')
@@ -56,8 +56,10 @@ const joomlaCommands = () => {
   const disableStatistics = () => {
     cy.log('**Disable Statistics**')
 
+    
+    cy.intercept('index.php?option=com_ajax&group=system&plugin=sendNever&format=raw').as('stopping_stats')
     cy.get('.js-pstats-btn-allow-never').click()
-    cy.wait(1)
+    cy.wait('@stopping_stats')
 
     cy.log('--Disable Statistics--')
   }
@@ -75,9 +77,11 @@ const joomlaCommands = () => {
     cy.get("div[role='tablist'] button[aria-controls='page-server']").click()
     cy.get('#jform_error_reporting').select('Maximum')
 
+    cy.intercept('index.php?option=com_config*').as('config_save')
     cy.clickToolbarButton('save')
-    cy.contains('.page-title', 'Global Configuration')
-    cy.contains('#system-message-container', 'Configuration saved.')
+    cy.wait('@config_save')
+    cy.contains('.page-title', 'Global Configuration').should('exist')
+    cy.contains('#system-message-container', 'Configuration saved.').should('exist')
 
     cy.log('--Set error reporting to dev mode--')
   }
