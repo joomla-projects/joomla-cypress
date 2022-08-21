@@ -36,6 +36,7 @@ const joomlaCommands = () => {
     cy.get('#jform_db_name').clear().type(config.db_name)
     cy.get('#jform_db_prefix').clear().type(config.db_prefix)
     cy.intercept('index.php?task=installation.*').as('ajax_requests')
+    cy.intercept('index.php?view=remove&layout=default').as('finished')
     cy.get('#setupButton').click()
     cy.wait('@ajax_requests', {timeout: 20000})
     cy.wait('@ajax_requests', {timeout: 20000})
@@ -44,7 +45,7 @@ const joomlaCommands = () => {
     cy.wait('@ajax_requests', {timeout: 20000})
     cy.wait('@ajax_requests', {timeout: 20000})
     cy.wait('@ajax_requests', {timeout: 20000})
-    cy.wait(5000)
+    cy.wait('@finished', {timeout: 20000})
     cy.get('#installCongrat').should('be.visible')
 
     cy.log('--Install Joomla--')
