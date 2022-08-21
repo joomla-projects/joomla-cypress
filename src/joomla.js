@@ -44,6 +44,7 @@ const joomlaCommands = () => {
     cy.wait('@ajax_requests', {timeout: 20000})
     cy.wait('@ajax_requests', {timeout: 20000})
     cy.wait('@ajax_requests', {timeout: 20000})
+    cy.wait(5000)
     cy.get('#installCongrat').should('be.visible')
 
     cy.log('--Install Joomla--')
@@ -56,7 +57,7 @@ const joomlaCommands = () => {
   const disableStatistics = () => {
     cy.log('**Disable Statistics**')
 
-    
+
     cy.intercept('index.php?option=com_ajax&group=system&plugin=sendNever&format=raw').as('stopping_stats')
     cy.get('.js-pstats-btn-allow-never').click()
     cy.wait('@stopping_stats')
