@@ -1,6 +1,6 @@
 {
   "name": "joomla-cypress",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Helpers for using Cypress with Joomla for testing",
   "main": "index.js",
   "scripts": {
