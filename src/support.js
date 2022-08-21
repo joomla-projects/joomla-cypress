@@ -36,7 +36,7 @@ const supportCommands = () => {
         cy.get("#toolbar-apply").click()
         break
       case "save & close":
-        cy.get(".button-save").click()
+        cy.get(".button-save").contains('Save & Close').click()
         break
       case "save & new":
         cy.get("#save-group-children-save-new").click()
