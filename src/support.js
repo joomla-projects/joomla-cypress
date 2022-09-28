@@ -114,6 +114,24 @@ const supportCommands = () => {
 
   Cypress.Commands.add('searchForItem', searchForItem)
 
+  // set filter on list view
+  const setFilter = (name, value) => {
+    cy.log('**Set Filter "' + name + '" to "' + value + '"**')
+
+    cy.get('#adminForm .js-stools-container-filters').then($container => {
+      if ($container.is(':not(:visible)')) {
+        cy.get('button.js-stools-btn-filter').click()
+      }
+    })
+
+    cy.intercept('index.php*').as('filter_' + name + '_' + value)
+    cy.get('#filter_' + name).should('exist').select(value)
+    cy.wait('@filter_' + name + '_' + value)
+
+    cy.log('--Set Filter "' + name + '" to "' + value + '"--')
+  }
+
+  Cypress.Commands.add('setFilter', setFilter)
 
   // Check all filtered results
   const checkAllResults = () => {
