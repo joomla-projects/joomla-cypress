@@ -35,11 +35,13 @@ const joomlaCommands = () => {
 
     cy.get('#jform_db_name').clear().type(config.db_name)
     cy.get('#jform_db_prefix').clear().type(config.db_prefix)
+    cy.intercept('index.php?task=installation.create*').as('ajax_create')
     cy.intercept('index.php?task=installation.populate1*').as('ajax_populate1')
     cy.intercept('index.php?task=installation.populate2*').as('ajax_populate2')
     cy.intercept('index.php?task=installation.populate3*').as('ajax_populate3')
     cy.intercept('index.php?view=remove&layout=default').as('finished')
     cy.get('#setupButton').click()
+    cy.wait('@ajax_create', {timeout: 20000})
     cy.wait('@ajax_populate1', {timeout: 20000})
     cy.wait('@ajax_populate2', {timeout: 20000})
     cy.wait('@ajax_populate3', {timeout: 20000})
