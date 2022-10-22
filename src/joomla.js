@@ -41,11 +41,7 @@ const joomlaCommands = () => {
     cy.intercept('index.php?task=installation.populate3*').as('ajax_populate3')
     cy.intercept('index.php?view=remove&layout=default').as('finished')
     cy.get('#setupButton').click()
-    cy.wait('@ajax_create', {timeout: 20000})
-    cy.wait('@ajax_populate1', {timeout: 20000})
-    cy.wait('@ajax_populate2', {timeout: 20000})
-    cy.wait('@ajax_populate3', {timeout: 20000})
-    cy.wait('@finished', {timeout: 20000})
+    cy.wait(['@ajax_create', '@ajax_populate1', '@ajax_populate2', '@ajax_populate3', '@finished'], {timeout: 120000})
     cy.get('#installCongrat').should('be.visible')
 
     cy.log('--Install Joomla--')
