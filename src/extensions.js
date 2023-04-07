@@ -10,7 +10,7 @@ const extensionsCommands = () => {
 
     cy.contains('Install from Folder').click()
 
-    cy.get('#install_directory').type(path)
+    cy.get('#install_directory').fill(path)
     cy.get('#installbutton_directory').click()
 
     cy.get('#system-message-container').contains('was successful').should('be.visible')
@@ -34,7 +34,9 @@ const extensionsCommands = () => {
     cy.get('#install_url').type(url)
     cy.get('#installbutton_url').click()
 
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+
+
+    cy.get('#system-message-container joomla-alert').contains('was successful').should('be.visible')
 
     cy.log('--Install an extension from Url--')
   }
@@ -82,10 +84,10 @@ const extensionsCommands = () => {
     cy.get('#system-message-container').contains('was successful')
 
     // Check for warnings during install
-    cy.get('joomla-alert[@type="warning"]').should('not.be.visible')
+    cy.get('joomla-alert[type="warning"]').should('not.exist')
 
     cy.searchForItem(extensionName)
-    cy.get('#system-message-container .alert').contains(' No Matching Results ').should('exist')
+    cy.get('.alert').contains(' No Matching Results ').should('exist')
 
     cy.log('--Uninstall an extension--')
   }
