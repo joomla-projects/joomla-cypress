@@ -10,7 +10,7 @@ const extensionsCommands = () => {
 
     cy.contains('Install from Folder').click()
 
-    cy.get('#install_directory').fill(path)
+    cy.get('#install_directory').type(path)
     cy.get('#installbutton_directory').click()
 
     cy.get('#system-message-container').contains('was successful').should('be.visible')
@@ -31,7 +31,7 @@ const extensionsCommands = () => {
 
     cy.contains('Install from URL').click()
 
-    cy.get('#install_url').fill(url)
+    cy.get('#install_url').type(url)
     cy.get('#installbutton_url').click()
 
     cy.get('#system-message-container').contains('was successful').should('be.visible')
