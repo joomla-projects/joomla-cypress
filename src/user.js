@@ -85,7 +85,7 @@ const userCommands = () => {
     cy.get('#jform_password2').clear().type(password)
 
     cy.contains('button', 'Assigned User Groups').click()
-    cy.contains('#groups label', userGroup).click()
+    cy.contains('#groups label', userGroup).find('input').check()
     cy.clickToolbarButton('save & close')
 
     cy.get('#system-message-container').contains('User saved').should('exist')
