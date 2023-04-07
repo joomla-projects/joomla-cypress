@@ -204,6 +204,16 @@ const supportCommands = () => {
   }
 
   Cypress.Commands.add('createCategory', createCategory)
+  	 
+  	 
+  // select an option in a fancy
+  const selectOptionInFancySelect = (selectId, option) => 
+  {
+  	cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
+    cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__item').contains(option).click();
+  }
+  
+  Cypress.Commands.add('selectOptionInFancySelect', selectOptionInFancySelect)
 }
 
 module.exports = {
