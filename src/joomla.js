@@ -106,7 +106,6 @@ const joomlaCommands = () => {
     cy.get('#installAddFeatures').click()
 
     cy.get('@installAddFeaturesBtnText').then((text) => {
-      console.log(`$text: ${text}`);
       cy.contains('legend', text).should('exist')
     })
 
