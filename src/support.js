@@ -204,18 +204,31 @@ const supportCommands = () => {
   }
 
   Cypress.Commands.add('createCategory', createCategory)
-  	 
-  	 
+
+
   // select an option in a fancy
-  const selectOptionInFancySelect = (selectId, option) => 
+  const selectOptionInFancySelect = (selectId, option) =>
   {
-  	cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
+    cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
     cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__item').contains(option).click();
   }
-  
+
   Cypress.Commands.add('selectOptionInFancySelect', selectOptionInFancySelect)
+
+
+  // toggle a switcher
+  const toggleSwitch = (switchId, value) => 
+  {
+    cy.get(switchId).find('label').contains(value).then(($label) => {
+      cy.window().then((win) => {
+        win.document.getElementById($label.attr('for')).checked = true;
+      });
+    });
+  }
+
+  Cypress.Commands.add('toggleSwitch', toggleSwitch)
 }
 
 module.exports = {
-    supportCommands
+  supportCommands
 }
