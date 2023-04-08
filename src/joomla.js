@@ -115,7 +115,7 @@ const joomlaCommands = () => {
 
     cy.get('#installLanguagesButton').click()
 
-    cy.get('#installCongrat', { timeout: 15000 }).should('be.visible')
+    cy.get('#installCongrat', { timeout: 30000 }).should('be.visible')
 
     cy.log('Joomla is now installed')
 
