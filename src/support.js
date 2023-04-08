@@ -206,7 +206,15 @@ const supportCommands = () => {
   Cypress.Commands.add('createCategory', createCategory)
 
 
-  // select an option in a fancy
+  /**
+   * Selects an option in a fancy select field
+   *
+   * @memberof cy
+   * @method selectOptionInFancySelect
+   * @param {string} selectId - The name of the field like #jform_countries
+   * @param {string} option - The name of the value like 'Germany'
+   * @returns Chainable
+   */
   const selectOptionInFancySelect = (selectId, option) =>
   {
     cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
@@ -216,14 +224,22 @@ const supportCommands = () => {
   Cypress.Commands.add('selectOptionInFancySelect', selectOptionInFancySelect)
 
 
-  // toggle a switcher
-  const toggleSwitch = (switchId, value) => 
+  /**
+   * Toggles a switch field
+   *
+   * @memberof cy
+   * @method toggleSwitch
+   * @param {string} fieldName - The name of the field like 'Published
+   * @param {string} valueName - The name of the value like 'Yes'
+   * @returns Chainable
+   */
+  const toggleSwitch = (fieldName, valueName) =>
   {
-    cy.get(switchId).find('label').contains(value).then(($label) => {
+    cy.get('legend').parents('fieldset').find('label').contains(valueName).then(($label) => {
       cy.window().then((win) => {
         win.document.getElementById($label.attr('for')).checked = true;
       });
-    });
+    })
   }
 
   Cypress.Commands.add('toggleSwitch', toggleSwitch)
