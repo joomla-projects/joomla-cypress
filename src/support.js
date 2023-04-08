@@ -272,6 +272,7 @@ const supportCommands = () => {
    */
   const selectOptionInFancySelect = (selectId, option) =>
   {
+    cy.log(`**Select option** ${option} in fancy select ${selectId}`)
     cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
     cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__item').contains(option).click();
   }
@@ -290,6 +291,7 @@ const supportCommands = () => {
    */
   const toggleSwitch = (fieldName, valueName) =>
   {
+    cy.log(`**Toggle switch** ${fieldName} to ${valueName}`)
     cy.get('label')
       .contains(fieldName)
       .parents('.control-group')
