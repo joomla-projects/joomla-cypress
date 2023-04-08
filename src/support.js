@@ -292,7 +292,7 @@ const supportCommands = () => {
   const toggleSwitch = (fieldName, valueName) =>
   {
     cy.log(`**Toggle switch** ${fieldName} to ${valueName}`)
-    cy.get('label')
+    cy.get('label:visible')
       .contains(fieldName)
       .parents('.control-group')
       .find('.switcher label')
