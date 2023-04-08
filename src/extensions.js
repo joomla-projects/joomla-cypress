@@ -135,9 +135,8 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('#cb0').click()
-    // cy.get('#toolbar-publish button').click()
-    cy.clickToolbarButton('publish')
-    cy.get('#system-message-container').contains('enabeld').should('be.visible')
+    cy.get('#toolbar-publish button').click()
+    cy.get('#system-message-container').should('contain', 'enabled')
 
     cy.log('--Enable Plugin--')
   }
