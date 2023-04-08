@@ -1,6 +1,14 @@
 const supportCommands = () => {
 
-  // Clicks on a button in the toolbar
+  /**
+   * Clicks on a button in the toolbar
+   *
+   * @memberof cy
+   * @method clickToolbarButton
+   * @param {string} button
+   * @param {string} subselector
+   * @returns Chainable
+   */
   const clickToolbarButton = (button, subselector = null) => {
     cy.log('**Click on a toolbar button**')
     cy.log('Button: ' + button)
@@ -71,7 +79,13 @@ const supportCommands = () => {
   Cypress.Commands.add('clickToolbarButton', clickToolbarButton)
 
 
-  // Check for notices and warnings
+  /**
+   * Check for notices and warnings
+   *
+   * @memberof cy
+   * @method checkForPhpNoticesOrWarnings
+   * @returns Chainable
+   */
   const checkForPhpNoticesOrWarnings = () => {
     cy.log('**Check for PHP notices and warnings**')
 
@@ -88,8 +102,16 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
 
-  // Search for an item
-  // TODO: deletes search field doesn't make sense to me in this context; RD)
+
+  /**
+   * Search for an item
+   * TODO: deletes search field doesn't make sense to me in this context; RD)
+   *
+   * @memberof cy
+   * @method searchForItem
+   * @param {string} name
+   * @returns Chainable
+   */
   const searchForItem = (name = null) => {
     cy.log('**Search for an item**')
     cy.log('Name: ' + name)
@@ -114,7 +136,16 @@ const supportCommands = () => {
 
   Cypress.Commands.add('searchForItem', searchForItem)
 
-  // set filter on list view
+
+  /**
+   * set filter on list view
+   *
+   * @memberof cy
+   * @method setFilter
+   * @param {string} name
+   * @param {string} value
+   * @returns Chainable
+   */
   const setFilter = (name, value) => {
     cy.log('**Set Filter "' + name + '" to "' + value + '"**')
 
@@ -133,7 +164,13 @@ const supportCommands = () => {
 
   Cypress.Commands.add('setFilter', setFilter)
 
-  // Check all filtered results
+  /**
+   * Check all filtered results
+   *
+   * @memberof cy
+   * @method checkAllResults
+   * @returns Chainable
+   */
   const checkAllResults = () => {
     cy.log("**Check all results**")
 
@@ -144,7 +181,19 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkAllResults', checkAllResults)
 
-  // Create a menu item
+  /**
+   * Create a menu item
+   *
+   * @memberof cy
+   * @method createMenuItem
+   * @param {string} menuTitle
+   * @param {string} menuCategory
+   * @param {string} menuItem
+   * @param {string} menu
+   * @param {string} language
+   * @param {string} extension
+   * @returns Chainable
+   */
   const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
     cy.log('**Create a menu item**');
     cy.log('Menu title: ' + menuTitle)
@@ -183,7 +232,13 @@ const supportCommands = () => {
   Cypress.Commands.add('createMenuItem', createMenuItem)
 
 
-  // Create a category
+  /**
+   * @memberof cy
+   * @method createCategory
+   * @param {string} title
+   * @param {string} extension
+   * @returns Chainable
+   */
   const createCategory = (title, extension = 'com_content') =>
   {
     cy.log('**Create a category**')
