@@ -290,11 +290,17 @@ const supportCommands = () => {
    */
   const toggleSwitch = (fieldName, valueName) =>
   {
-    cy.get('legend').parents('fieldset').find('label').contains(valueName).then(($label) => {
-      cy.window().then((win) => {
-        win.document.getElementById($label.attr('for')).checked = true;
-      });
-    })
+    cy.get('label')
+      .contains(fieldName)
+      .parents('.control-group')
+      .find('.switcher label')
+      .contains(valueName)
+      .invoke('attr', 'for')
+      .then(id => {
+        cy.window().then(win => {
+          win.document.getElementById(id).checked = true
+        })
+      })
   }
 
   Cypress.Commands.add('toggleSwitch', toggleSwitch)
