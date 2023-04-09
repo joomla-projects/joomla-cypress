@@ -117,6 +117,13 @@ const joomlaCommands = () => {
 
     cy.get('#installCongrat', { timeout: 30000 }).should('be.visible')
 
+    cy.get('#defaultLanguagesButton').click()
+    cy.get('#system-message-container .alert-message').should('have.length', 2)
+
+    cy.get('#removeInstallationFolder').click()
+    cy.get('#removeInstallationFolder').should('not.exist')
+
+
     cy.log('Joomla is now installed')
 
     cy.log('--Install Joomla as a multi language site--')
