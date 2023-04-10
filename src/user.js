@@ -1,6 +1,15 @@
 const userCommands = () => {
 
-  // Do administrator login
+  /**
+   * Do administrator login
+   *
+   * @memberof cy
+   * @method doAdministratorLogin
+   * @param {string} user
+   * @param {string} password
+   * @param {boolean} useSnapshot
+   * @returns Chainable
+   */
   const doAdministratorLogin = (user, password, useSnapshot = true) => {
     cy.log('**Do administrator login**')
     cy.log('User: ' + user)
@@ -18,7 +27,13 @@ const userCommands = () => {
   Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin)
 
 
-  // Do administrator logout
+  /**
+   * Do administrator logout
+   *
+   * @memberof cy
+   * @method doAdministratorLogout
+   * @returns Chainable
+   */
   const doAdministratorLogout = () => {
     cy.log('**Do administrator logout**')
 
@@ -32,7 +47,15 @@ const userCommands = () => {
   Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout)
 
 
-  // Do frontend login
+  /**
+   * Do frontent logout
+   *
+   * @memberof cy
+   * @method doFrontendLogin
+   * @param {string} user
+   * @param {string} password
+   * @returns Chainable
+   */
   const doFrontendLogin = (user, password) => {
     cy.log('**Do frontend login**')
     cy.log('User: ' + user)
@@ -50,7 +73,13 @@ const userCommands = () => {
   Cypress.Commands.add('doFrontendLogin', doFrontendLogin)
 
 
-  // Do frontend logout
+  /**
+   * Do frontend logout
+   *
+   * @memberof cy
+   * @method doFrontendLogout
+   * @returns Chainable
+   */
   const doFrontendLogout = () => {
     cy.log('**Do frontend logout**')
 
@@ -62,8 +91,19 @@ const userCommands = () => {
 
   Cypress.Commands.add('doFrontendLogout', doFrontendLogout)
 
-
-  // Create a user
+  
+  /**
+   * Create a user
+   *
+   * @memberof cy
+   * @method createUser
+   * @param {string} name
+   * @param {string} username
+   * @param {string} password
+   * @param {string} email
+   * @param {string} userGroup
+   * @returns Chainable
+   */
   const createUser = (name, username, password, email, userGroup = 'Super Users') => {
     cy.log('**Create a user**')
     cy.log('Name: ' + name)
@@ -98,3 +138,4 @@ const userCommands = () => {
 module.exports = {
   userCommands
 }
+
