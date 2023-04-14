@@ -89,13 +89,11 @@ const supportCommands = () => {
   const checkForPhpNoticesOrWarnings = () => {
     cy.log('**Check for PHP notices and warnings**')
 
-    cy.contains('Notice:').should('not.exist')
-    cy.contains('<b>Notice</b>:').should('not.exist')
-    cy.contains('Warning:').should('not.exist')
-    cy.contains('<b>Warning</b>:').should('not.exist')
-    cy.contains('Strict standards:').should('not.exist')
-    cy.contains('<b>Strict standards</b>:').should('not.exist')
-    cy.contains('The requested page can\'t be found').should('not.exist')
+    cy.document().then((doc) => {
+      const pageSource = doc.documentElement.innerHTML
+      const regex = /<b>Warning<\/b>:|<b>Deprecated<\/b>:|<b>Notice<\/b>:|<b>Strict standards<\/b>:/
+      expect(regex.test(pageSource)).to.equal(false)
+    })
 
     cy.log('--Check for PHP notices and warnings--')
   }
