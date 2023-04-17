@@ -1,6 +1,14 @@
 const supportCommands = () => {
 
-  // Clicks on a button in the toolbar
+  /**
+   * Clicks on a button in the toolbar
+   *
+   * @memberof cy
+   * @method clickToolbarButton
+   * @param {string} button
+   * @param {string} subselector
+   * @returns Chainable
+   */
   const clickToolbarButton = (button, subselector = null) => {
     cy.log('**Click on a toolbar button**')
     cy.log('Button: ' + button)
@@ -10,6 +18,9 @@ const supportCommands = () => {
     {
       case "new":
         cy.get("#toolbar-new").click()
+        break
+      case "enable":
+        cy.get("#toolbar-publish button").click()
         break
       case "publish":
         cy.get("#status-group-children-publish").click()
@@ -71,25 +82,37 @@ const supportCommands = () => {
   Cypress.Commands.add('clickToolbarButton', clickToolbarButton)
 
 
-  // Check for notices and warnings
+  /**
+   * Check for notices and warnings
+   *
+   * @memberof cy
+   * @method checkForPhpNoticesOrWarnings
+   * @returns Chainable
+   */
   const checkForPhpNoticesOrWarnings = () => {
     cy.log('**Check for PHP notices and warnings**')
 
-    // cy.contains('Notice:').should('not.exists')
-    // cy.contains('<b>Notice</b>:').should('not.exists')
-    // cy.contains('Warning:').should('not.exists')
-    // cy.contains('<b>Warning</b>:').should('not.exists')
-    // cy.contains('Strict standards:').should('not.exists')
-    // cy.contains('<b>Strict standards</b>:').should('not.exists')
-    // cy.contains('The requested page can\'t be found').should('not.exists')
+    cy.document().then((doc) => {
+      const pageSource = doc.documentElement.innerHTML
+      const regex = /<b>Warning<\/b>:|<b>Deprecated<\/b>:|<b>Notice<\/b>:|<b>Strict standards<\/b>:/
+      expect(regex.test(pageSource)).to.equal(false)
+    })
 
     cy.log('--Check for PHP notices and warnings--')
   }
 
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
 
-  // Search for an item
-  // TODO: deletes search field doesn't make sense to me in this context; RD)
+
+  /**
+   * Search for an item
+   * TODO: deletes search field doesn't make sense to me in this context; RD)
+   *
+   * @memberof cy
+   * @method searchForItem
+   * @param {string} name
+   * @returns Chainable
+   */
   const searchForItem = (name = null) => {
     cy.log('**Search for an item**')
     cy.log('Name: ' + name)
@@ -114,7 +137,16 @@ const supportCommands = () => {
 
   Cypress.Commands.add('searchForItem', searchForItem)
 
-  // set filter on list view
+
+  /**
+   * set filter on list view
+   *
+   * @memberof cy
+   * @method setFilter
+   * @param {string} name
+   * @param {string} value
+   * @returns Chainable
+   */
   const setFilter = (name, value) => {
     cy.log('**Set Filter "' + name + '" to "' + value + '"**')
 
@@ -133,7 +165,13 @@ const supportCommands = () => {
 
   Cypress.Commands.add('setFilter', setFilter)
 
-  // Check all filtered results
+  /**
+   * Check all filtered results
+   *
+   * @memberof cy
+   * @method checkAllResults
+   * @returns Chainable
+   */
   const checkAllResults = () => {
     cy.log("**Check all results**")
 
@@ -144,7 +182,19 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkAllResults', checkAllResults)
 
-  // Create a menu item
+  /**
+   * Create a menu item
+   *
+   * @memberof cy
+   * @method createMenuItem
+   * @param {string} menuTitle
+   * @param {string} menuCategory
+   * @param {string} menuItem
+   * @param {string} menu
+   * @param {string} language
+   * @param {string} extension
+   * @returns Chainable
+   */
   const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
     cy.log('**Create a menu item**');
     cy.log('Menu title: ' + menuTitle)
@@ -183,7 +233,13 @@ const supportCommands = () => {
   Cypress.Commands.add('createMenuItem', createMenuItem)
 
 
-  // Create a category
+  /**
+   * @memberof cy
+   * @method createCategory
+   * @param {string} title
+   * @param {string} extension
+   * @returns Chainable
+   */
   const createCategory = (title, extension = 'com_content') =>
   {
     cy.log('**Create a category**')
@@ -204,8 +260,55 @@ const supportCommands = () => {
   }
 
   Cypress.Commands.add('createCategory', createCategory)
+
+
+  /**
+   * Selects an option in a fancy select field
+   *
+   * @memberof cy
+   * @method selectOptionInFancySelect
+   * @param {string} selectId - The name of the field like #jform_countries
+   * @param {string} option - The name of the value like 'Germany'
+   * @returns Chainable
+   */
+  const selectOptionInFancySelect = (selectId, option) =>
+  {
+    cy.log(`**Select option** ${option} in fancy select ${selectId}`)
+    cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__inner').click();
+    cy.get(selectId).parents('joomla-field-fancy-select').find('.choices__item').contains(option).click();
+  }
+
+  Cypress.Commands.add('selectOptionInFancySelect', selectOptionInFancySelect)
+
+
+  /**
+   * Toggles a switch field
+   *
+   * @memberof cy
+   * @method toggleSwitch
+   * @param {string} fieldName - The name of the field like 'Published
+   * @param {string} valueName - The name of the value like 'Yes'
+   * @returns Chainable
+   */
+  const toggleSwitch = (fieldName, valueName) =>
+  {
+    cy.log(`**Toggle switch** ${fieldName} to ${valueName}`)
+    cy.get('label:visible')
+      .contains(fieldName)
+      .parents('.control-group')
+      .find('.switcher label')
+      .contains(valueName)
+      .invoke('attr', 'for')
+      .then(id => {
+        cy.window().then(win => {
+          win.document.getElementById(id).checked = true
+        })
+      })
+  }
+
+  Cypress.Commands.add('toggleSwitch', toggleSwitch)
 }
 
 module.exports = {
-    supportCommands
+  supportCommands
 }

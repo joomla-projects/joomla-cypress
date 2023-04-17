@@ -31,10 +31,12 @@ const extensionsCommands = () => {
 
     cy.contains('Install from URL').click()
 
-    cy.get('#install_url').fill(url)
+    cy.get('#install_url').type(url)
     cy.get('#installbutton_url').click()
 
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+
+
+    cy.get('#system-message-container joomla-alert').contains('was successful').should('be.visible')
 
     cy.log('--Install an extension from Url--')
   }
@@ -82,10 +84,10 @@ const extensionsCommands = () => {
     cy.get('#system-message-container').contains('was successful')
 
     // Check for warnings during install
-    cy.get('joomla-alert[@type="warning"]').should('not.be.visible')
+    cy.get('joomla-alert[type="warning"]').should('not.exist')
 
     cy.searchForItem(extensionName)
-    cy.get('#system-message-container .alert').contains(' No Matching Results ').should('exist')
+    cy.get('#installer-manage .alert').contains('No Matching Results').should('exist')
 
     cy.log('--Uninstall an extension--')
   }
@@ -133,9 +135,8 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('#cb0').click()
-    // cy.get('#toolbar-publish button').click()
-    cy.clickToolbarButton('publish')
-    cy.get('#system-message-container').contains('enabeld').should('be.visible')
+    cy.clickToolbarButton('enable')
+    cy.get('#system-message-container').should('contain', 'enabled')
 
     cy.log('--Enable Plugin--')
   }

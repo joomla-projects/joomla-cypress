@@ -99,16 +99,30 @@ const joomlaCommands = () => {
 
     cy.installJoomla(config)
 
+    cy.get('#installAddFeatures').then(($btn) => {
+      cy.wrap($btn.text().trim()).as('installAddFeaturesBtnText');
+    })
+
     cy.get('#installAddFeatures').click()
-    cy.contains('Install Language packages', 'h3').should('exist')
+
+    cy.get('@installAddFeaturesBtnText').then((text) => {
+      cy.contains('legend', text).should('exist')
+    })
 
     languages.forEach((language) => {
-        cy.contains(language, 'label').click()
+        cy.contains('label', language).click()
     })
 
     cy.get('#installLanguagesButton').click()
 
-    cy.get('#installCongrat').should('be.visible')
+    cy.get('#installCongrat', { timeout: 30000 }).should('be.visible')
+
+    cy.get('#defaultLanguagesButton').click()
+    cy.get('#system-message-container .alert-message').should('have.length', 2)
+
+    cy.get('#removeInstallationFolder').click()
+    cy.get('#removeInstallationFolder').should('not.exist')
+
 
     cy.log('Joomla is now installed')
 
