@@ -87,7 +87,7 @@ const extensionsCommands = () => {
     cy.get('joomla-alert[type="warning"]').should('not.exist')
 
     cy.searchForItem(extensionName)
-    cy.get('.alert').contains(' No Matching Results ').should('exist')
+    cy.get('#installer-manage .alert').contains('No Matching Results').should('exist')
 
     cy.log('--Uninstall an extension--')
   }
@@ -135,7 +135,7 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('#cb0').click()
-    cy.get('#toolbar-publish button').click()
+    cy.clickToolbarButton('enable')
     cy.get('#system-message-container').should('contain', 'enabled')
 
     cy.log('--Enable Plugin--')

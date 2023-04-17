@@ -19,6 +19,9 @@ const supportCommands = () => {
       case "new":
         cy.get("#toolbar-new").click()
         break
+      case "enable":
+        cy.get("#toolbar-publish button").click()
+        break
       case "publish":
         cy.get("#status-group-children-publish").click()
         break
