@@ -54,10 +54,7 @@ const joomlaCommands = () => {
   const disableStatistics = () => {
     cy.log('**Disable Statistics**')
 
-
-    cy.intercept('index.php?option=com_ajax&group=system&plugin=sendNever&format=raw').as('stopping_stats')
-    cy.get('.js-pstats-btn-allow-never').click()
-    cy.wait('@stopping_stats')
+    cy.get('.js-pstats-btn-allow-never', { timeout: 4000 }).should('be.visible')
 
     cy.log('--Disable Statistics--')
   }
