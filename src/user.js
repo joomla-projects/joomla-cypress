@@ -11,9 +11,16 @@ const userCommands = () => {
    * @returns Chainable
    */
   const doAdministratorLogin = (user, password, useSnapshot = true) => {
+    user = user ? user : Cypress.env('username')
+    password = password ? password : Cypress.env('password')
+
     cy.log('**Do administrator login**')
     cy.log('User: ' + user)
     cy.log('Password: ' + password)
+
+    if (useSnapshot) {
+      return cy.session([user, password, 'back'], () => doAdministratorLogin(user, password, false), { cacheAcrossSpecs: true })
+    }
 
     cy.visit('administrator/index.php')
     cy.get('#mod-login-username').type(user)
@@ -22,6 +29,8 @@ const userCommands = () => {
     cy.get('h1.page-title').should('contain', 'Home Dashboard')
 
     cy.log('--Do administrator login--')
+
+    Cypress.session.clearAllSavedSessions()
   }
 
   Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin)
@@ -42,6 +51,8 @@ const userCommands = () => {
     cy.get('#mod-login-username').should('exist')
 
     cy.log('--Do administrator logout--')
+
+    Cypress.session.clearAllSavedSessions()
   }
 
   Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout)
@@ -54,12 +65,20 @@ const userCommands = () => {
    * @method doFrontendLogin
    * @param {string} user
    * @param {string} password
+   * @param {boolean} useSnapshot
    * @returns Chainable
    */
-  const doFrontendLogin = (user, password) => {
+  const doFrontendLogin = (user, password, useSnapshot = true) => {
+    user = user ? user : Cypress.env('username')
+    password = password ? password : Cypress.env('password')
+
     cy.log('**Do frontend login**')
     cy.log('User: ' + user)
     cy.log('Password: ' + password)
+
+    if (useSnapshot) {
+      return cy.session([user, password, 'front'], () => doFrontendLogin(user, password, false), { cacheAcrossSpecs: true })
+    }
 
     cy.visit('index.php?option=com_users&view=login')
     cy.get('#username').type(user)
@@ -68,6 +87,8 @@ const userCommands = () => {
     cy.get('.mod-login-logout button[type=submit]').should('exist').should('contain', 'Log out')
 
     cy.log('--Do frontend login--')
+
+    Cypress.session.clearAllSavedSessions()
   }
 
   Cypress.Commands.add('doFrontendLogin', doFrontendLogin)
@@ -87,11 +108,13 @@ const userCommands = () => {
     cy.get('.com-users-logout__form button[type=submit]').should('contain', 'Log out').click()
 
     cy.log('--Do frontend logout--')
+
+    Cypress.session.clearAllSavedSessions()
   }
 
   Cypress.Commands.add('doFrontendLogout', doFrontendLogout)
 
-  
+
   /**
    * Create a user
    *
@@ -138,4 +161,3 @@ const userCommands = () => {
 module.exports = {
   userCommands
 }
-
