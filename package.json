@@ -1,8 +1,8 @@
 {
   "name": "joomla-cypress",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "Helpers for using Cypress with Joomla for testing",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,7 +20,6 @@
     "url": "https://github.com/joomla-projects/joomla-cypress/issues"
   },
   "homepage": "https://github.com/joomla-projects/joomla-cypress#readme",
-  "main": "src/index.js",
   "files": [
     "src"
   ]
