@@ -49,6 +49,18 @@ const joomlaCommands = () => {
 
   Cypress.Commands.add('installJoomla', installJoomla)
 
+  
+  // Cancel Tour
+  const cancelTour = () => {
+    cy.log('**Cancel Tour**')
+
+    cy.get('.shepherd-cancel-icon', { timeout: 40000 }).should('be.visible').click()
+
+    cy.log('--Cancel Tour--')
+  }
+
+  Cypress.Commands.add('cancelTour', cancelTour)
+
 
   // Disable Statistics
   const disableStatistics = () => {
