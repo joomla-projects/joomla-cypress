@@ -10,7 +10,7 @@ const extensionsCommands = () => {
 
     cy.contains('Install from Folder').click()
 
-    cy.get('#install_directory').fill(path)
+    cy.get('#install_directory').clear().type(path)
     cy.get('#installbutton_directory').click()
 
     cy.get('#system-message-container').contains('was successful').should('be.visible')
