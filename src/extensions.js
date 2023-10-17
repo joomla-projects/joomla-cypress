@@ -13,7 +13,11 @@ const extensionsCommands = () => {
     cy.get('#install_directory').clear().type(path)
     cy.get('#installbutton_directory').click()
 
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+    // cy.get('#system-message-container').contains('was successful').should('be.visible')
+    //   Cypress has the obscure error "assert expected <noscript> to be visible".
+    //   Maybe as the message is dynamically loaded?
+    //   Anyway, as a work-around we use a different access that works.
+    cy.get('#system-message-container').should('contain.text', 'was successful').and('be.visible')
 
     cy.log('--Install an extension from folder--')
   }
