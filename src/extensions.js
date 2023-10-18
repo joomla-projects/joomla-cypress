@@ -100,7 +100,7 @@ const extensionsCommands = () => {
     cy.log('**Install a language**')
     cy.log('Language Name: ' + languageName)
 
-    cy.visit('/administrator/index.php?option=com_installer&view=manage')
+    cy.visit('/administrator/index.php?option=com_installer&view=languages')
 
     // TODO: Do we need this?
     cy.checkForPhpNoticesOrWarnings()
