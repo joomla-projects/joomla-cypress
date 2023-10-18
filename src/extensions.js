@@ -190,8 +190,16 @@ const extensionsCommands = () => {
 
     cy.checkAllResults()
 
+    // Click on Actions to make menu entry Unpublish visible
+    cy.get('#toolbar-status-group').click()
+
     // Make sure modules are unpublished, if we don't do this we don't get a publish message
     cy.clickToolbarButton('unpublish')
+
+    cy.checkAllResults()
+
+    // Click on Actions to make menu entry Publish visible
+    cy.get('#toolbar-status-group').click()
 
     cy.clickToolbarButton('publish')
 
