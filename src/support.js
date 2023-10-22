@@ -103,6 +103,29 @@ const supportCommands = () => {
 
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
 
+  /**
+   * @memberof cy
+   * @method checkForSystemMessage
+   * @param {string} contain - what we are looking for, e.g. 'published'
+   * @returns Chainable
+   */
+  const checkForSystemMessage = (contain) => {
+    cy.log('**Check for system message**')
+    cy.log('Contain: ' + contain)
+
+    // cy.get('#system-message-container').contains(contain).should('be.visible')
+    //   Cypress has the obscure error "assert expected <noscript> to be visible".
+    //   Maybe as the message is dynamically loaded?
+    //   Workarounds are:
+    //      cy.get('#system-message-container').contains(contain)
+    //      cy.get('#system-message-container').should('contain.text', contain).and('be.visible')
+    //   However, if we also access the '.alert-message' class, it works:
+    cy.get('#system-message-container .alert-message').contains(contain).should('be.visible')
+
+    cy.log('--Check for system message--')
+  }
+
+  Cypress.Commands.add('checkForSystemMessage', checkForSystemMessage)
 
   /**
    * Search for an item
@@ -225,7 +248,7 @@ const supportCommands = () => {
     // TODO: Language settings
 
     cy.clickToolbarButton('save & close')
-    cy.get('#system-message-container .alert-message').contains('saved').should('be.visible')
+    cy.checkForSystemMessage('saved')
 
     cy.log('--Create a menu item--');
   }
@@ -254,7 +277,7 @@ const supportCommands = () => {
     cy.get('#jform_title').clear().type(title)
 
     cy.clickToolbarButton('save & close')
-    cy.get('#system-message-container .alert-message').contains('saved').should('be.visible')
+    cy.checkForSystemMessage('saved')
 
     cy.log('--Create a category--')
   }

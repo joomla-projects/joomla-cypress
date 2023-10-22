@@ -151,7 +151,7 @@ const userCommands = () => {
     cy.contains('#groups label', userGroup).find('input').check()
     cy.clickToolbarButton('save & close')
 
-    cy.get('#system-message-container').contains('User saved').should('exist')
+    cy.checkForSystemMessage('User saved')
     cy.log('--Create a user--')
   }
 

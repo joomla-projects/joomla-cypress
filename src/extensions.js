@@ -10,10 +10,10 @@ const extensionsCommands = () => {
 
     cy.contains('Install from Folder').click()
 
-    cy.get('#install_directory').fill(path)
+    cy.get('#install_directory').clear().type(path)
     cy.get('#installbutton_directory').click()
 
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+    cy.checkForSystemMessage('was successful')
 
     cy.log('--Install an extension from folder--')
   }
@@ -35,8 +35,7 @@ const extensionsCommands = () => {
     cy.get('#installbutton_url').click()
 
 
-
-    cy.get('#system-message-container joomla-alert').contains('was successful').should('be.visible')
+    cy.checkForSystemMessage('was successful')
 
     cy.log('--Install an extension from Url--')
   }
@@ -59,7 +58,7 @@ const extensionsCommands = () => {
 
     cy.get('#install_package').attachFile(file)
 
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+    cy.checkForSystemMessage('was successful')
 
     cy.log('--Install an extension from file upload--')
   }
@@ -81,7 +80,7 @@ const extensionsCommands = () => {
 
     cy.get('#cb0').click()
     cy.clickToolbarButton('delete')
-    cy.get('#system-message-container').contains('was successful')
+    cy.checkForSystemMessage('was successful')
 
     // Check for warnings during install
     cy.get('joomla-alert[type="warning"]').should('not.exist')
@@ -101,7 +100,7 @@ const extensionsCommands = () => {
     cy.log('**Install a language**')
     cy.log('Language Name: ' + languageName)
 
-    cy.visit('/administrator/index.php?option=com_installer&view=manage')
+    cy.visit('/administrator/index.php?option=com_installer&view=languages')
 
     // TODO: Do we need this?
     cy.checkForPhpNoticesOrWarnings()
@@ -111,7 +110,7 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('tr.row0 input').click()
-    cy.get('#system-message-container').contains('was successful').should('be.visible')
+    cy.checkForSystemMessage('was successful')
 
     cy.log('--Install a language--')
   }
@@ -136,7 +135,7 @@ const extensionsCommands = () => {
 
     cy.get('#cb0').click()
     cy.clickToolbarButton('enable')
-    cy.get('#system-message-container').should('contain', 'enabled')
+    cy.checkForSystemMessage('enabled')
 
     cy.log('--Enable Plugin--')
   }
@@ -159,12 +158,15 @@ const extensionsCommands = () => {
 
     cy.get('tr.row0 .has-context a').click()
 
-    // TODO: herausfinden wie ich das mit dem select mache
-    // $this->selectOptionInChosen('Position', $position);
+    // as we have styled dropdown, not simple: cy.get('#jform_position').select(position)
+    // 1st click the (not visible) dropdown to open it
+    cy.get('joomla-field-fancy-select').click({force: true});
+    // 2nd select the desired (not visable) option from the dropdown
+    cy.contains(position).click({force: true});
 
     // cy.get('#toolbar-dropdown-save-group .button-save').click()
     cy.clickToolbarButton('save & close')
-    cy.get('#system-message-container').contains('saved').should('be.visible')
+    cy.checkForSystemMessage('saved')
 
     cy.log('--Set module position--')
   }
@@ -186,12 +188,20 @@ const extensionsCommands = () => {
 
     cy.checkAllResults()
 
+    // Click on Actions to make menu entry Unpublish visible
+    cy.get('#toolbar-status-group').click()
+
     // Make sure modules are unpublished, if we don't do this we don't get a publish message
     cy.clickToolbarButton('unpublish')
 
+    cy.checkAllResults()
+
+    // Click on Actions to make menu entry Publish visible
+    cy.get('#toolbar-status-group').click()
+
     cy.clickToolbarButton('publish')
 
-    cy.get('#system-message-container').contains('published').should('be.visible')
+    cy.checkForSystemMessage('published')
 
     cy.log('--Publish all modules--')
   }
@@ -218,7 +228,8 @@ const extensionsCommands = () => {
     cy.get('#jform_assignment').select(0)
 
     cy.clickToolbarButton('save & close')
-    cy.get('#system-message-container').contains('saved').should('be.visible')
+
+    cy.checkForSystemMessage('saved')
 
     cy.log('--Display module on all pages--')
   }

@@ -129,9 +129,20 @@ const joomlaCommands = () => {
     cy.get('#defaultLanguagesButton').click()
     cy.get('#system-message-container .alert-message').should('have.length', 2)
 
-    cy.get('#removeInstallationFolder').click()
-    cy.get('#removeInstallationFolder').should('not.exist')
+    // delete installation
+    cy.get('body').then((body) => {
+      // Joomla 5: check element with ID 'removeInstallationFolder' exists
+      if (body.find('#removeInstallationFolder').length > 0) {
+        cy.get('#removeInstallationFolder').click()
+      } else {
+        // Joomla 4: simple click 1st button to complete installation and delete installation folder
+        cy.get('.complete-installation').eq(0).click()
+      }
+    });
 
+    // check installation is no more available
+    cy.visit("/installation", { failOnStatusCode: false }); // prevent Cypress from failing
+    cy.title().should("include", "404"); // page title have to contain 404
 
     cy.log('Joomla is now installed')
 
