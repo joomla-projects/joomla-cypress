@@ -10,7 +10,7 @@ const joomlaCommands = () => {
     cy.get('#jform_language').should('be.visible')
 
     // Select en-GB as installation language
-    cy.get('#jform_language').select('English (United Kingdom)')
+    cy.get('#jform_language').select('English (en-GB) | English (United Kingdom)')
     cy.get('#jform_language-lbl').should('contain', 'Select Language')
 
     // Fill Sitename
