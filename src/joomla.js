@@ -54,7 +54,7 @@ const joomlaCommands = () => {
   const cancelTour = () => {
     cy.log('**Cancel Tour**')
 
-    cy.get('.shepherd-cancel-icon', { timeout: 40000 }).should('be.visible').click()
+    cy.get('.shepherd-cancel-icon', { timeout: 40000 }).should('exist').click()
 
     cy.log('--Cancel Tour--')
   }
