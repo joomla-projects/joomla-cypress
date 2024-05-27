@@ -79,7 +79,23 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('#cb0').click()
-    cy.clickToolbarButton('delete')
+    // Delete the extension
+    cy.get('body').then(($body) => {
+      if ($body.find('button.button-delete.btn.btn-danger').length > 0) {
+        // Joomla 4: Click on the 'Uninstall' button directly
+        cy.clickToolbarButton('delete');
+      } else {
+        // Joomla >= 5: First open the 'Actions' menu
+        cy.get('button.button-status-group.btn.btn-action.dropdown-toggle').click();
+        // Second click on the 'Uninstall' button
+        cy.get('button.button-delete.dropdown-item').click();
+        // Third click on the 'Yes' button to confirm
+        cy.get('div.joomla-dialog-container')
+          .find('button.button.button-primary.btn.btn-primary[data-button-ok]')
+          .click();
+      }
+      // In case of any failure, the following 'was successful' is missing
+    })
     cy.checkForSystemMessage('was successful')
 
     // Check for warnings during install
