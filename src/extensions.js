@@ -79,7 +79,7 @@ const extensionsCommands = () => {
     cy.get('#system-message-container .alert').should('not.exist')
 
     cy.get('#cb0').click()
-    // delete the extension
+    // Delete the extension
     cy.get('body').then(($body) => {
       if ($body.find('button.button-delete.btn.btn-danger').length > 0) {
         // Joomla 4: Click on the 'Uninstall' button directly
@@ -94,7 +94,7 @@ const extensionsCommands = () => {
           .find('button.button.button-primary.btn.btn-primary[data-button-ok]')
           .click();
       }
-      // in case of any failure, the following 'was successful' is missing
+      // In case of any failure, the following 'was successful' is missing
     })
     cy.checkForSystemMessage('was successful')
 
