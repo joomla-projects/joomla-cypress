@@ -1,7 +1,6 @@
 # Joomla Cypress
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
-
-Joomla versions 4 and 5, as well as all active Joomla development branches, are supported.
+All active Joomla development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
 ## Cypress Custom Commands for Joomla
 
