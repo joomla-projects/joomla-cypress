@@ -767,9 +767,9 @@ User group to assign the new user (default is 'Super Users').
 
 ## Usage Samples
 You can see the usage by sample:
-* [joomla-cms](https://github.com/joomla/joomla-cms/tree/5.0-dev/tests/System) – The Joomla System Tests, using e.g.
+* [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see `tests/System` – The Joomla System Tests, using e.g.
   `cy.installJoomla`, `cy.doFrontendLogin()` or `cy.clickToolbarButton`
 * [manual-examples](https://github.com/joomla/manual-examples) - Testing the Joomla module tutorial sample
   from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or `cy.installExtensionFromFileUpload` 
-* [quote_joomla](https://github.com/muhme/quote_joomla/test) – Installation of a Joomla module, using e.g. 
+* [quote_joomla](https://github.com/muhme/quote_joomla/tree/main/test) – Installation of a Joomla module, using e.g. 
   `cy.installJoomlaMultilingualSite`, `cy.installExtensionFromFolder` or `cy.publishModule` 
