@@ -1,59 +1,22 @@
 # Joomla Cypress
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
+All active Joomla development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
+
+## Cypress Custom Commands for Joomla
 
 The Cypress API is extended with [custom commands](https://docs.cypress.io/api/cypress-api/custom-commands).
+The Cypress custom commands for Joomla are grouped into the following categories:
+* Common
+* Extensions
+* Joomla
+* Support
+* User
 
-Joomla versions 4 and 5 are supported.
+:point_right: If you would like to see the complete list of custom commands, you can use the TOC button at the top right of the README.
 
-## Usage
-You can see the usage by sample:
-* [joomla-cms](https://github.com/joomla/joomla-cms/tree/5.0-dev/tests/System) – e.g. cy.doAdministratorLogin() or cy.clickToolbarButton()
-* [quote_joomla](https://github.com/muhme/quote_joomla/test) – Joomla plus module installation
+### Common Commands
 
-## Overview of custom Cypress commands for Joomla testing available in this package v1.0.3
-<!-- TOC -->
-
-- [commonCommands](#commoncommands)
-  - [iframe](#iframe)
-- [extensionCommands](#extensioncommands)
-  - [installExtensionFromFolder](#installextensionfromfolder)
-  - [installExtensionFromUrl](#installextensionfromurl)
-  - [installExtensionFromFileUpload](#installextensionfromfileupload)
-  - [uninstallExtension](#uninstallextension)
-  - [installLanguage](#installlanguage)
-  - [enablePlugin](#enableplugin)
-  - [setModulePosition](#setmoduleposition)
-  - [publishModule](#publishmodule)
-  - [displayModuleOnAllPages](#displaymoduleonallpages)
-- [joomlaCommands](#joomlacommands)
-  - [installJoomla](#installjoomla)
-  - [cancelTour](#canceltour)
-  - [disableStatistics](#disablestatistics)
-  - [setErrorReportingToDevelopment](#seterrorreportingtodevelopment)
-  - [installJoomlaMultilingualSite](#installjoomlamultilingualsite)
-- [supportCommands](#supportcommands)
-  - [clickToolbarButton](#clicktoolbarbutton)
-  - [checkForPhpNoticesOrWarnings](#checkforphpnoticesorwarnings)
-  - [checkForSystemMessage](#checkforsystemmessage)
-  - [searchForItem](#searchforitem)
-  - [setFilter](#setfilter)
-  - [checkAllResults](#checkallresults)
-  - [createMenuItem](#createmenuitem)
-  - [createCategory](#createcategory)
-  - [selectOptionInFancySelect](#selectoptioninfancyselect)
-  - [toggleSwitch](#toggleswitch)
-- [userCommands](#usercommands)
-  - [doAdministratorLogin](#doadministratorlogin)
-  - [doAdministratorLogout](#doadministratorlogout)
-  - [doFrontendLogin](#dofrontendlogin)
-  - [doFrontendLogout](#dofrontendlogout)
-  - [createUser](#createuser)
-
-<!-- /TOC -->
-
-## commonCommands
-
-### iframe
+#### iframe
 
 **Command**
 
@@ -77,9 +40,9 @@ const isIframeLoaded = $iframe => {...};
 Represents the iframe element being processed. \
 Used to manage the iframe's loading state and retrieve its content once loaded.
 
-## extensionCommands
+### Extensions Commands
 
-### installExtensionFromFolder
+#### installExtensionFromFolder
 
 **Command**
 
@@ -105,7 +68,7 @@ const installExtensionFromFolder = (path, type = 'Extension') => {...};
 
 ---
 
-### installExtensionFromUrl
+#### installExtensionFromUrl
 
 **Command**
 
@@ -130,7 +93,7 @@ const installExtensionFromUrl = (url, type = 'Extension') => {...};
  
 ---
 
-### installExtensionFromFileUpload
+#### installExtensionFromFileUpload
 
 **Command**
 
@@ -152,7 +115,7 @@ const installExtensionFromFileUpload = (file, type = 'Extension') => {...};
  
 ---
 
-### uninstallExtension
+#### uninstallExtension
 
 **Command**
 
@@ -171,7 +134,7 @@ const uninstallExtension = (extensionName) => {...};
  
 ---
 
-### installLanguage
+#### installLanguage
 
 **Command**
 
@@ -190,7 +153,7 @@ const installLanguage = (languageName) => {...};
  
 ---
 
-### enablePlugin
+#### enablePlugin
 
 **Command**
 
@@ -209,7 +172,7 @@ const enablePlugin = (pluginName) => {...};
 
 ---
 
-### setModulePosition
+#### setModulePosition
 
 **Command**
 
@@ -230,7 +193,7 @@ const setModulePosition = (module, position = 'position-7') => {...};
 
 ---
 
-### publishModule
+#### publishModule
 
 **Command**
 
@@ -249,7 +212,7 @@ const publishModule = (module) => {...};
  
 ---
 
-### displayModuleOnAllPages
+#### displayModuleOnAllPages
 
 **Command**
 
@@ -268,9 +231,9 @@ const displayModuleOnAllPages = (module) => {...};
 
 ---
 
-## joomlaCommands
+### Joomla Commands
 
-### installJoomla
+#### installJoomla
 
 **Command**
 
@@ -294,7 +257,7 @@ const installJoomla = (config) => {...};
 
 ---
 
-### cancelTour
+#### cancelTour
 
 **Command**
 
@@ -318,7 +281,7 @@ None used.
 
 ---
 
-### disableStatistics
+#### disableStatistics
 
 **Command**
 
@@ -342,7 +305,7 @@ None used.
 
 ---
 
-### setErrorReportingToDevelopment
+#### setErrorReportingToDevelopment
 
 **Command**
 
@@ -366,7 +329,7 @@ None used.
 
 ---
 
-### installJoomlaMultilingualSite
+#### installJoomlaMultilingualSite
 
 **Command**
 
@@ -391,9 +354,9 @@ Configuration object containing sitename, name, username, password, email, db_ty
 - `languages`: \
 Array of languages to be installed (default is an empty array).
 
-## supportCommands
+### Support Commands
 
-### clickToolbarButton
+#### clickToolbarButton
 
 **Command**
 
@@ -420,7 +383,7 @@ const clickToolbarButton = (button, subselector = null) => {...};
 
 ---
 
-### checkForPhpNoticesOrWarnings
+#### checkForPhpNoticesOrWarnings
 
 **Command**
 
@@ -444,7 +407,7 @@ None used.
 
 ---
 
-### checkForSystemMessage
+#### checkForSystemMessage
 
 **Command**
 
@@ -469,7 +432,7 @@ const checkForSystemMessage = (contain) => {...};
  
 ---
 
-### searchForItem
+#### searchForItem
 
 **Command**
 
@@ -494,7 +457,7 @@ const searchForItem = (name = null) => {...};
  
 ---
 
-### setFilter
+#### setFilter
 
 **Command**
 
@@ -521,7 +484,7 @@ const setFilter = (name, value) => {...};
  
 ---
 
-### checkAllResults
+#### checkAllResults
 
 **Command**
 
@@ -545,7 +508,7 @@ None used.
 
 ---
 
-### createMenuItem
+#### createMenuItem
 
 **Command**
 
@@ -578,7 +541,7 @@ const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', l
 
 ---
 
-### createCategory
+#### createCategory
 
 **Command**
 
@@ -605,7 +568,7 @@ const createCategory = (title, extension = 'com_content') => {...};
 
 ---
 
-### selectOptionInFancySelect
+#### selectOptionInFancySelect
 
 **Command**
 
@@ -632,7 +595,7 @@ const selectOptionInFancySelect = (selectId, option) => {...};
  
 ---
 
-### toggleSwitch
+#### toggleSwitch
 
 **Command**
 
@@ -659,9 +622,9 @@ const toggleSwitch = (fieldName, valueName) => {...};
 
 ---
 
-## userCommands
+### User Commands
 
-### doAdministratorLogin
+#### doAdministratorLogin
 
 **Command**
 
@@ -680,7 +643,6 @@ variables.
 const doAdministratorLogin = (user, password, useSnapshot = true) => {...};
 ```
 
-
 **Variables**
 
 - `user`: \
@@ -692,7 +654,7 @@ Boolean flag to determine if the session should be cached across specs (default 
 
 ---
 
-### doAdministratorLogout
+#### doAdministratorLogout
 
 **Command**
 
@@ -716,7 +678,7 @@ None used.
 
 ---
 
-### doFrontendLogin
+#### doFrontendLogin
 
 **Command**
 
@@ -745,7 +707,7 @@ Boolean flag to determine if the session should be cached across specs (default 
 
 ---
 
-### doFrontendLogout
+#### doFrontendLogout
 
 **Command**
 
@@ -769,7 +731,7 @@ None used.
 
 ---
 
-### createUser
+#### createUser
 
 **Command**
 
@@ -801,3 +763,12 @@ Email address for the new user.
 User group to assign the new user (default is 'Super Users').
 
 ---
+
+## Usage Samples
+You can see the usage by sample:
+* [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see `tests/System` – The Joomla System Tests, using e.g.
+  `cy.installJoomla`, `cy.doFrontendLogin()` or `cy.clickToolbarButton`
+* [manual-examples](https://github.com/joomla/manual-examples) - Testing the Joomla module tutorial sample
+  from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or `cy.installExtensionFromFileUpload` 
+* [quote_joomla](https://github.com/muhme/quote_joomla/tree/main/test) – Installation of a Joomla module, using e.g. 
+  `cy.installJoomlaMultilingualSite`, `cy.installExtensionFromFolder` or `cy.publishModule` 
