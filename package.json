@@ -22,5 +22,9 @@
   "homepage": "https://github.com/joomla-projects/joomla-cypress#readme",
   "files": [
     "src"
-  ]
+  ],
+  "devDependencies": {
+    "cypress": "^13.12.0",
+    "cypress-file-upload": "^5.0.8"
+  }
 }

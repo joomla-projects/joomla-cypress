@@ -104,6 +104,7 @@ Cypress.Commands.add('installExtensionFromFileUpload', installExtensionFromFileU
 **Function**
 
 ```
+import 'cypress-file-upload';
 const installExtensionFromFileUpload = (file, type = 'Extension') => {...};
 ```
 **Variables**
