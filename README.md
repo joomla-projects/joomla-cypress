@@ -770,6 +770,6 @@ You can see the usage by sample:
 * [joomla-cms](https://github.com/joomla/joomla-cms/tree/5.0-dev/tests/System) – The Joomla System Tests, using e.g.
   `cy.installJoomla`, `cy.doFrontendLogin()` or `cy.clickToolbarButton`
 * [manual-examples](https://github.com/joomla/manual-examples) - Testing the Joomla module tutorial sample
-  from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition`, `cy.installExtensionFromFileUpload` or 
+  from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or `cy.installExtensionFromFileUpload` 
 * [quote_joomla](https://github.com/muhme/quote_joomla/test) – Installation of a Joomla module, using e.g. 
   `cy.installJoomlaMultilingualSite`, `cy.installExtensionFromFolder` or `cy.publishModule` 
