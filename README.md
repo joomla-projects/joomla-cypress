@@ -13,7 +13,7 @@ The Cypress custom commands for Joomla are grouped into the following categories
 * Support
 * User
 
-All custom commands are list following, if you like to see the overall list you can use READMEs top right TOC button.
+:point_right: If you would like to see the complete list of custom commands, you can use the TOC button at the top right of the README.
 
 ### Common Commands
 
