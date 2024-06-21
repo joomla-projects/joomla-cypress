@@ -54,7 +54,12 @@ const extensionsCommands = () => {
 
     cy.contains('Upload Package File').click()
 
-    document.getElementById('legacy-uploader').classList.remove('hidden')
+    // Wait until the element is available
+    cy.get('#legacy-uploader').should('exist').then(($uploader) => {
+      if ($uploader) {
+        cy.get('#legacy-uploader').invoke('removeClass', 'hidden');
+      }
+    });
 
     cy.get('#install_package').attachFile(file)
 
