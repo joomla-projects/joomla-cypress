@@ -62,11 +62,29 @@ const joomlaCommands = () => {
   Cypress.Commands.add('cancelTour', cancelTour)
 
 
-  // Disable Statistics
+  /**
+   * Disable Statistics Plugin
+   *
+   * Preconditions:
+   * - Admin login is required before executing this function.
+   * - This function can be executed multiple times without causing issues.
+   *
+   * Steps:
+   * 1. Navigate to the Plugins management page.
+   * 2. Search for the "System - Joomla! Statistics" plugin.
+   * 3. Open the plugin's detail view.
+   * 4. Set the plugin status to "Disabled".
+   * 5. Save and close the plugin configuration.
+  */
   const disableStatistics = () => {
+    const statisticPlugin = 'System - Joomla! Statistics';
     cy.log('**Disable Statistics**')
 
-    cy.get('.js-pstats-btn-allow-never', { timeout: 40000 }).should('be.visible').click()
+    cy.visit('/administrator/index.php?option=com_plugins&view=plugins');
+    cy.searchForItem(statisticPlugin);
+    cy.get('a').contains(statisticPlugin).click();
+    cy.get('select#jform_enabled').select('Disabled');
+    cy.get('button.button-save.btn.btn-success').click();
 
     cy.log('--Disable Statistics--')
   }
