@@ -1,4 +1,9 @@
 # Joomla Cypress
+
+<!-- prettier-ignore-start -->
+[![version][version-badge]][package]
+<!-- prettier-ignore-end -->
+
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
 All active Joomla development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
@@ -773,3 +778,8 @@ You can see the usage by sample:
   from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or `cy.installExtensionFromFileUpload` 
 * [quote_joomla](https://github.com/muhme/quote_joomla/tree/main/test) – Installation of a Joomla module, using e.g. 
   `cy.installJoomlaMultilingualSite`, `cy.installExtensionFromFolder` or `cy.publishModule` 
+
+<!-- prettier-ignore-start -->
+[version-badge]: https://img.shields.io/npm/v/joomla-cypress
+[package]: https://www.npmjs.com/package/joomla-cypress
+<!-- prettier-ignore-end -->
