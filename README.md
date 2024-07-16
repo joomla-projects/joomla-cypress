@@ -7,6 +7,25 @@
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
 All active Joomla development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
+## Installation
+
+`joomla-cypress` is distributed with [npm](https://npmjs.com/) and works with the latest version of Cypress.
+It should be installed as one of your project's `devDependencies`:
+```
+npm install --save-dev @testing-library/joomla-cypress
+```
+
+## Usage
+
+To import and load the additional Cypress custom commands you will typically extend the `cypress/support/index.js` file:
+```
+// Register additional Cypress custom commands from npm module 'joomla-cypress'
+import { registerCommands } from "joomla-cypress";
+// To have attachFile() which is used in installExtensionFromFileUpload()
+import 'cypress-file-upload';
+registerCommands();
+```
+
 ## Cypress Custom Commands for Joomla
 
 The Cypress API is extended with [custom commands](https://docs.cypress.io/api/cypress-api/custom-commands).
