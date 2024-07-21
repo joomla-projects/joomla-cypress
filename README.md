@@ -29,768 +29,886 @@ registerCommands();
 ## Cypress Custom Commands for Joomla
 
 The Cypress API is extended with [custom commands](https://docs.cypress.io/api/cypress-api/custom-commands).
+As Cypress custom commands, all `joomla-cypress` extended commands return an `Cypress.Chainable`.
+
+The target Joomla installation requires the language `en-GB` for the Joomla administrator user used.
+
+All extended commands use Cypress logging, with messages formatted in bold type at the beginning and
+enclosed with double dashes at the end. 
+These log messages can be observed when running the Cypress GUI.
+This consistent logging format helps to easily identify the steps and
+status of the custom commands during test execution. For example:
+
+**Install an extension from file upload**<br />
+--Install an extension from file upload--
+
 The Cypress custom commands for Joomla are grouped into the following categories:
-* Common
-* Extensions
-* Joomla
-* Support
-* User
+* User Commands
+* Joomla Commands
+* Extensions Commands
+* Support Commands
+* Common Commands
 
-:point_right: If you would like to see the complete list of custom commands, you can use the TOC button at the top right of the README.
+:point_right: If you would like to see the complete list of custom commands as overview,
+on GitHub you can use the TOC button at the top right of the README.
 
-### Common Commands
+### User Commands
 
-#### iframe
+#### `doAdministratorLogin`
 
-**Command**
+The command `doAdministratorLogin` initiates the administrator login process for the backend.
+It performs the administrator login with the specified login information or with the Cypress environment variables.
+The user must be a member of the 'Manager', 'Administrator' or 'Super Users' group to be able to log in to the backend.
+By default, [Cypress session](https://docs.cypress.io/api/commands/session) is used
+to cache and restore session data for this users backend login across Cypress test specs,
+thereby speeding up the overall test suite.
 
-Command to interact with iframes in Cypress, ensuring they are fully loaded before proceeding with assertions or actions.
+See also [doAdministratorLogout](doadministratorlogout) and [doFrontendLogin](dofrontendlogin).
 
-```
-Cypress.Commands.add('iframe', {prevSubject: 'element'}, $iframes => new Cypress.Promise(resolve => {...}));
-```
+##### Usage
 
-**Function**
-
-Function to check if an iframe is fully loaded and then resolve with its body content for Cypress commands.
-
-```
-const isIframeLoaded = $iframe => {...};
-```
-
-**Variables**
-
-- `$iframe`: \
-Represents the iframe element being processed. \
-Used to manage the iframe's loading state and retrieve its content once loaded.
-
-### Extensions Commands
-
-#### installExtensionFromFolder
-
-**Command**
-
-Installs a Joomla extension from a folder
-
-```
-Cypress.Commands.add('installExtensionFromFolder', installExtensionFromFolder);
+```javascript
+cy.doAdministratorLogin(user, password, useSnapshot)
 ```
 
-**Function**
+##### Arguments
 
-Installs an extension in Joomla that is located in a folder inside the server.
+- **`user`** *(String, optional, default: `Cypress.env('username')`)*: The username for logging in.
+- **`password`** *(String, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`useSnapshot`** *(String, optional, default: `true`)*:
+  Boolean flag to determine if this users backend login session should be cached across specs.
+
+##### Example
+
+```javascript
+// Admin login without saving the session
+cy.doAdministratorLogin("admin-user", "admin-user-password", false);
 ```
-const installExtensionFromFolder = (path, type = 'Extension') => {...};
-```
-
-**Variables**
-
-- `path`: \
- The path to the folder where the extension is located.
-- `type`: \
- The type of extension (default is 'Extension').
 
 ---
 
-#### installExtensionFromUrl
+#### `doAdministratorLogout`
 
-**Command**
+The command `doAdministratorLogout` initiates administrator logout process from the backend.
+All session data (both backend and frontend, for all users) is being cleaned up.
+A user must be logged into the backend.
 
-Installs a Joomla extension from a URL
-```
-Cypress.Commands.add('installExtensionFromUrl', installExtensionFromUrl);
-```
+See also [doAdministratorLogin](doadministratorlogin).
 
-**Function**
+##### Usage
 
-Installs an extension in Joomla that is located at a URL.
-```
-const installExtensionFromUrl = (url, type = 'Extension') => {...};
+```javascript
+cy.doAdministratorLogout()
 ```
 
-**Variables**
+##### Example
 
-- `url`: \
- The URL where the extension is located.
-- `type`: \
- The type of extension (default is 'Extension').
- 
----
-
-#### installExtensionFromFileUpload
-
-**Command**
-
+```javascript
+// Do explicit logout to start with new login
+cy.doAdministratorLogout();
+// Check login action log
+cy.doAdministratorLogin("admin-user", "admin-user-password")
+  .visit('/administrator/index.php?option=com_actionlogs&view=actionlogs')
+  .contains('User admin-user logged in to admin');
 ```
-Cypress.Commands.add('installExtensionFromFileUpload', installExtensionFromFileUpload);
-```
-
-**Function**
-
-```
-import 'cypress-file-upload';
-const installExtensionFromFileUpload = (file, type = 'Extension') => {...};
-```
-**Variables**
-
-- `file`: \
- The file to be uploaded.
-- `type`: \
- The type of extension (default is 'Extension').
- 
----
-
-#### uninstallExtension
-
-**Command**
-
-```
-Cypress.Commands.add('uninstallExtension', uninstallExtension);
-```
-**Function**
-
-```
-const uninstallExtension = (extensionName) => {...};
-```
-**Variables**
-
-- `extensionName`: \
- The name of the extension to be uninstalled.
- 
----
-
-#### installLanguage
-
-**Command**
-
-```
-Cypress.Commands.add('installLanguage', installLanguage);
-```
-**Function**
-
-```
-const installLanguage = (languageName) => {...};
-```
-**Variables**
-
-- `languageName`: \
- The name of the language to be installed.
- 
----
-
-#### enablePlugin
-
-**Command**
-
-```
-Cypress.Commands.add('enablePlugin', enablePlugin);
-```
-**Function**
-
-```
-const enablePlugin = (pluginName) => {...};
-```
-**Variables**
-
-- `pluginName`: \
- The name of the plugin to be enabled.
 
 ---
 
-#### setModulePosition
+#### `doFrontendLogin`
 
-**Command**
+The command `doFrontendLogin` initiates a user login to the frontend.
+It performs the user login with the specified login information or with the Cypress environment variables.
+The user must belong to a user group that has the necessary permissions to access the frontend.
+By default, [Cypress session](https://docs.cypress.io/api/commands/session) is used
+to cache and restore session data for this users frontend login across Cypress test specs,
+thereby speeding up the overall test suite.
 
-```
-Cypress.Commands.add('setModulePosition', setModulePosition);
-```
-**Function**
+See also [doFrontendLogout](dofrontendlogout) and [doAdministratorLogin](doadministratorlogin).
 
-```
-const setModulePosition = (module, position = 'position-7') => {...};
-```
-**Variables**
+##### Usage
 
-- `module`: \
- The name of the module to be positioned.
-- `position`: \
- The position where the module should be placed (default is 'position-7').
+```javascript
+cy.doFrontendLogin(user, password, useSnapshot)
+```
+
+##### Arguments
+
+- **`user`** *(String, optional, default: `Cypress.env('username')`)*: The user name for logging in.
+- **`password`** *(String, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`useSnapshot`** *(String, optional, default: `true`)*:
+  Boolean flag to determine if this users frontend login session should be cached across specs.
+
+##### Example
+
+```javascript
+// Checks the welcome message with the user's name
+cy.doFrontendLogin()
+  .visit("/")
+  .contains(`Hi ${Cypress.env('name')}`).should('be.visible');
+```
 
 ---
 
-#### publishModule
+#### `doFrontendLogout`
 
-**Command**
+The command `doFrontendLogout` initiates frontend logout process.
+All session data (both backend and frontend, for all users) is being cleaned up.
+A user must be logged into the frontend.
 
-```
-Cypress.Commands.add('publishModule', publishModule);
-```
-**Function**
+See also [doFrontendLogin](dofrontendlogin).
 
-```
-const publishModule = (module) => {...};
-```
-**Variables**
+##### Usage
 
-- `module`: \
- The name of the module to be published.
- 
+```javascript
+cy.
+```
+
+##### Example
+
+```javascript
+    // Can log in and out with the default credentials
+    cy.doFrontendLogin(null, null, false)
+      .doFrontendLogout()
+```
+
 ---
 
-#### displayModuleOnAllPages
+#### `createUser`
 
-**Command**
+The command `createUser` creates a new user entry in Joomla.
+If the user name already exists, the creation will fail.
+The user entry is activated after creation
 
-```
-Cypress.Commands.add('displayModuleOnAllPages', displayModuleOnAllPages);
-```
-**Function**
+##### Usage
 
+```javascript
+cy.createUser(name, username, password, email, userGroup)
 ```
-const displayModuleOnAllPages = (module) => {...};
-```
-**Variables**
 
-- `module`: \
- The name of the module to be displayed on all pages.
+##### Arguments
+
+- **`name`** *(String)*: The full name of the user.
+- **`username`** *(String)*: The name the user will log in as.
+- **`password`** *(String)*: The user's password.
+- **`email`** *(String)*: The user's email address.
+- **`userGroup`** *(String, optional, default: 'Super Users')*: The user group that is assigned to the new user entry.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin()
+  .createUser("Alice in Wonderland", "alice", "CheshireSmile", "alice@in.wonderland");
+```
 
 ---
 
 ### Joomla Commands
 
-#### installJoomla
+#### `installJoomla`
 
-**Command**
+After Joomla download the command `installJoomla` runs all 'Joomla Installer' steps
+to install a Joomla instance on a web server.
+The installed language pack 'en-GB' is English (United Kingdom).
 
-Installs Joomla via the user interface.
+> :warning: The `/installation` folder is not deleted after installation.
+  This allows multiple runs of the command `installJoomla`.
+  For production sites the  `/installation` folder needs to be deleted after installation.
+After the command, the 'Joomla Installer' screen remains open in the session.
 
+See also [installJoomlaMultilingualSite](#installjoomlamultilingualsite).
+
+##### Usage
+
+```javascript
+cy.installJoomla(config)
 ```
-Cypress.Commands.add('installJoomla', installJoomla);
+
+##### Arguments
+
+- **`config`** *(Object)*: Configuration object containing sitename, name, username, password, email,
+  db_type, db_host, db_user, db_password, db_name and db_prefix.
+
+##### Example
+
+```javascript
+const config = {
+  sitename: "Sample Joomla Site",
+  name: "Joomla Administrator",
+  username: "admin",
+  password: "admin-password",
+  email: "sampleuser@example.com",
+  db_type: "MySQLi",
+  db_host: "localhost",
+  db_user: "joomla",
+  db_password: "joomla-db-user-password",
+  db_name: "sample_joomla",
+  db_prefix: "sjs_"
+}
+cy.installJoomla(config);
 ```
-**Function**
-
-Installs Joomla via the user interface.
-
-```
-const installJoomla = (config) => {...};
-```
-
-**Variables**
-
-- `config`: \
- Configuration object containing sitename, name, username, password, email, db_type, db_host, db_user, db_password, db_name, db_prefix.
 
 ---
 
-#### cancelTour
+#### `installJoomlaMultilingualSite`
 
-**Command**
+The command `installJoomlaMultilingualSite` first runs the [installJoomla](#installjoomla) command
+and continues the 'Joomla Installer' with installation of additional languages.
 
-Cancel a guided tour.
+The `/installation` folder is deleted after the installation. Therefore, this command can only run once.
+It is verified that the URL path '/installation' receives an error 404 – not found.
 
-```
-Cypress.Commands.add('cancelTour', cancelTour);
-```
+See also [installJoomla](#installjoomla).
 
-**Function**
+##### Usage
 
-Cancels a tour in the Joomla interface.
-
-```
-const cancelTour = () => {...};
+```javascript
+cy.installJoomlaMultilingualSite(config, languages)
 ```
 
-**Variables**
+##### Arguments
 
-None used.
+- **`config`** *(Object)*: Configuration object containing sitename, name, username, password, email,
+  db_type, db_host, db_user, db_password, db_name and db_prefix.
+- **`languages`** *(Array of Strings, optional, default: ["French"])*: Array of additional languages to be installed.
+
+##### Example
+
+```javascript
+const config = {
+  sitename: "Sample Joomla Site",
+  name: "Joomla Administrator",
+  username: "admin",
+  password: "admin-password",
+  email: "sampleuser@example.com",
+  db_type: "MySQLi",
+  db_host: "localhost",
+  db_user: "joomla",
+  db_password: "joomla-db-user-password",
+  db_name: "sample_joomla",
+  db_prefix: "sjs_"
+}
+const languages = ["German", "Japanese", "Spanish", "Ukrainian"];
+cy.installJoomlaMultilingualSite(config, languages);
+```
 
 ---
 
-#### disableStatistics
+#### `cancelTour`
 
-**Command**
+Since Joomla version 5 there is a guided tour with the overlay 'Welcome to Joomla!'
+after first login of an administrator.
+The command `cancelTour` closes this guided tour overlay.
+The Joomla administrator must be logged in to do this.
+This is only possible once after installation and the first login.
+A timeout of 40 seconds is set.
 
-Disable statistics.
+##### Usage
 
-```
-Cypress.Commands.add('disableStatistics', disableStatistics);
-```
-
-**Function**
-
-Disables statistics in the Joomla interface.
-
-```
-const disableStatistics = () => {...};
+```javascript
+cy.cancelTour()
 ```
 
-**Variables**
+##### Example
 
-None used.
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.cancelTour();
+```
 
 ---
 
-#### setErrorReportingToDevelopment
+#### `disableStatistics`
 
-**Command**
+To remove the system message container 'Enable Joomla Statistics?' from the backend home dashboard
+the command `disableStatistics` deactivates the plugin 'System - Joomla! Statistics'.
+This command can be executed multiple times without causing issues.
+The Joomla administrator must be logged in to do this.
 
-Sets error reporting to development mode.
+##### Usage
 
-```
-Cypress.Commands.add('setErrorReportingToDevelopment', setErrorReportingToDevelopment);
-```
-
-**Function**
-
-Sets error reporting to development mode in the Joomla configuration.
-
-```
-const setErrorReportingToDevelopment = () => {...};
+```javascript
+cy.disableStatistics()
 ```
 
-**Variables**
+##### Example
 
-None used.
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.disableStatistics();
+```
 
 ---
 
-#### installJoomlaMultilingualSite
+#### `setErrorReportingToDevelopment`
 
-**Command**
+The command `setErrorReportingToDevelopment` sets 'Error Reporting' on the 'Server' tab in the Joomla 'Global Configuration'
+to 'Maximum'.
+This command can be executed multiple times without causing issues.
+The Joomla administrator must be logged in to do this.
 
-Installs Joomla as a multi-language site.
+See also [checkForPhpNoticesOrWarnings](#checkforphpnoticesorwarnings).
 
-```
-Cypress.Commands.add('installJoomlaMultilingualSite', installJoomlaMultilingualSite);
-```
+##### Usage
 
-**Function**
-
-Installs Joomla as a multi-language site using provided configurations and languages.
-
-```
-const installJoomlaMultilingualSite = (config, languages = []) => {...};
+```javascript
+cy.setErrorReportingToDevelopment()
 ```
 
-**Variables**
+##### Example
 
-- `config`: \
-Configuration object containing sitename, name, username, password, email, db_type, db_host, db_user, db_password, db_name, db_prefix.
-- `languages`: \
-Array of languages to be installed (default is an empty array).
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.setErrorReportingToDevelopment()
+```
+
+---
+
+### Extensions Commands
+
+#### `installExtensionFromFolder`
+
+The command `installExtensionFromFolder` automates the process of installing an extension in Joomla
+from a folder on the server. It navigates to the Joomla extension installer page, selects 'Install from Folder',
+fills in the path to the folder and completes the installation.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.installExtensionFromFolder(path, type)
+```
+
+##### Arguments
+
+- **`path`** *(String, required)*: The path to the folder containing the extension.
+- **`type`** *(String, optional, default: 'Extension')*: The type of the extension.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.installExtensionFromFolder("/joomla-module/src"); // mounted in docker image
+```
+
+---
+
+#### `installExtensionFromUrl`
+
+The command `installExtensionFromUrl` installs an extension in Joomla from the given URL.
+It navigates to the Joomla extension installer page, selects 'Install from URL',
+fills in URL and completes the installation.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.installExtensionFromUrl(url, type)
+```
+
+##### Arguments
+
+- **`url`** *(string, required)*: The URL where the extension can be downloaded.
+- **`type`** *(string, optional, default: 'Extension')*: The type of the extension.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.installExtensionFromUrl("https://server.org/download/joomla-module.zip");
+```
+
+---
+
+#### `installExtensionFromFileUpload`
+
+The command `installExtensionFromFileUpload` installs an extension in Joomla from the specified package file
+in the Cypress Test Runner (web browser) environment.
+It navigates to the Joomla extension installer page, selects 'Upload Package File',
+fills the path to the file and completes the installation.
+The Joomla administrator must be logged in to do this.
+It is based on the custom command `attachFile` from the `cypress-file-upload` module.
+
+##### Usage
+
+```javascript
+cy.installExtensionFromFileUpload(file, type)
+```
+
+##### Arguments
+
+- **`file`** *(String, required)*: The path to the package file.
+- **`type`** *(String, optional, default: 'Extension')*: The type of the extension.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.installExtensionFromFileUpload("manual-examples.zip");
+```
+
+---
+
+#### `uninstallExtension`
+
+The command `uninstallExtension` removed an installed extension from Joomla.
+It ensures that there are no warning messages after deletion and
+checks afterwards that the extension no longer exists
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.uninstallExtension(extensionName)
+```
+
+##### Arguments
+
+- **`extensionName`** *(String)*: The name of the extension.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.uninstallExtension("Joomla module tutorial");
+```
+
+---
+
+#### `installLanguage`
+
+The command `installLanguage` installs a language pack in Joomla.
+The Joomla administrator must be logged in to do this.
+If the language pack is already installed, a reinstall is executed.
+
+##### Usage
+
+```javascript
+cy.installLanguage(languageName)
+```
+
+##### Arguments
+
+- **`languageName`** *(String)*: Language name or language tag.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+// Install German for Switzerland with language tag or ...
+cy.installLanguage("de-CH");
+// ... install with language name
+// cy.installLanguage("German, Switzerland");
+```
+
+---
+
+#### `enablePlugin`
+
+The command `enablePlugin` activates a Joomla plugin so that is becomes operational.
+If the specified plugin is already activated, the command will fail.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.enablePlugin(pluginName)
+```
+
+##### Arguments
+
+- **`pluginName`** *(String)*: The plugin name.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.enablePlugin("Authentication - LDAP");
+```
+
+---
+
+#### `setModulePosition`
+
+The command `setModulePosition` sets a module display position within a Joomla template.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.setModulePosition(module, position)
+```
+
+##### Arguments
+
+- **`module`** *(String)*: The module name.
+- **`position`** *(String, optional, default: 'position-7')*: The display position.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.setModulePosition("module-name", "sidebar-right");
+```
+
+---
+
+#### `publishModule`
+
+The command `publishModule` makes the module active and visible on the Joomla website.
+It navigates to the Joomla modules list, selects the module and sets the status to Published. 
+It does not matter whether the module has already been published,
+as the module found is initially set to the status Unpublished.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.publishModule(module)
+```
+
+##### Arguments
+
+- **`module`** *(String)*: The module name.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.publishModule("Breadcrumbs");
+```
+
+---
+
+#### `displayModuleOnAllPages`
+
+The command `displayModuleOnAllPages` sets the menu assignment for the specified module for all pages in Joomla.
+The Joomla administrator must be logged in to do this.
+
+##### Usage
+
+```javascript
+cy.displayModuleOnAllPages(module)
+```
+
+##### Arguments
+
+- **`module`** *(String)*: The module name.
+
+##### Example
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.displayModuleOnAllPages("Login Form");
+```
+
+---
 
 ### Support Commands
 
-#### clickToolbarButton
+#### `clickToolbarButton`
 
-**Command**
+The command `clickToolbarButton` clicks on a Joomla backend button by using an internal mapping table.
+For example the button 'Enable' is mapped to click on CSS selector "#toolbar-publish button".
+For the button 'transition' it is possible to give an additional subselector string.
 
-Clicks on a button in the toolbar.
+##### Usage
 
-```
-Cypress.Commands.add('clickToolbarButton', clickToolbarButton);
-```
-
-**Function**
-
-Clicks on a button in the Joomla toolbar based on the button name and optional subselector.
-
-```
-const clickToolbarButton = (button, subselector = null) => {...};
+```javascript
+cy.clickToolbarButton(button, subselector)
 ```
 
-**Variables**
+##### Arguments
 
-- `button`: \
- Name of the button to be clicked.
-- `subselector`: \
- Optional subselector for more specific targeting within the button (default is null).
+- **`button`** *(String)*: Name of the button to be clicked (case insensitive).
+- **`subselector`** *(String, optional, default: null)*: Optional subselector for more specific targeting within the button.
+
+##### Example
+
+```javascript
+cy.clickToolbarButton('Save & Close');
+```
 
 ---
 
-#### checkForPhpNoticesOrWarnings
+#### `checkForPhpNoticesOrWarnings`
 
-**Command**
+The command `checkForPhpNoticesOrWarnings` checks for PHP notices and warnings in the HTML page source.
+It looks for keywords such as 'Deprecated' in bold followed by a colon.
+If such a styled keyword is found, the Cypress test fails with the PHP problem message.
+Looking for:
+* Warning:
+* Deprecated:
+* Notice:
+* Strict standards:
 
-Checks for PHP notices and warnings in the current page.
+To show PHP notices and warnings [setErrorReportingToDevelopment](#seterrorreportingrodevelopment)
+has to be executed once before.
 
+:point_right: This command could be used in Cypress `afterEach()` to to run after each test block.
+
+##### Usage
+
+```javascript
+cy.checkForPhpNoticesOrWarnings()
 ```
-Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings);
+
+##### Example
+
+```javascript
+cy.checkForPhpNoticesOrWarnings();
 ```
-
-**Function**
-
-Checks the HTML source of the current page for PHP notices and warnings.
-
-```
-const checkForPhpNoticesOrWarnings = () => {...};
-```
-
-**Variables**
-
-None used.
 
 ---
 
-#### checkForSystemMessage
+#### `checkForSystemMessage`
 
-**Command**
+The command `checkForSystemMessage` checks that a Joomla system message exists,
+is visible and contains a specific text.
 
-Checks for a system message containing specific text.
+##### Usage
 
-```
-Cypress.Commands.add('checkForSystemMessage', checkForSystemMessage);
-```
-
-**Function**
-
-Checks if a system message containing specified text is visible.
-
-```
-const checkForSystemMessage = (contain) => {...};
+```javascript
+cy.checkForSystemMessage(contain)
 ```
 
-**Variables**
+##### Arguments
 
-- `contain`: \
- Text content to check within the system message.
- 
+- **`contain`** *(String)*: The substring that must be included in the system message.
+
+##### Example
+
+This command is used, for example, in the command [installExtensionFromFolder](#installextensionfromfolder)
+to check if the installation of the extension was successful
+by checking if there is a system message containing "was successful".
+
+```javascript
+cy.checkForSystemMessage('was successful')
+```
+
 ---
 
-#### searchForItem
-
-**Command**
-
-Searches for an item using the Joomla interface.
-
-```
-Cypress.Commands.add('searchForItem', searchForItem);
-```
-
-**Function**
+#### `searchForItem`
 
 Initiates a search for an item within Joomla based on the provided name.
 
-```
-const searchForItem = (name = null) => {...};
-```
+The command `searchForItem` searches for a specific name in a Joomla list and
+clicks on the checkbox at the beginning of the corresponding list entry.
+As a prerequisite, the list must be open.
+The search field is used to avoid paging.
+The list entry being searched for is selected as the result.
 
-**Variables**
+##### Usage
 
-- `name`: \
- Optional name of the item to search for (default is null).
- 
----
-
-#### setFilter
-
-**Command**
-
-Sets a filter on the list view in Joomla.
-
-```
-Cypress.Commands.add('setFilter', setFilter);
+```javascript
+cy.searchForItem(name)
 ```
 
-**Function**
+##### Arguments
 
-Sets a filter on the Joomla list view based on the provided filter name and value.
+- **`name`** *(String, optional, default: null)*: Name of the item to search for.
 
+##### Example
+
+This command is used, for example, in the [enablePlugin](#enableplugin) command
+to select the plugin to be enabled.
+
+```javascript
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+cy.visit('/administrator/index.php?option=com_plugins');
+cy.searchForItem(pluginName);
 ```
-const setFilter = (name, value) => {...};
-```
-
-**Variables**
-
-- `name`: \
- Name of the filter to set.
-- `value`: \
- Value to set for the filter.
- 
----
-
-#### checkAllResults
-
-**Command**
-
-Checks all results in the Joomla list view.
-
-```
-Cypress.Commands.add('checkAllResults', checkAllResults);
-```
-
-**Function**
-
-Selects all results by checking the 'check all' checkbox in the Joomla list view.
-
-```
-const checkAllResults = () => {...};
-```
-
-**Variables**
-
-None used.
 
 ---
 
-#### createMenuItem
+#### `setFilter`
 
-**Command**
+The command `setFilter` sets a filter on the list view in Joomla.
 
-Creates a new menu item in Joomla.
+##### Usage
 
-```
-Cypress.Commands.add('createMenuItem', createMenuItem);
-```
-
-**Function**
-
-Creates a new menu item in Joomla with specified parameters.
-
-```
-const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {...};
+```javascript
+cy.setFilter(name, value)
 ```
 
-**Variables**
+##### Arguments
 
-- `menuTitle`: \
- Title of the new menu item.
-- `menuCategory`: \
- Category of the menu item.
-- `menuItem`: \
- Type of the menu item.
-- `menu`: \
- Menu where the item will be created (default is 'Main Menu').
-- `language`: \
- Language for the menu item (default is 'All').
+- **`name`** *(String)*: Name of the filter to set.
+- **`value`** *(String)*: Value to set for the filter.
+
+##### Example
+
+In the following example, the list of user entries is filtered to "State: Activated":
+
+```javascript
+// Using 'username' and 'password' from Cypress.env()
+cy.doAdministratorLogin()
+  // Open user list
+  .visit('/administrator/index.php?option=com_users')
+  // Only enabled user entries
+  .setFilter('state', 'Enabled');
+```
 
 ---
 
-#### createCategory
+#### `checkAllResults`
 
-**Command**
+Joomla list views are page by page.
+The command `checkAllResults` displays all list entries in one page by marking 'All' entries in the Joomla list view.
+As a prerequisite, the list must be open.
 
-Creates a new category in Joomla.
+##### Usage
 
-```
-Cypress.Commands.add('createCategory', createCategory);
-```
-
-**Function**
-
-Creates a new category in Joomla with specified title and extension.
-
-```
-const createCategory = (title, extension = 'com_content') => {...};
+```javascript
+cy.checkAllResults()
 ```
 
-**Variables**
+##### Example
 
-- `title`: \
- Title of the new category.
-- `extension`: \
- Extension associated with the category (default is 'com_content').
+```javascript
+// Show all extensions on one page:
+cy.doAdministratorLogin
+  .visit('/administrator/index.php?option=com_installer&view=manage')
+  .checkAllResults();
+```
 
 ---
 
-#### selectOptionInFancySelect
+#### `createMenuItem`
 
-**Command**
+The command `createMenuItem` creates a new menu item in Joomla. TODO
 
-Selects an option from a fancy select field in Joomla.
+##### Usage
 
-```
-Cypress.Commands.add('selectOptionInFancySelect', selectOptionInFancySelect);
-```
-
-**Function**
-
-Selects an option from a fancy select field identified by selectId.
-
-```
-const selectOptionInFancySelect = (selectId, option) => {...};
+```javascript
+cy.createMenuItem(menuTitle, menuCategory, menuItem, menu, language)
 ```
 
-**Variables**
+##### Arguments
 
-- `selectId`: \
- ID of the fancy select field.
-- `option`: \
- Option to be selected from the fancy select field.
- 
----
+- **`menuTitle`** *(String)*: The title of the new menu item.
+- **`menuCategory`** *(String)*: The category of the menu item.
+- **`menuItem`** *(String)*: The type of the menu item.
+- **`menu`** *(String, optional, default: 'Main Menu')*: The menu where the item will be created.
+- **`language`** *(String, optional, default: 'All')*: The Language for the menu item.
 
-#### toggleSwitch
+##### Example
 
-**Command**
-
-Toggles a switch field in Joomla.
-
+```javascript
+// Create menu entry 'Spotlight Stories' in 'Main Menu'
+cy.doAdministratorLogin("admin-user", "admin-user-password");
+  .createMenuItem('Spotlight Stories', 'Articles', 'Featured Articles');
 ```
-Cypress.Commands.add('toggleSwitch', toggleSwitch);
-```
-
-**Function**
-
-Toggles a switch field identified by fieldName to the specified valueName.
-
-```
-const toggleSwitch = (fieldName, valueName) => {...};
-```
-
-**Variables**
-
-- `fieldName`: \
- Name of the switch field to toggle.
-- `valueName`: \
- Value to toggle the switch field to.
 
 ---
 
-### User Commands
+#### `createCategory`
 
-#### doAdministratorLogin
+The command `createCategory`creates a new category in Joomla with the specified title.
+Categories can be created to organise:
+* Content articles – extension 'com_content',
+* News feeds – extension 'com_newsfeeds',
+* Banners – extension 'com_banners' or
+* Contacts – extension 'com_contact'.
 
-**Command**
+If the category with the specified title and extension already exists, the command will fail.
 
-Initiates administrator login process.
+##### Usage
 
-```
-Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin);
-```
-
-**Function**
-
-Performs administrator login with provided credentials or defaults to environment 
-variables.
-
-```
-const doAdministratorLogin = (user, password, useSnapshot = true) => {...};
+```javascript
+cy.createCategory(title, extension)
 ```
 
-**Variables**
+##### Arguments
 
-- `user`: \
-Username for login. Defaults to Cypress environment variable if not provided.
-- `password`: \
-Password for login. Defaults to Cypress environment variable if not provided.
-- `useSnapshot`: \
-Boolean flag to determine if the session should be cached across specs (default is true).
+- **`title`** *(String)*: The title of the new category.
+- **`extension`** *(String, optional, default: 'com_content')*: The content type of the category.
+
+##### Example
+
+```javascript
+// Create Monday banners category
+cy.doAdministratorLogin()
+  .createCategory("Monday Banners", "com_banners");
+```
 
 ---
 
-#### doAdministratorLogout
+#### `selectOptionInFancySelect`
 
-**Command**
+The command `selectOptionInFancySelect` selects an option from a fancy select field in Joomla.
 
-Initiates administrator logout process.
+##### Usage
 
-```
-Cypress.Commands.add('doAdministratorLogout', doAdministratorLogout);
-```
-
-**Function**
-
-Logs out from the Joomla administrator interface.
-
-```
-const doAdministratorLogout = () => {...};
+```javascript
+cy.selectOptionInFancySelect(selectId, option)
 ```
 
-**Variables**
+##### Arguments
 
-None used.
+- **`selectId`** *(String)*: The CSS ID of the fancy select field.
+- **`option`** *(String)*: The option to be selected from the fancy select field.
+
+##### Example
+
+<!-- muhme, 20 July 2024: untested as no use case was found -->
+```javascript
+cy.selectOptionInFancySelect("#jform_countries", "Germany")
+```
 
 ---
 
-#### doFrontendLogin
+#### `toggleSwitch`
 
-**Command**
+The command `toggleSwitch` toggles a switch field in Joomla identified by fieldName to the specified valueName.
 
-Initiates frontend login process.
+##### Usage
 
-```
-Cypress.Commands.add('doFrontendLogin', doFrontendLogin);
-```
-
-**Function**
-
-Logs into the Joomla frontend using provided credentials or environment variables.
-
-```
-const doFrontendLogin = (user, password, useSnapshot = true) => {...};
+```javascript
+cy.toggleSwitch(fieldName, valueName)
 ```
 
-**Variables**
+##### Arguments
 
-- `user`: \
-Username for login. Defaults to Cypress environment variable if not provided.
-- `password`: \
-Password for login. Defaults to Cypress environment variable if not provided.
-- `useSnapshot`: \
-Boolean flag to determine if the session should be cached across specs (default is true).
+- **`fieldName`** *(String)*: The name of the switch field to toggle.
+- **`valueName`** *(String)*: The value to toggle the switch field to.
+
+##### Example
+
+<!-- muhme, 20 July 2024: untested as no use case was found -->
+```javascript
+cy.toggleSwitch("Published", "Yes");
+cy.
+```
 
 ---
 
-#### doFrontendLogout
+### Common Commands
 
-**Command**
+#### `iframe`
 
-Initiates frontend logout process.
+The command `iframe` works with iframe elements.
+It waits for the iframe to fully load and resolves with the iframe's body content,
+allowing to interact with elements inside the iframe seamlessly.
 
-```
-Cypress.Commands.add('doFrontendLogout', doFrontendLogout);
-```
+##### Usage
 
-**Function**
-
-Logs out from the Joomla frontend.
-
-```
-const doFrontendLogout = () => {...};
+```javascript
+cy.get('iframe').iframe()
 ```
 
-**Variables**
+##### Example
 
-None used.
+```javascript
+cy.get('iframe').iframe().then($body => {
+  // You can now interact with the iframe's body as a Cypress element
+  cy.wrap($body).find('selector-within-iframe').click();
+});
+```
 
 ---
 
-#### createUser
-
-**Command**
-
-Creates a new user in the Joomla administrator interface.
-
-```
-Cypress.Commands.add('createUser', createUser);
-```
-
-**Function**
-
-Creates a new user with specified details.
-
-```
-const createUser = (name, username, password, email, userGroup = 'Super Users') => {...};
-```
-
-**Variables**
-
-- `name`: \
-Name of the user.
-- `username`: \
-Username for the new user.
-- `password`: \
-Password for the new user.
-- `email`: \
-Email address for the new user.
-- `userGroup`: \
-User group to assign the new user (default is 'Super Users').
-
----
-
-## Usage Samples
-You can see the usage by sample:
+## Usage Examples from the Field
+You can see the usage in practical applications examples:
 * [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see `tests/System` – The Joomla System Tests, using e.g.
   `cy.installJoomla`, `cy.doFrontendLogin()` or `cy.clickToolbarButton`
 * [manual-examples](https://github.com/joomla/manual-examples) - Testing the Joomla module tutorial sample
