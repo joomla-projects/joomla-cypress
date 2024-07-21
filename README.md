@@ -41,7 +41,7 @@ This consistent logging format helps to easily identify the steps and
 status of the custom commands during test execution. For example:
 
 **Install an extension from file upload**<br />
-...
+...<br />
 --Install an extension from file upload--
 
 The Cypress custom commands for Joomla are grouped into the following categories:
