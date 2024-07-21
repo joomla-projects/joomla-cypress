@@ -5,7 +5,7 @@
 <!-- prettier-ignore-end -->
 
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
-All active Joomla development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
+The Joomla default branch and all active development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
 ## Installation
 
@@ -19,10 +19,11 @@ npm install --save-dev @testing-library/joomla-cypress
 
 To import and load the additional Cypress custom commands you will typically extend the `cypress/support/index.js` file:
 ```
-// Register additional Cypress custom commands from npm module 'joomla-cypress'
-import { registerCommands } from "joomla-cypress";
-// To have attachFile() which is used in installExtensionFromFileUpload()
+// Add attachFile() command, which is used in installExtensionFromFileUpload()
 import 'cypress-file-upload';
+
+// Register Joomla Cypress custom commands from npm module 'joomla-cypress'
+import { registerCommands } from "joomla-cypress";
 registerCommands();
 ```
 
@@ -31,15 +32,16 @@ registerCommands();
 The Cypress API is extended with [custom commands](https://docs.cypress.io/api/cypress-api/custom-commands).
 As Cypress custom commands, all `joomla-cypress` extended commands return an `Cypress.Chainable`.
 
-The target Joomla installation requires the language `en-GB` for the Joomla administrator user used.
+The target Joomla installation requires the language `en-GB` for the used Joomla administrator user.
 
-All extended commands use Cypress logging, with messages formatted in bold type at the beginning and
-enclosed with double dashes at the end. 
+All added commands use Cypress logging, with messages formatted in bold type at the beginning and
+double hyphens at the end.
 These log messages can be observed when running the Cypress GUI.
 This consistent logging format helps to easily identify the steps and
 status of the custom commands during test execution. For example:
 
 **Install an extension from file upload**<br />
+...
 --Install an extension from file upload--
 
 The Cypress custom commands for Joomla are grouped into the following categories:
@@ -59,9 +61,10 @@ on GitHub you can use the TOC button at the top right of the README.
 The command `doAdministratorLogin` initiates the administrator login process for the backend.
 It performs the administrator login with the specified login information or with the Cypress environment variables.
 The user must be a member of the 'Manager', 'Administrator' or 'Super Users' group to be able to log in to the backend.
-By default, [Cypress session](https://docs.cypress.io/api/commands/session) is used
-to cache and restore session data for this users backend login across Cypress test specs,
-thereby speeding up the overall test suite.
+
+By default, a [Cypress session](https://docs.cypress.io/api/commands/session) is used
+to cache and restore session data for this user's backend login across Cypress test specs.
+This speeds up the entire test suite.
 
 See also [doAdministratorLogout](#doadministratorlogout) and [doFrontendLogin](#dofrontendlogin).
 
@@ -73,9 +76,9 @@ cy.doAdministratorLogin(user, password, useSnapshot)
 
 ##### Arguments
 
-- **`user`** *(String, optional, default: `Cypress.env('username')`)*: The username for logging in.
-- **`password`** *(String, optional, default: `Cypress.env('password')`)*: The password for logging in.
-- **`useSnapshot`** *(String, optional, default: `true`)*:
+- **`user`** *(string, optional, default: `Cypress.env('username')`)*: The username for logging in.
+- **`password`** *(string, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`useSnapshot`** *(boolean, optional, default: `true`)*:
   Boolean flag to determine if this users backend login session should be cached across specs.
 
 ##### Example
@@ -89,11 +92,11 @@ cy.doAdministratorLogin("admin-user", "admin-user-password", false);
 
 #### `doAdministratorLogout`
 
-The command `doAdministratorLogout` initiates administrator logout process from the backend.
+The command `doAdministratorLogout` initiates user logout process from the backend.
 All session data (both backend and frontend, for all users) is being cleaned up.
 A user must be logged into the backend.
 
-See also [doAdministratorLogin](doadministratorlogin).
+See also [doAdministratorLogin](#doadministratorlogin).
 
 ##### Usage
 
@@ -119,11 +122,12 @@ cy.doAdministratorLogin("admin-user", "admin-user-password")
 The command `doFrontendLogin` initiates a user login to the frontend.
 It performs the user login with the specified login information or with the Cypress environment variables.
 The user must belong to a user group that has the necessary permissions to access the frontend.
-By default, [Cypress session](https://docs.cypress.io/api/commands/session) is used
-to cache and restore session data for this users frontend login across Cypress test specs,
-thereby speeding up the overall test suite.
 
-See also [doFrontendLogout](dofrontendlogout) and [doAdministratorLogin](doadministratorlogin).
+By default, [Cypress session](https://docs.cypress.io/api/commands/session) is used
+to cache and restore session data for this users frontend login across Cypress test specs.
+This speeds up the entire test suite.
+
+See also [doFrontendLogout](#dofrontendlogout) and [doAdministratorLogin](#doadministratorlogin).
 
 ##### Usage
 
@@ -133,9 +137,9 @@ cy.doFrontendLogin(user, password, useSnapshot)
 
 ##### Arguments
 
-- **`user`** *(String, optional, default: `Cypress.env('username')`)*: The user name for logging in.
-- **`password`** *(String, optional, default: `Cypress.env('password')`)*: The password for logging in.
-- **`useSnapshot`** *(String, optional, default: `true`)*:
+- **`user`** *(string, optional, default: `Cypress.env('username')`)*: The user name for logging in.
+- **`password`** *(string, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`useSnapshot`** *(boolean, optional, default: `true`)*:
   Boolean flag to determine if this users frontend login session should be cached across specs.
 
 ##### Example
@@ -155,7 +159,7 @@ The command `doFrontendLogout` initiates frontend logout process.
 All session data (both backend and frontend, for all users) is being cleaned up.
 A user must be logged into the frontend.
 
-See also [doFrontendLogin](dofrontendlogin).
+See also [doFrontendLogin](#dofrontendlogin).
 
 ##### Usage
 
@@ -166,9 +170,9 @@ cy.
 ##### Example
 
 ```javascript
-    // Can log in and out with the default credentials
-    cy.doFrontendLogin(null, null, false)
-      .doFrontendLogout()
+// Can log in and out with the default credentials
+cy.doFrontendLogin(null, null, false)
+  .doFrontendLogout();
 ```
 
 ---
@@ -177,7 +181,7 @@ cy.
 
 The command `createUser` creates a new user entry in Joomla.
 If the user name already exists, the creation will fail.
-The user entry is activated after creation
+The user entry is activated after creation.
 
 ##### Usage
 
@@ -187,11 +191,11 @@ cy.createUser(name, username, password, email, userGroup)
 
 ##### Arguments
 
-- **`name`** *(String)*: The full name of the user.
-- **`username`** *(String)*: The name the user will log in as.
-- **`password`** *(String)*: The user's password.
-- **`email`** *(String)*: The user's email address.
-- **`userGroup`** *(String, optional, default: 'Super Users')*: The user group that is assigned to the new user entry.
+- **`name`** *(string)*: The full name of the user.
+- **`username`** *(string)*: The name the user will log in as.
+- **`password`** *(string)*: The user's password.
+- **`email`** *(string)*: The user's email address.
+- **`userGroup`** *(string, optional, default: 'Super Users')*: The user group that is assigned to the new user entry.
 
 ##### Example
 
@@ -209,11 +213,11 @@ cy.doAdministratorLogin()
 After Joomla download the command `installJoomla` runs all 'Joomla Installer' steps
 to install a Joomla instance on a web server.
 The installed language pack 'en-GB' is English (United Kingdom).
-
-> :warning: The `/installation` folder is not deleted after installation.
-  This allows multiple runs of the command `installJoomla`.
-  For production sites the  `/installation` folder needs to be deleted after installation.
 After the command, the 'Joomla Installer' screen remains open in the session.
+
+:warning: The `/installation` folder is not deleted after the installation.
+This allows multiple runs of the command `installJoomla`.
+For production sites the  `/installation` folder needs to be deleted after installation.
 
 See also [installJoomlaMultilingualSite](#installjoomlamultilingualsite).
 
@@ -225,24 +229,24 @@ cy.installJoomla(config)
 
 ##### Arguments
 
-- **`config`** *(Object)*: Configuration object containing sitename, name, username, password, email,
+- **`config`** *(object)*: Configuration object containing sitename, name, username, password, email,
   db_type, db_host, db_user, db_password, db_name and db_prefix.
 
 ##### Example
 
 ```javascript
 const config = {
-  sitename: "Sample Joomla Site",
-  name: "Joomla Administrator",
-  username: "admin",
-  password: "admin-password",
-  email: "sampleuser@example.com",
-  db_type: "MySQLi",
-  db_host: "localhost",
-  db_user: "joomla",
+     sitename: "Sample Joomla Site",
+         name: "Joomla Administrator",
+     username: "admin",
+     password: "admin-password",
+        email: "sampleuser@example.com",
+      db_type: "MySQLi",
+      db_host: "localhost",
+      db_user: "joomla",
   db_password: "joomla-db-user-password",
-  db_name: "sample_joomla",
-  db_prefix: "sjs_"
+      db_name: "sample_joomla",
+    db_prefix: "sjs_"
 }
 cy.installJoomla(config);
 ```
@@ -254,8 +258,9 @@ cy.installJoomla(config);
 The command `installJoomlaMultilingualSite` first runs the [installJoomla](#installjoomla) command
 and continues the 'Joomla Installer' with installation of additional languages.
 
-The `/installation` folder is deleted after the installation. Therefore, this command can only run once.
+The `/installation` folder is deleted after the installation.
 It is verified that the URL path '/installation' receives an error 404 – not found.
+This command can only run once.
 
 See also [installJoomla](#installjoomla).
 
@@ -267,25 +272,25 @@ cy.installJoomlaMultilingualSite(config, languages)
 
 ##### Arguments
 
-- **`config`** *(Object)*: Configuration object containing sitename, name, username, password, email,
+- **`config`** *(object)*: Configuration object containing sitename, name, username, password, email,
   db_type, db_host, db_user, db_password, db_name and db_prefix.
-- **`languages`** *(Array of Strings, optional, default: ["French"])*: Array of additional languages to be installed.
+- **`languages`** *(string[], optional, default: ["French"])*: Array of additional languages to be installed.
 
 ##### Example
 
 ```javascript
 const config = {
-  sitename: "Sample Joomla Site",
-  name: "Joomla Administrator",
-  username: "admin",
-  password: "admin-password",
-  email: "sampleuser@example.com",
-  db_type: "MySQLi",
-  db_host: "localhost",
-  db_user: "joomla",
+     sitename: "Sample Joomla Site",
+         name: "Joomla Administrator",
+     username: "admin",
+     password: "admin-password",
+        email: "sampleuser@example.com",
+      db_type: "MySQLi",
+      db_host: "localhost",
+      db_user: "joomla",
   db_password: "joomla-db-user-password",
-  db_name: "sample_joomla",
-  db_prefix: "sjs_"
+      db_name: "sample_joomla",
+    db_prefix: "sjs_"
 }
 const languages = ["German", "Japanese", "Spanish", "Ukrainian"];
 cy.installJoomlaMultilingualSite(config, languages);
@@ -296,11 +301,11 @@ cy.installJoomlaMultilingualSite(config, languages);
 #### `cancelTour`
 
 Since Joomla version 5 there is a guided tour with the overlay 'Welcome to Joomla!'
-after first login of an administrator.
+after first administrator login.
 The command `cancelTour` closes this guided tour overlay.
 The Joomla administrator must be logged in to do this.
 This is only possible once after installation and the first login.
-A timeout of 40 seconds is set.
+The timeout is extended to 40 seconds.
 
 ##### Usage
 
@@ -367,8 +372,8 @@ cy.setErrorReportingToDevelopment()
 
 #### `installExtensionFromFolder`
 
-The command `installExtensionFromFolder` automates the process of installing an extension in Joomla
-from a folder on the server. It navigates to the Joomla extension installer page, selects 'Install from Folder',
+The command `installExtensionFromFolder` installs an extension in Joomla from a folder on the server.
+It navigates to the Joomla extension installer page, selects 'Install from Folder',
 fills in the path to the folder and completes the installation.
 The Joomla administrator must be logged in to do this.
 
@@ -380,14 +385,14 @@ cy.installExtensionFromFolder(path, type)
 
 ##### Arguments
 
-- **`path`** *(String, required)*: The path to the folder containing the extension.
-- **`type`** *(String, optional, default: 'Extension')*: The type of the extension.
+- **`path`** *(string, required)*: The path to the folder containing the extension.
+- **`type`** *(string, optional, default: 'Extension')*: The type of the extension.
 
 ##### Example
 
 ```javascript
 cy.doAdministratorLogin("admin-user", "admin-user-password");
-cy.installExtensionFromFolder("/joomla-module/src"); // mounted in docker image
+cy.installExtensionFromFolder("/joomla-module/src"); // as mounted in docker image
 ```
 
 ---
@@ -436,8 +441,8 @@ cy.installExtensionFromFileUpload(file, type)
 
 ##### Arguments
 
-- **`file`** *(String, required)*: The path to the package file.
-- **`type`** *(String, optional, default: 'Extension')*: The type of the extension.
+- **`file`** *(string, required)*: The path to the package file.
+- **`type`** *(string, optional, default: 'Extension')*: The type of the extension.
 
 ##### Example
 
@@ -452,7 +457,7 @@ cy.installExtensionFromFileUpload("manual-examples.zip");
 
 The command `uninstallExtension` removed an installed extension from Joomla.
 It ensures that there are no warning messages after deletion and
-checks afterwards that the extension no longer exists
+checks afterwards that the extension no longer exists.
 The Joomla administrator must be logged in to do this.
 
 ##### Usage
@@ -463,7 +468,7 @@ cy.uninstallExtension(extensionName)
 
 ##### Arguments
 
-- **`extensionName`** *(String)*: The name of the extension.
+- **`extensionName`** *(string)*: The name of the extension.
 
 ##### Example
 
@@ -488,15 +493,15 @@ cy.installLanguage(languageName)
 
 ##### Arguments
 
-- **`languageName`** *(String)*: Language name or language tag.
+- **`languageName`** *(string)*: Language name or language tag.
 
 ##### Example
 
 ```javascript
 cy.doAdministratorLogin("admin-user", "admin-user-password");
-// Install German for Switzerland with language tag or ...
+// Install German for Switzerland with language tag
 cy.installLanguage("de-CH");
-// ... install with language name
+// or install with language name
 // cy.installLanguage("German, Switzerland");
 ```
 
@@ -516,7 +521,7 @@ cy.enablePlugin(pluginName)
 
 ##### Arguments
 
-- **`pluginName`** *(String)*: The plugin name.
+- **`pluginName`** *(string)*: The plugin name.
 
 ##### Example
 
@@ -540,8 +545,8 @@ cy.setModulePosition(module, position)
 
 ##### Arguments
 
-- **`module`** *(String)*: The module name.
-- **`position`** *(String, optional, default: 'position-7')*: The display position.
+- **`module`** *(string)*: The module name.
+- **`position`** *(string, optional, default: 'position-7')*: The display position.
 
 ##### Example
 
@@ -568,7 +573,7 @@ cy.publishModule(module)
 
 ##### Arguments
 
-- **`module`** *(String)*: The module name.
+- **`module`** *(string)*: The module name.
 
 ##### Example
 
@@ -592,7 +597,7 @@ cy.displayModuleOnAllPages(module)
 
 ##### Arguments
 
-- **`module`** *(String)*: The module name.
+- **`module`** *(string)*: The module name.
 
 ##### Example
 
@@ -608,7 +613,7 @@ cy.displayModuleOnAllPages("Login Form");
 #### `clickToolbarButton`
 
 The command `clickToolbarButton` clicks on a Joomla backend button by using an internal mapping table.
-For example the button 'Enable' is mapped to click on CSS selector "#toolbar-publish button".
+For example the button 'Enable' is mapped to click on CSS selector `#toolbar-publish button'.
 For the button 'transition' it is possible to give an additional subselector string.
 
 ##### Usage
@@ -619,8 +624,8 @@ cy.clickToolbarButton(button, subselector)
 
 ##### Arguments
 
-- **`button`** *(String)*: Name of the button to be clicked (case insensitive).
-- **`subselector`** *(String, optional, default: null)*: Optional subselector for more specific targeting within the button.
+- **`button`** *(string)*: Name of the button to be clicked (case insensitive).
+- **`subselector`** *(string, optional, default: null)*: Optional subselector for more specific targeting within the button.
 
 ##### Example
 
@@ -636,15 +641,18 @@ The command `checkForPhpNoticesOrWarnings` checks for PHP notices and warnings i
 It looks for keywords such as 'Deprecated' in bold followed by a colon.
 If such a styled keyword is found, the Cypress test fails with the PHP problem message.
 Looking for:
-* Warning:
-* Deprecated:
-* Notice:
-* Strict standards:
+* **Warning**:
+* **Deprecated**:
+* **Notice**:
+* **Strict standards**:
 
-To show PHP notices and warnings [setErrorReportingToDevelopment](#seterrorreportingrodevelopment)
-has to be executed once before.
+To maske the PHP notes and warnings visible,
+the command [setErrorReportingToDevelopment](#seterrorreportingrodevelopment)
+can to be executed once beforehand.
 
 :point_right: This command could be used in Cypress `afterEach()` to to run after each test block.
+
+See also [setErrorReportingToDevelopment](#seterrorreportingtodevelopment).
 
 ##### Usage
 
@@ -673,7 +681,7 @@ cy.checkForSystemMessage(contain)
 
 ##### Arguments
 
-- **`contain`** *(String)*: The substring that must be included in the system message.
+- **`contain`** *(string)*: The substring that must be included in the system message.
 
 ##### Example
 
@@ -682,14 +690,12 @@ to check if the installation of the extension was successful
 by checking if there is a system message containing "was successful".
 
 ```javascript
-cy.checkForSystemMessage('was successful')
+cy.checkForSystemMessage('was successful');
 ```
 
 ---
 
 #### `searchForItem`
-
-Initiates a search for an item within Joomla based on the provided name.
 
 The command `searchForItem` searches for a specific name in a Joomla list and
 clicks on the checkbox at the beginning of the corresponding list entry.
@@ -705,7 +711,7 @@ cy.searchForItem(name)
 
 ##### Arguments
 
-- **`name`** *(String, optional, default: null)*: Name of the item to search for.
+- **`name`** *(string, optional, default: null)*: Name of the item to search for.
 
 ##### Example
 
@@ -732,8 +738,8 @@ cy.setFilter(name, value)
 
 ##### Arguments
 
-- **`name`** *(String)*: Name of the filter to set.
-- **`value`** *(String)*: Value to set for the filter.
+- **`name`** *(string)*: Name of the filter to set.
+- **`value`** *(string)*: Value to set for the filter.
 
 ##### Example
 
@@ -765,7 +771,7 @@ cy.checkAllResults()
 ##### Example
 
 ```javascript
-// Show all extensions on one page:
+// Show all extensions in one single page:
 cy.doAdministratorLogin
   .visit('/administrator/index.php?option=com_installer&view=manage')
   .checkAllResults();
@@ -785,11 +791,11 @@ cy.createMenuItem(menuTitle, menuCategory, menuItem, menu, language)
 
 ##### Arguments
 
-- **`menuTitle`** *(String)*: The title of the new menu item.
-- **`menuCategory`** *(String)*: The category of the menu item.
-- **`menuItem`** *(String)*: The type of the menu item.
-- **`menu`** *(String, optional, default: 'Main Menu')*: The menu where the item will be created.
-- **`language`** *(String, optional, default: 'All')*: The Language for the menu item.
+- **`menuTitle`** *(string)*: The title of the new menu item.
+- **`menuCategory`** *(string)*: The category of the menu item.
+- **`menuItem`** *(string)*: The type of the menu item.
+- **`menu`** *(string, optional, default: 'Main Menu')*: The menu where the item will be created.
+- **`language`** *(string, optional, default: 'All')*: The Language for the menu item.
 
 ##### Example
 
@@ -820,8 +826,8 @@ cy.createCategory(title, extension)
 
 ##### Arguments
 
-- **`title`** *(String)*: The title of the new category.
-- **`extension`** *(String, optional, default: 'com_content')*: The content type of the category.
+- **`title`** *(string)*: The title of the new category.
+- **`extension`** *(string, optional, default: 'com_content')*: The content type of the category.
 
 ##### Example
 
@@ -845,21 +851,21 @@ cy.selectOptionInFancySelect(selectId, option)
 
 ##### Arguments
 
-- **`selectId`** *(String)*: The CSS ID of the fancy select field.
-- **`option`** *(String)*: The option to be selected from the fancy select field.
+- **`selectId`** *(string)*: The CSS ID of the fancy select field.
+- **`option`** *(string)*: The option to be selected from the fancy select field.
 
 ##### Example
 
 <!-- muhme, 20 July 2024: untested as no use case was found -->
 ```javascript
-cy.selectOptionInFancySelect("#jform_countries", "Germany")
+cy.selectOptionInFancySelect("#jform_countries", "Germany");
 ```
 
 ---
 
 #### `toggleSwitch`
 
-The command `toggleSwitch` toggles a switch field in Joomla identified by fieldName to the specified valueName.
+The command `toggleSwitch` toggles a switch field in Joomla identified by fieldName to the specified value name.
 
 ##### Usage
 
@@ -869,15 +875,14 @@ cy.toggleSwitch(fieldName, valueName)
 
 ##### Arguments
 
-- **`fieldName`** *(String)*: The name of the switch field to toggle.
-- **`valueName`** *(String)*: The value to toggle the switch field to.
+- **`fieldName`** *(string)*: The name of the switch field to toggle.
+- **`valueName`** *(string)*: The value to toggle the switch field to.
 
 ##### Example
 
 <!-- muhme, 20 July 2024: untested as no use case was found -->
 ```javascript
 cy.toggleSwitch("Published", "Yes");
-cy.
 ```
 
 ---
@@ -909,10 +914,12 @@ cy.get('iframe').iframe().then($body => {
 
 ## Usage Examples from the Field
 You can see the usage in practical applications examples:
-* [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see `tests/System` – The Joomla System Tests, using e.g.
-  `cy.installJoomla`, `cy.doFrontendLogin()` or `cy.clickToolbarButton`
-* [manual-examples](https://github.com/joomla/manual-examples) - Testing the Joomla module tutorial sample
-  from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or `cy.installExtensionFromFileUpload` 
+* [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see folder `tests/System` –
+   The Joomla System Tests, using e.g.
+  `cy.installJoomla`, `cy.doFrontendLogin` or `cy.clickToolbarButton`
+* [manual-examples](https://github.com/joomla/manual-examples) see folder `tests` - Testing the Joomla module
+  tutorial sample from the development manual, using e.g. `cy.doAdministratorLogin`, `cy.setModulePosition` or
+  `cy.installExtensionFromFileUpload` 
 * [quote_joomla](https://github.com/muhme/quote_joomla/tree/main/test) – Installation of a Joomla module, using e.g. 
   `cy.installJoomlaMultilingualSite`, `cy.installExtensionFromFolder` or `cy.publishModule` 
 
