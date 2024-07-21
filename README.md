@@ -63,7 +63,7 @@ By default, [Cypress session](https://docs.cypress.io/api/commands/session) is u
 to cache and restore session data for this users backend login across Cypress test specs,
 thereby speeding up the overall test suite.
 
-See also [doAdministratorLogout](doadministratorlogout) and [doFrontendLogin](dofrontendlogin).
+See also [doAdministratorLogout](#doadministratorlogout) and [doFrontendLogin](#dofrontendlogin).
 
 ##### Usage
 
