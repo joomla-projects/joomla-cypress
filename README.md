@@ -781,7 +781,13 @@ cy.doAdministratorLogin
 
 #### `createMenuItem`
 
-The command `createMenuItem` creates a new menu item in Joomla. TODO
+The command `createMenuItem` creates a new menu item in Joomla.
+
+The parameter "language" is only used if the Joomla website multilingual (several languages are installed,
+these content languages are activated and the "System - Language filter" plugin is enabled).
+Otherwise, the language selection is hidden and ignored.
+For the language parameter the language name (e.g. "Japanese (Japan)") or the language tag (e.g. "ja-JP") can be used.
+Default is "All".
 
 ##### Usage
 
@@ -795,14 +801,14 @@ cy.createMenuItem(menuTitle, menuCategory, menuItem, menu, language)
 - **`menuCategory`** *(string)*: The category of the menu item.
 - **`menuItem`** *(string)*: The type of the menu item.
 - **`menu`** *(string, optional, default: 'Main Menu')*: The menu where the item will be created.
-- **`language`** *(string, optional, default: 'All')*: The Language for the menu item.
+- **`language`** *(string, optional, default: 'All')*: The language for the menu item.
 
 ##### Example
 
 ```javascript
-// Create menu entry 'Spotlight Stories' in 'Main Menu'
+// Create Japanese menu item 'Spotlight Stories'
 cy.doAdministratorLogin("admin-user", "admin-user-password");
-  .createMenuItem('Spotlight Stories', 'Articles', 'Featured Articles');
+  .createMenuItem('スポットライト・ストーリー', 'Articles', 'Featured Articles', 'Menu 日本語', 'ja-JP');
 ```
 
 ---
