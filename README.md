@@ -783,10 +783,11 @@ cy.doAdministratorLogin
 
 The command `createMenuItem` creates a new menu item in Joomla.
 
-The parameter "language" is only used if the Joomla website multilingual (several languages are installed,
-these content languages are activated and the "System - Language filter" plugin is enabled).
+The Language parameter is only used if the Joomla website is set up multingual.
+This means that at least one additional language must be installed and the
+"System - Language Filter" plugin must be activated.
 Otherwise, the language selection is hidden and ignored.
-For the language parameter the language name (e.g. "Japanese (Japan)") or the language tag (e.g. "ja-JP") can be used.
+For the `language` parameter the language name (e.g. "Japanese (Japan)") or the language tag (e.g. "ja-JP") can be used.
 Default is "All".
 
 ##### Usage
