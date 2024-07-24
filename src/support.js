@@ -241,7 +241,7 @@ const supportCommands = () => {
     cy.get('body').then(($body) => {
       if ($body.find('.controls > .input-group > .btn.btn-primary').length > 0) {
         // Do it in Joomla 4
-        cy.get('.controls > .input-group > .btn.btn-primary').click()
+        cy.get('.controls > .input-group > .btn.btn-primary').eq(0).click()
       } else {
         // Do it in Joomla >= 5 with click the 'Menu Item Type'
         cy.get('button[data-button-action="select"]').each(($btn) => {
@@ -249,7 +249,7 @@ const supportCommands = () => {
           if (dataModalConfig && dataModalConfig.includes('Menu Item Type')) {
             cy.wrap($btn).click()
           }
-        });
+        })
       }
     })
 
