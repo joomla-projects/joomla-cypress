@@ -216,8 +216,7 @@ const supportCommands = () => {
    * @param {string} [menu='Main Menu'] – The used menu item destination (e.g. 'Featured Articles').
    * @param {string} [language='All'] - Menu item language as name (e.g. 'Czech (Čeština)') or tag (e.g. 'cs-CZ').
    *
-   * The 'language' parameter is only used if the Joomla website is a multilingual (more than one languages is
-   * installed, the content languages are activated and the "System - Language filter" plugin is enabled).
+   * The 'language' parameter is only used for multilingual websites where the language selection is visible.
    * 
    * @returns {Cypress.Chainable}
    */
