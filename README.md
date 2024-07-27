@@ -164,7 +164,7 @@ See also [doFrontendLogin](#dofrontendlogin).
 ##### Usage
 
 ```javascript
-cy.
+cy.doFrontendLogin()
 ```
 
 ##### Example
@@ -210,7 +210,7 @@ cy.doAdministratorLogin()
 
 #### `installJoomla`
 
-After Joomla download the command `installJoomla` runs all 'Joomla Installer' steps
+After Joomla download, the command `installJoomla` runs all 'Joomla Installer' steps
 to install a Joomla instance on a web server.
 The installed language pack 'en-GB' is English (United Kingdom).
 After the command, the 'Joomla Installer' screen remains open in the session.
@@ -259,7 +259,7 @@ The command `installJoomlaMultilingualSite` first runs the [installJoomla](#inst
 and continues the 'Joomla Installer' with installation of additional languages.
 
 The `/installation` folder is deleted after the installation.
-It is verified that the URL path '/installation' receives an error 404 – not found.
+It is verified that the URL path '/installation' receives an error 404 – Not Found.
 This command can only run once.
 
 See also [installJoomla](#installjoomla).
@@ -363,7 +363,7 @@ cy.setErrorReportingToDevelopment()
 
 ```javascript
 cy.doAdministratorLogin("admin-user", "admin-user-password");
-cy.setErrorReportingToDevelopment()
+cy.setErrorReportingToDevelopment();
 ```
 
 ---
@@ -646,11 +646,11 @@ Looking for:
 * **Notice**:
 * **Strict standards**:
 
-To maske the PHP notes and warnings visible,
+To make the PHP notes and warnings visible,
 the command [setErrorReportingToDevelopment](#seterrorreportingrodevelopment)
-can to be executed once beforehand.
+needs to be executed once beforehand.
 
-:point_right: This command could be used in Cypress `afterEach()` to to run after each test block.
+:point_right: This command could be used in Cypress `afterEach()` to run after each test block.
 
 See also [setErrorReportingToDevelopment](#seterrorreportingtodevelopment).
 
@@ -786,7 +786,7 @@ The command `createMenuItem` creates a new menu item in Joomla.
 The Language parameter is only used if the Joomla website is set up multingual.
 This means that at least one additional language must be installed and the
 "System - Language Filter" plugin must be activated.
-Otherwise, the language selection is hidden and ignored.
+Otherwise, the language selection is ignored.
 For the `language` parameter the language name (e.g. "Japanese (Japan)") or the language tag (e.g. "ja-JP") can be used.
 Default is "All".
 
@@ -806,6 +806,8 @@ cy.createMenuItem(menuTitle, menuCategory, menuItem, menu, language)
 
 ##### Example
 
+The following code creates a menu entry 'Spotlight Story' for featured articles as a Japanese menu entry,
+for the Japanese language and in the Japanese menu.
 ```javascript
 // Create Japanese menu item 'Spotlight Stories'
 cy.doAdministratorLogin("admin-user", "admin-user-password");
@@ -899,7 +901,7 @@ cy.toggleSwitch("Published", "Yes");
 #### `iframe`
 
 The command `iframe` works with iframe elements.
-It waits for the iframe to fully load and resolves with the iframe's body content,
+It waits for the iframe to be fully loaded and resolves with the iframe's body content,
 allowing to interact with elements inside the iframe seamlessly.
 
 ##### Usage
@@ -920,7 +922,7 @@ cy.get('iframe').iframe().then($body => {
 ---
 
 ## Usage Examples from the Field
-You can see the usage in practical applications examples:
+You can see the practical use in various projects:
 * [joomla-cms](https://github.com/joomla/joomla-cms//blob/HEAD/tests/System) see folder `tests/System` –
    The Joomla System Tests, using e.g.
   `cy.installJoomla`, `cy.doFrontendLogin` or `cy.clickToolbarButton`
