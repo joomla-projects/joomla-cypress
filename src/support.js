@@ -81,27 +81,38 @@ const supportCommands = () => {
 
   Cypress.Commands.add('clickToolbarButton', clickToolbarButton)
 
-
   /**
-   * Check for notices and warnings
+   * Check for PHP notices and warnings in the HTML page source.
+   * This command looks for keywords such as 'Deprecated' in bold followed by a colon.
+   * If such a styled keyword is found, the test fails with the PHP problem message.
    *
-   * @memberof cy
+   * Looking for:
+   * - <b>Warning</b>:
+   * - <b>Deprecated</b>:
+   * - <b>Notice</b>:
+   * - <b>Strict standards</b>:
+   *
+   * @memberof Cypress.Commands
    * @method checkForPhpNoticesOrWarnings
-   * @returns Chainable
+   * @returns {void} - It does not return any value, but it is chainable with other Cypress commands.
    */
-  const checkForPhpNoticesOrWarnings = () => {
+  Cypress.Commands.add('checkForPhpNoticesOrWarnings', () => {
     cy.log('**Check for PHP notices and warnings**')
 
     cy.document().then((doc) => {
       const pageSource = doc.documentElement.innerHTML
-      const regex = /<b>Warning<\/b>:|<b>Deprecated<\/b>:|<b>Notice<\/b>:|<b>Strict standards<\/b>:/
-      expect(regex.test(pageSource)).to.equal(false)
+      // Search for PHP problem keywords in bold style with colon and collect the found keyword and the message
+      const regex = /<b>(Warning|Deprecated|Notice|Strict standards)<\/b>:(.*?)(<br|$)/
+      const match = regex.exec(pageSource)
+      if (match) {
+        // Directly fail with the reason, the keyword found and report the PHP problem message, e.g.
+        // Error: Unwanted PHP Warning: "Attempt to read property \"id\" on null in <b>/joomla-cms/components/com_newsfeeds/src/View/Category/HtmlView.php</b> on line <b>92</b>"
+        throw new Error(`Unwanted PHP ${match?.[1]}: ${JSON.stringify(match?.[2])}`)
+      }
     })
 
     cy.log('--Check for PHP notices and warnings--')
-  }
-
-  Cypress.Commands.add('checkForPhpNoticesOrWarnings', checkForPhpNoticesOrWarnings)
+  })
 
   /**
    * @memberof cy
