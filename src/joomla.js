@@ -61,6 +61,17 @@ const joomlaCommands = () => {
 
   Cypress.Commands.add('cancelTour', cancelTour)
 
+  // Skip Tour
+  const skipTour = () => {
+    cy.log('**Skip Tour**')
+
+    cy.get('.shepherd-button-secondary', { timeout: 40000 }).should('exist').click()
+
+    cy.log('--Skip Tour--')
+  }
+
+  Cypress.Commands.add('skipTour', skipTour)
+
 
   /**
    * Disable Statistics Plugin
