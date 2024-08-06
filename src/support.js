@@ -218,7 +218,7 @@ const supportCommands = () => {
    *
    * The 'language' parameter is only used for multilingual websites where the language selection is visible.
    * 
-   * @returns {Cypress.Chainable}
+   * @returns {void} - It does not return any value, but it is chainable with other Cypress commands.
    */
    Cypress.Commands.add('createMenuItem', (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
     cy.log('**Create a menu item**')
