@@ -271,7 +271,7 @@ const supportCommands = () => {
     cy.get('#jform_title').type(menuTitle)
 
     // The language is only configured for multilingual websites where the language selection is visible.
-    cy.get('#jform_language').should('exist').then(($select) => {
+    cy.get('#jform_language').then(($select) => {
       if ($select.is(':visible')) {
         cy.get('#jform_language').select(language);
       }
