@@ -138,7 +138,7 @@ const joomlaCommands = () => {
     cy.installJoomla(config)
 
     cy.get('#installAddFeatures').then(($btn) => {
-      cy.wrap($btn.text().trim()).as('installAddFeaturesBtnText');
+      cy.wrap($btn.text().trim()).as('installAddFeaturesBtnText')
     })
 
     cy.get('#installAddFeatures').click()
@@ -167,11 +167,27 @@ const joomlaCommands = () => {
         // Joomla 4: simple click 1st button to complete installation and delete installation folder
         cy.get('.complete-installation').eq(0).click()
       }
-    });
+    })
 
-    // check installation is no more available
-    cy.visit("/installation", { failOnStatusCode: false }); // prevent Cypress from failing
-    cy.title().should("include", "404"); // page title have to contain 404
+    // Check installation is no longer available - it may take a little while
+    const maxRetries = 10
+    cy.wrap(null).then(function checkRequest() {
+      // Current attempt count is kept in `this` context
+      if (!this.attempts) {
+        this.attempts = 0
+      }
+      this.attempts += 1
+      cy.request({
+        url: "/installation",
+        failOnStatusCode: false // Prevent Cypress from failing on non-2xx status codes
+      }).then((response) => {
+        if (response.status !== 404 && this.attempts < maxRetries) {
+          cy.wait(1000).then(checkRequest) // Wait for 1 second and retry
+        } else {
+          expect(response.status).to.equal(404) // Yes, we are looking for 404 Not Found
+        }
+      })
+    })
 
     cy.log('Joomla is now installed')
 
