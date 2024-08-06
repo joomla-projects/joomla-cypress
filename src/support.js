@@ -94,7 +94,7 @@ const supportCommands = () => {
    *
    * @memberof Cypress.Commands
    * @method checkForPhpNoticesOrWarnings
-   * @returns {Cypress.Chainable}
+   * @returns {void} - It does not return any value, but it is chainable with other Cypress commands.
    */
   Cypress.Commands.add('checkForPhpNoticesOrWarnings', () => {
     cy.log('**Check for PHP notices and warnings**')
