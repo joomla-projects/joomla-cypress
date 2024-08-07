@@ -217,20 +217,22 @@ const supportCommands = () => {
   Cypress.Commands.add('checkAllResults', checkAllResults)
 
   /**
-   * Create a menu item
+   * Custom Cypress command to create a menu item in Joomla.
    *
-   * @memberof cy
+   * @memberof Cypress.Commands
    * @method createMenuItem
-   * @param {string} menuTitle
-   * @param {string} menuCategory
-   * @param {string} menuItem
-   * @param {string} menu
-   * @param {string} language
-   * @param {string} extension
-   * @returns Chainable
+   * @param {string} menuTitle – The title of the menu item to be created.
+   * @param {string} menuCategory – The category of the menu item.
+   * @param {string} menuItem – The used menu item type (e.g. 'Articles').
+   * @param {string} [menu='Main Menu'] – The used menu item destination (e.g. 'Featured Articles').
+   * @param {string} [language='All'] - Menu item language as name (e.g. 'Czech (Čeština)') or tag (e.g. 'cs-CZ').
+   *
+   * The 'language' parameter is only used for multilingual websites where the language selection is visible.
+   * 
+   * @returns {void} - It does not return any value, but it is chainable with other Cypress commands.
    */
-  const createMenuItem = (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
-    cy.log('**Create a menu item**');
+   Cypress.Commands.add('createMenuItem', (menuTitle, menuCategory, menuItem, menu = 'Main Menu', language = 'All') => {
+    cy.log('**Create a menu item**')
     cy.log('Menu title: ' + menuTitle)
     cy.log('Menu category: ' + menuCategory)
     cy.log('Menu Item: ' + menuItem)
@@ -246,25 +248,40 @@ const supportCommands = () => {
     cy.get('#menuList a[href*="menutype"]:first').click()
     cy.clickToolbarButton('new')
 
-    // Select a type for the new menu item
-    cy.get('.controls > .input-group > .btn').click();
-    cy.get('#menuTypeModal').should('be.visible')
+    // Open iFrame to select menu item type
+    cy.get('body').then(($body) => {
+      if ($body.find('.controls > .input-group > .btn.btn-primary').length > 0) {
+        // Do it in Joomla 4
+        cy.get('.controls > .input-group > .btn.btn-primary').eq(0).click()
+      } else {
+        // Do it in Joomla >= 5 with click the 'Menu Item Type'
+        cy.get('button[data-button-action="select"]').each(($btn) => {
+          const dataModalConfig = $btn.attr('data-modal-config')
+          if (dataModalConfig && dataModalConfig.includes('Menu Item Type')) {
+            cy.wrap($btn).click()
+          }
+        })
+      }
+    })
 
     cy.get('iframe').iframe().find('button').contains(menuCategory).click()
     cy.get('iframe').iframe().find('.accordion-body a').contains(menuItem).click()
 
-    cy.get('#jform_title').click();
-    cy.get('#jform_title').type(menuTitle);
+    cy.get('#jform_title').click()
+    cy.get('#jform_title').type(menuTitle)
 
-    // TODO: Language settings
+    // The language is only configured for multilingual websites where the language selection is visible.
+    cy.get('#jform_language').then(($select) => {
+      if ($select.is(':visible')) {
+        cy.get('#jform_language').select(language);
+      }
+    })
 
     cy.clickToolbarButton('save & close')
     cy.checkForSystemMessage('saved')
 
-    cy.log('--Create a menu item--');
-  }
-
-  Cypress.Commands.add('createMenuItem', createMenuItem)
+    cy.log('--Create a menu item--')
+  })
 
 
   /**
