@@ -298,7 +298,7 @@ cy.installJoomlaMultilingualSite(config, languages);
 
 ---
 
-<img src="images/skipTour.png" alt="'Welcome to Joomla!' guided tour overlay window" align="right" width="300" />
+<img src="images/cancelTour.png" alt="'Welcome to Joomla!' guided tour overlay window" align="right" width="300" />
 
 #### `cancelTour`
 
