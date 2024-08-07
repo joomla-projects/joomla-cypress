@@ -298,14 +298,15 @@ cy.installJoomlaMultilingualSite(config, languages);
 
 ---
 
+<img src="images/skipTour.png" alt="'Welcome to Joomla!' guided tour overlay window" align="right" width="300" />
+
 #### `cancelTour`
 
-Since Joomla version 5 there is a guided tour with the overlay 'Welcome to Joomla!'
-after first administrator login.
-The command `cancelTour` closes this guided tour overlay.
-The Joomla administrator must be logged in to do this.
-This is only possible once after installation and the first login.
-The timeout is extended to 40 seconds.
+With Joomla 5.1 the 'Welcome to Joomla!' guided tour starts automatically the very first time an user logs in to the Administrator backend. As this overlay window (see screenshot) blocks interaction with the underlying content, it must be closed. The overlay of the guided tour is closed with the `cancelTour` command.
+
+In Joomla 5.1 the overlay window is closed with the cancel `X`-button. Since Joomla 5.2 there is an additional button `Hide Forever`. This is preferably used.
+
+A Joomla administrator must be logged in for this. This command can only be executed once after a Joomla installation and only from version 5.1 upwards.
 
 ##### Usage
 
