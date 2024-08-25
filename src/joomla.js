@@ -27,6 +27,7 @@ const joomlaCommands = () => {
     // Fill database configuration
     cy.get('#jform_db_type').select(config.db_type)
     cy.get('#jform_db_host').clear().type(config.db_host)
+    cy.get('#jform_db_port').clear().type(config.db_port)
     cy.get('#jform_db_user').type(config.db_user)
 
     if (config.db_password) {
@@ -129,6 +130,7 @@ const joomlaCommands = () => {
     cy.contains('.page-title', 'Global Configuration').scrollIntoView()
     cy.get("div[role='tablist'] button[aria-controls='page-server']").click()
     cy.get('#jform_error_reporting').select('Maximum')
+    cy.get('#jform_db_port').clear().type(Cypress.env('db_port'))
 
     cy.intercept('index.php?option=com_config*').as('config_save')
     cy.clickToolbarButton('save')
