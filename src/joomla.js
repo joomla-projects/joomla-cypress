@@ -25,8 +25,13 @@ const joomlaCommands = () => {
     cy.get('#step2').click()
 
     // Fill database configuration
+    let connection = config.db_host
+    if (config.db_port && config.db_port.trim() !== "") {
+      // host:port currently (August 2024) only work for MariaDB and MySQL
+      connection += `:${config.db_port.trim()}`;
+    }
     cy.get('#jform_db_type').select(config.db_type)
-    cy.get('#jform_db_host').clear().type(config.db_host)
+    cy.get('#jform_db_host').clear().type(connection)
     cy.get('#jform_db_user').type(config.db_user)
 
     if (config.db_password) {

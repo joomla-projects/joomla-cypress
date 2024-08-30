@@ -217,7 +217,7 @@ After the command, the 'Joomla Installer' screen remains open in the session.
 
 :warning: The `/installation` folder is not deleted after the installation.
 This allows multiple runs of the command `installJoomla`.
-For production sites the  `/installation` folder needs to be deleted after installation.
+For production sites the `/installation` folder needs to be deleted after installation.
 
 See also [installJoomlaMultilingualSite](#installjoomlamultilingualsite).
 
@@ -230,7 +230,9 @@ cy.installJoomla(config)
 ##### Arguments
 
 - **`config`** *(object)*: Configuration object containing sitename, name, username, password, email,
-  db_type, db_host, db_user, db_password, db_name and db_prefix.
+  db_type, db_host, db_port, db_user, db_password, db_name and db_prefix.
+
+:point_right: The use of `db_port` for a non-standard database port currently (August 2024) only works for MariaDB and MySQL.
 
 ##### Example
 
@@ -243,6 +245,7 @@ const config = {
         email: "sampleuser@example.com",
       db_type: "MySQLi",
       db_host: "localhost",
+      db_port: "3316"
       db_user: "joomla",
   db_password: "joomla-db-user-password",
       db_name: "sample_joomla",
@@ -273,8 +276,10 @@ cy.installJoomlaMultilingualSite(config, languages)
 ##### Arguments
 
 - **`config`** *(object)*: Configuration object containing sitename, name, username, password, email,
-  db_type, db_host, db_user, db_password, db_name and db_prefix.
+  db_type, db_host, db_port, db_user, db_password, db_name and db_prefix.
 - **`languages`** *(string[], optional, default: ["French"])*: Array of additional languages to be installed.
+
+:point_right: The use of `db_port` for a non-standard database port currently (August 2024) only works for MariaDB and MySQL.
 
 ##### Example
 
@@ -287,6 +292,7 @@ const config = {
         email: "sampleuser@example.com",
       db_type: "MySQLi",
       db_host: "localhost",
+      db_port: "3316",
       db_user: "joomla",
   db_password: "joomla-db-user-password",
       db_name: "sample_joomla",
