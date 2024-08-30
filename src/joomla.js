@@ -44,6 +44,16 @@ const joomlaCommands = () => {
     cy.wait(['@ajax_create', '@ajax_populate1', '@ajax_populate2', '@ajax_populate3', '@finished'], {timeout: 120000})
     cy.get('#installCongrat').should('be.visible')
 
+    // In case of Stable release the Joomla Web Installer needs one more click to complete the installation
+    cy.get('button.complete-installation').then($button => {
+      // Check if the button exists
+      if ($button.length > 0) {
+        // If there is a button, click on it and
+        // since there are two of them, just click on the first one, it doesn't matter which one
+        cy.wrap($button).first().click()
+      }
+    })
+
     cy.log('--Install Joomla--')
   }
 
