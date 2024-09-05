@@ -27,6 +27,11 @@ const joomlaCommands = () => {
     // Fill database configuration
     let connection = config.db_host
     if (config.db_port && config.db_port.trim() !== "") {
+      // Contains at least two colons and is not already enclosed in brackets?
+      if (connection.split(':').length > 2 && !connection.includes('[')) {
+        // Assuming it's an IPv6 address, wrap it with square brackets [ ]
+        connection = `[${connection}]`;
+      }
       // host:port currently (August 2024) only work for MariaDB and MySQL
       connection += `:${config.db_port.trim()}`;
     }
