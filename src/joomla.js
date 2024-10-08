@@ -24,21 +24,24 @@ const joomlaCommands = () => {
     cy.get('#jform_admin_email').type(config.email)
     cy.get('#step2').click()
 
-    // Fill database configuration
+    // Fill database connection settings
     let connection = config.db_host
-    // Check if it's an IPv6 address, not already in square brackets, and not PostgreSQL.
-    if (connection.split(':').length > 2 && !connection.includes('[') && config.db_type !== 'PostgreSQL (PDO)' && config.db_type !== 'pgsql') {
-      // Square brackets required for IPv6 for MariaDB and MySQL, even without port, but not working for PostgreSQL.
+    const isPortSet = config.db_port && config.db_port.trim() !== "";
+    // If the host is an IPv6 address, not already in square brackets, 
+    // and it's not PostgreSQL without a port number, add square brackets around it.
+    if (connection.split(':').length > 2 && !connection.includes('[') &&
+        (isPortSet || (config.db_type !== 'PostgreSQL (PDO)') && (config.db_type !== 'pgsql'))) {
+      // MariaDB and MySQL require square brackets around IPv6 addresses, even if no port is set
+      // For PostgreSQL, square brackets are used only if a port number is provided
+      // (see PR https://github.com/joomla-framework/database/pull/315)
       connection = `[${connection}]`;
     }
-    if (config.db_port && config.db_port.trim() !== "") {
-      // host:port currently (August 2024) only work for MariaDB and MySQL
+    if (isPortSet) {
       connection += `:${config.db_port.trim()}`;
     }
     cy.get('#jform_db_type').select(config.db_type)
     cy.get('#jform_db_host').clear().type(connection)
     cy.get('#jform_db_user').type(config.db_user)
-
     if (config.db_password) {
       cy.get('#jform_db_pass').type(config.db_password)
     }
