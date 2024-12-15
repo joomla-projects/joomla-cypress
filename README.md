@@ -7,6 +7,10 @@
 This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
 The Joomla default branch and all active development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
+Instructions for testing the package are provided and documented in the
+[cypress](https://github.com/joomla-projects/joomla-cypress/cypress) sub-folder.
+The test suite also shows the use of the Cypress custom commands.
+
 ## Installation
 
 `joomla-cypress` is distributed with [npm](https://npmjs.com/) and works with the latest version of Cypress.

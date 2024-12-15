@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="4.0" client="site" method="upgrade">
+    <name>mod_hello_world</name>
+    <author>Joomla! project</author>
+    <creationDate>2024-11-19</creationDate>
+    <version>1.0.0</version>
+    <description>Hello World Joomla Module</description>
+    <files>
+        <filename module="mod_hello_world">mod_hello_world.php</filename>
+        <filename>helper.php</filename>
+        <folder>language</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_hello_world.ini</language>
+    </languages>
+</extension>
