@@ -14,7 +14,7 @@ In the `installation/joomla-cypress` directory the latest main branch version is
 Furthermore Joomla, databases, Cypress and sample module are already provided with JBT.
 Restoring the `installation`folder, running `npm ci` and handing over the
 sample module for installation are covered for you.
-This is implemented witin in the scripts `tests`, `cypress` and `patch`.
+This is implemented in the scripts `tests`, `cypress` and `patch`.
 
 Patch `installation/joomla-cypress` e.g. with pull request `#37 Fixing installJoomlaMultilingualSite()`:
 ```
@@ -37,10 +37,10 @@ scripts/test 52 joomla-cypress cypress/user.cy.js novnc
 
 Running the test suite for Joomla 5.3 and 6.0
 without the `installLanguage` and `installJoomlaMultilingualSite` tests,
-as the language package is not yet available, on Unix-based systems:
+if the language package is not yet available, on Unix-based systems:
 
 ```
-CYPRESS_SKIP_INSTALL_LANGUAGES=1 cypress/test 53 60 joomla-cypress 
+CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/test 53 60 joomla-cypress 
 ```
 
 Running tests with local Cypress GUI, e.g. on macOS or Linux:
@@ -65,7 +65,7 @@ Requirements:
 * Joomla sources
 * A database and PHP extensions for the database
 
-Ensure Firefox is installed system-wide (verify its availability for Cypress using `npx cypress info`).
+Ensure Firefox is installed system-wide (check with `npx cypress info`).
 
 For Joomla sources the following commands are sufficient:
 ```
@@ -108,7 +108,7 @@ Most configurations are the same as with Joomla System Tests `cypress.configurat
 Additional variables are
 * `installationPath` contains the file system path to your Joomla installation
   (used to delete the `configuration.php` file before installing Joomla)
-* `instance` specifies the Joomla major and minor version number, e.g. `5.3` for Joomla 5.3.
+* `instance` specifies the Joomla major and minor version number, e.g. `53` for Joomla 5.3.
 
 ### Tests
 
