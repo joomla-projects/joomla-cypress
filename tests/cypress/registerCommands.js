@@ -4,11 +4,11 @@
  * imports the source files to ensure they are used in the test suite.
  */
 
-const { joomlaCommands } = require('../src/joomla');
-const { extensionsCommands } = require('../src/extensions');
-const { supportCommands } = require('../src/support');
-const { userCommands } = require('../src/user');
-const { commonCommands } = require('../src/common');
+const { joomlaCommands } = require('../../src/joomla');
+const { extensionsCommands } = require('../../src/extensions');
+const { supportCommands } = require('../../src/support');
+const { userCommands } = require('../../src/user');
+const { commonCommands } = require('../../src/common');
 
 const registerCommands = () => {
   joomlaCommands();

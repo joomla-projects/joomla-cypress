@@ -128,7 +128,7 @@ npm test
 Running only `user.cy.js` test spec file
 
 ```
-npx cypress run --spec cypress/user.cy.js
+npx cypress run --spec tests/cypress/user.cy.js
 ```
 
 Running tests with local Cypress GUI:
@@ -146,13 +146,13 @@ npm run open
    cancelling guided tours and disabling Joomla statistics.
    In such cases open the target Joomla installation administration
    to investigate or reinstall the target Joomla sources.
-3. For failed tests you can inspect the screenshoots in `cypress/screenshoots` folder or
+3. For failed tests you can inspect the screenshoots in `tests/cypress/screenshoots` folder or
    run Cypresss GUI to observe the issue.
 4. If the `installExtensionFromFolder()` test fails as the Joomla web server cannot
    find the `mod_hello_world` package folder, set the folder with the enviroment
    variable `CYPRESS_SERVER_UPLOAD_FOLDER`. For example on Unix-based systems:
    ```
-   export CYPRESS_SERVER_UPLOAD_FOLDER=/users/alice/joomla-cypress/cypress/fixtures/mod_hello_world
+   export CYPRESS_SERVER_UPLOAD_FOLDER=/users/alice/joomla-cypress/tests/cypress/fixtures/mod_hello_world
    ```
 5. For Joomla development versions that are not yet been released,
    the tests `installLanguage` and `installJoomlaMultilingualSite`

@@ -8,6 +8,7 @@
 .docker
 /docker-compose.yml
 cypress.config.mjs
+tests/cypress/screenshots
 
 # NPM
 node_modules

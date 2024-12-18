@@ -4,7 +4,7 @@
 	"description": "Helpers for using Cypress with Joomla for testing",
 	"main": "src/index.js",
 	"scripts": {
-		"clean": "rm -rf cypress.config.mjs node_modules cypress/screenshots",
+		"clean": "rm -rf node_modules tests/cypress.config.mjs tests/cypress/screenshots",
 		"test": "npx cypress run",
 		"open": "npx cypress open",
 		"cypress:install": "cypress install"

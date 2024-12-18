@@ -30,7 +30,9 @@ export default defineConfig({
     baseUrl: 'http://localhost:9500',
     supportFile: false,
     // Just in case we are coming from a failed installation test, start with the Joomla installation
-    specPattern: ['cypress/joomla.cy.js', 'cypress/*.cy.js'],
+    specPattern: ['tests/cypress/joomla.cy.js', 'tests/cypress/*.cy.js'],
+    screenshotsFolder: 'tests/cypress/screenshots',
+    fixturesFolder: 'tests/cypress/fixtures',
     // Use Firefox as Joomla default and to prevent useless macOS Electron font warnings
     // (Cypress 13.16.0 added 'defaultBrowser' option)
     defaultBrowser: 'firefox',

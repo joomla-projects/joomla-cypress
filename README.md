@@ -8,7 +8,7 @@ This is a support package that helps in writing end-to-end tests for the [Joomla
 The Joomla default branch and all active development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
 Instructions for testing the package are provided and documented in the
-[cypress](https://github.com/joomla-projects/joomla-cypress/cypress) sub-folder.
+[tests](https://github.com/joomla-projects/joomla-cypress/tests) sub-folder.
 The test suite also shows the use of the Cypress custom commands.
 
 ## Installation
