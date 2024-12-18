@@ -30,7 +30,7 @@ scripts/test 52 joomla-cypress
 
 Running only `user.cy.js` test spec file and watching the progress with NoVNC:
 ```
-scripts/test 52 joomla-cypress cypress/user.cy.js novnc
+scripts/test 52 joomla-cypress tests/user.cy.js novnc
 ```
 
 ![Cypress test user.cy.js file](../images/test-user.png)
@@ -76,6 +76,8 @@ npm ci
 ```
 No additional configuration is needed, as the parameters
 are set within `joomla-cypress` Cypress configuration.
+No Joomla installation is required,
+if you first run the entire test suite or the `joomla.cy.js` test spec.
 
 > [!NOTE]
 > The custom command `installJoomlaMultilingualSite` deletes the Joomla `installation` folder.
@@ -99,12 +101,12 @@ npm ci
 
 Create the Cypress configuration file from the distribution template.
 ```
-cp cypress.config.dist.mjs cypress.config.mjs
+cp tests/cypress.config.dist.mjs tests/cypress.config.mjs
 ```
 
 Adapt the environment variables in the file `cypress.config.mjs`,
 they should point to the site, user data and database environment.
-Most configurations are the same as with Joomla System Tests `cypress.configuration.mjs` file.
+Most configurations are the same as with Joomla System Tests `cypress.config.mjs` file.
 Additional variables are
 * `installationPath` contains the file system path to your Joomla installation
   (used to delete the `configuration.php` file before installing Joomla)
@@ -128,7 +130,7 @@ npm test
 Running only `user.cy.js` test spec file
 
 ```
-npx cypress run --spec tests/cypress/user.cy.js
+npx cypress run --spec tests/user.cy.js --config-file tests/cypress.config.mjs
 ```
 
 Running tests with local Cypress GUI:
@@ -136,7 +138,7 @@ Running tests with local Cypress GUI:
 npm run open
 ```
 
-# Trouble-Shooting
+# Troubleshooting
 
 1. Ensure that you have installed the version of `joomla-cypress` to be tested 
    and patched if necessary.
@@ -146,13 +148,13 @@ npm run open
    cancelling guided tours and disabling Joomla statistics.
    In such cases open the target Joomla installation administration
    to investigate or reinstall the target Joomla sources.
-3. For failed tests you can inspect the screenshoots in `tests/cypress/screenshoots` folder or
+3. For failed tests you can inspect the screenshots in `tests/screenshots` folder or
    run Cypresss GUI to observe the issue.
 4. If the `installExtensionFromFolder()` test fails as the Joomla web server cannot
    find the `mod_hello_world` package folder, set the folder with the enviroment
    variable `CYPRESS_SERVER_UPLOAD_FOLDER`. For example on Unix-based systems:
    ```
-   export CYPRESS_SERVER_UPLOAD_FOLDER=/users/alice/joomla-cypress/tests/cypress/fixtures/mod_hello_world
+   export CYPRESS_SERVER_UPLOAD_FOLDER=/users/alice/joomla-cypress/tests/fixtures/mod_hello_world
    ```
 5. For Joomla development versions that are not yet been released,
    the tests `installLanguage` and `installJoomlaMultilingualSite`

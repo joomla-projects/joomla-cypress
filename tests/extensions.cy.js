@@ -2,10 +2,10 @@
  * extensions.cy.js – Cypress test suite for ../src/extensions.js custom commands
  */
 
-import { registerCommands } from './registerCommands';
+import { registerCommands } from './support/registerCommands';
 // Add attachFile() Cypress custom command, which is used in installExtensionFromFileUpload()
 import 'cypress-file-upload';
-import { config, caughtJavaScriptExceptions } from './setup';
+import { config, caughtJavaScriptExceptions } from './support/setup';
 
 registerCommands();
 

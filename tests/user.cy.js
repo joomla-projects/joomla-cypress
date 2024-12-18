@@ -2,8 +2,8 @@
  * user.cy.js – Cypress test suite for ../src/user.js custom commands
  */
 
-import { registerCommands } from './registerCommands';
-import { config, caughtJavaScriptExceptions } from './setup';
+import { registerCommands } from './support/registerCommands';
+import { config, caughtJavaScriptExceptions } from './support/setup';
 
 registerCommands();
 
