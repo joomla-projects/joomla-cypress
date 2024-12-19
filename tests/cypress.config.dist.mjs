@@ -30,7 +30,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:9500',
     supportFile: false,
     // Just in case we are coming from a failed installation test, start with the Joomla installation
-    specPattern: ['tests/joomla.cy.js', 'tests/*.cy.js'],
+    specPattern: ['tests/e2e/joomla.cy.js', 'tests/e2e/*.cy.js'],
     screenshotsFolder: 'tests/screenshots',
     fixturesFolder: 'tests/fixtures',
     // Use Firefox as Joomla default and to prevent useless macOS Electron font warnings

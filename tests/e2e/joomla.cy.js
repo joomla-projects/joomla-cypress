@@ -2,8 +2,8 @@
  * joomla.cy.js – Cypress test suite for ../src/joomla.js custom commands
  */
 
-import { registerCommands } from './support/registerCommands';
-import { config, deleteJoomlaConfigurationFile, caughtJavaScriptExceptions } from './support/setup';
+import { registerCommands } from '../support/registerCommands';
+import { config, deleteJoomlaConfigurationFile, caughtJavaScriptExceptions } from '../support/setup';
 
 registerCommands();
 

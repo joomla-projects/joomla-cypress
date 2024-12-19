@@ -1,6 +1,6 @@
 # Cypress Tests
 
-The testing of the NPM module `joomla-cypress` is also implemented with Cypress.
+The testing of the NPM module `joomla-cypress` is implemented using Cypress as well.
 Each Cypress custom command is executed at least once and the result is checked.
 
 You can use [Joomla Branches Tester](https://github.com/muhme/joomla-branches-tester) (JBT)
@@ -12,7 +12,7 @@ to run the tests or use your own target Joomla installation.
 JBT has integrated the testing of the NPM module `joomla-cypress`.
 In the `installation/joomla-cypress` directory the latest main branch version is already installed.
 Furthermore Joomla, databases, Cypress and sample module are already provided with JBT.
-Restoring the `installation`folder, running `npm ci` and handing over the
+Restoring the `installation` folder, running `npm ci` and handing over the
 sample module for installation are covered for you.
 This is implemented in the scripts `tests`, `cypress` and `patch`.
 
@@ -30,7 +30,7 @@ scripts/test 52 joomla-cypress
 
 Running only `user.cy.js` test spec file and watching the progress with NoVNC:
 ```
-scripts/test 52 joomla-cypress tests/user.cy.js novnc
+scripts/test 52 joomla-cypress tests/e2e/user.cy.js novnc
 ```
 
 ![Cypress test user.cy.js file](../images/test-user.png)
@@ -54,7 +54,7 @@ with the Cypress GUI, e.g. on Windows 11 WSL2 Ubuntu:
 CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
 ```
 
-## Running the Tests Using Own Installation
+## Running the Tests Using Your Own Installation
 
 Requirements:
 * PHP (a Joomla-supported version)
@@ -74,10 +74,10 @@ cd joomla-cms
 composer install
 npm ci
 ```
-No additional configuration is needed, as the parameters
-are set within `joomla-cypress` Cypress configuration.
-No Joomla installation is required,
-if you first run the entire test suite or the `joomla.cy.js` test spec.
+No additional configuration for Joomla is necessary, as the parameters
+are defined in the `joomla-cypress/tests/cypress.config.mjs` Cypress configuration file.
+A Joomla installation is not required
+if you start by running the entire test suite or the `tests/e2e/joomla.cy.js` test spec.
 
 > [!NOTE]
 > The custom command `installJoomlaMultilingualSite` deletes the Joomla `installation` folder.
@@ -90,7 +90,7 @@ if you first run the entire test suite or the `joomla.cy.js` test spec.
 
 ### Installation
 
-Install the JavaScript dependencies
+Install the JavaScript dependencies:
 ```
 git clone https://github.com/joomla-projects/joomla-cypress
 cd joomla-cypress
@@ -99,7 +99,7 @@ npm ci
 
 ### Configuration
 
-Create the Cypress configuration file from the distribution template.
+Create the Cypress configuration file from the distribution template:
 ```
 cp tests/cypress.config.dist.mjs tests/cypress.config.mjs
 ```
@@ -115,7 +115,6 @@ Additional variables are
 ### Tests
 
 Running all tests headless:
-
 ```
 npm test
 ```
@@ -127,10 +126,9 @@ $env:CYPRESS_SKIP_INSTALL_LANGUAGES=1
 npm test
 ```
 
-Running only `user.cy.js` test spec file
-
+Running only `user.cy.js` test spec file:
 ```
-npx cypress run --spec tests/user.cy.js --config-file tests/cypress.config.mjs
+npx cypress run --spec tests/e2e/user.cy.js --config-file tests/cypress.config.mjs
 ```
 
 Running tests with local Cypress GUI:
