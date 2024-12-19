@@ -4,7 +4,7 @@
 [![version][version-badge]][package]
 <!-- prettier-ignore-end -->
 
-This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](/https://www.cypress.io/).
+This is a support package that helps in writing end-to-end tests for the [Joomla CMS](https://joomla.org) and its extensions with the frontend testing tool [Cypress](https://www.cypress.io/).
 The Joomla default branch and all active development [branches](https://github.com/joomla/joomla-cms/branches) are supported.
 
 Instructions for testing the package are provided and documented in the
