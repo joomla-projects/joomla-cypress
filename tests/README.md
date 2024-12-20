@@ -1,60 +1,9 @@
-# Cypress Tests
+# Cypress tests
 
 The testing of the NPM module `joomla-cypress` is implemented using Cypress as well.
 Each Cypress custom command is executed at least once and the result is checked.
 
-You can use [Joomla Branches Tester](https://github.com/muhme/joomla-branches-tester) (JBT)
-to run the tests or use your own target Joomla installation.
-
-
-## Running the Tests Using JBT
-
-JBT has integrated the testing of the NPM module `joomla-cypress`.
-In the `installation/joomla-cypress` directory the latest main branch version is already installed.
-Furthermore Joomla, databases, Cypress and sample module are already provided with JBT.
-Restoring the `installation` folder, running `npm ci` and handing over the
-sample module for installation are covered for you.
-This is implemented in the scripts `tests`, `cypress` and `patch`.
-
-Patch `installation/joomla-cypress` e.g. with pull request `#37 Fixing installJoomlaMultilingualSite()`:
-```
-scripts/patch installation joomla-cypress-37
-```
-
-Running the test suite headless for Joomla 5.2:
-```
-scripts/test 52 joomla-cypress
-```
-
-![Cypress test run](../images/test-run.png)
-
-Running only `user.cy.js` test spec file and watching the progress with NoVNC:
-```
-scripts/test 52 joomla-cypress tests/e2e/user.cy.js novnc
-```
-
-![Cypress test user.cy.js file](../images/test-user.png)
-
-Running the test suite for Joomla 5.3 and 6.0
-without the `installLanguage` and `installJoomlaMultilingualSite` tests,
-if the language package is not yet available, on Unix-based systems:
-
-```
-CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/test 53 60 joomla-cypress 
-```
-
-Running tests with local Cypress GUI, e.g. on macOS or Linux:
-```
-scripts/cypress 52 joomla-cypress local
-```
-
-Running on Joomla 6.0 without the tests they install languages,
-with the Cypress GUI, e.g. on Windows 11 WSL2 Ubuntu:
-```
-CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
-```
-
-## Running the Tests Using Your Own Installation
+## Running the tests
 
 Requirements:
 * PHP (a Joomla-supported version)
@@ -134,6 +83,53 @@ npx cypress run --spec tests/e2e/user.cy.js --config-file tests/cypress.config.m
 Running tests with local Cypress GUI:
 ```
 npm run open
+```
+
+## Running the tests using JBT
+
+JBT has integrated the testing of the NPM module `joomla-cypress`.
+In the `installation/joomla-cypress` directory the latest main branch version is already installed.
+Furthermore Joomla, databases, Cypress and sample module are already provided with JBT.
+Restoring the `installation` folder, running `npm ci` and handing over the
+sample module for installation are covered for you.
+This is implemented in the scripts `tests`, `cypress` and `patch`.
+
+Patch `installation/joomla-cypress` e.g. with pull request `#37 Fixing installJoomlaMultilingualSite()`:
+```
+scripts/patch installation joomla-cypress-37
+```
+
+Running the test suite headless for Joomla 5.2:
+```
+scripts/test 52 joomla-cypress
+```
+
+![Cypress test run](../images/test-run.png)
+
+Running only `user.cy.js` test spec file and watching the progress with NoVNC:
+```
+scripts/test 52 joomla-cypress tests/e2e/user.cy.js novnc
+```
+
+![Cypress test user.cy.js file](../images/test-user.png)
+
+Running the test suite for Joomla 5.3 and 6.0
+without the `installLanguage` and `installJoomlaMultilingualSite` tests,
+if the language package is not yet available, on Unix-based systems:
+
+```
+CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/test 53 60 joomla-cypress 
+```
+
+Running tests with local Cypress GUI, e.g. on macOS or Linux:
+```
+scripts/cypress 52 joomla-cypress local
+```
+
+Running on Joomla 6.0 without the tests they install languages,
+with the Cypress GUI, e.g. on Windows 11 WSL2 Ubuntu:
+```
+CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
 ```
 
 # Troubleshooting
