@@ -7,6 +7,8 @@
 .vscode
 .docker
 /docker-compose.yml
+cypress.config.mjs
+tests/screenshots
 
 # NPM
 node_modules

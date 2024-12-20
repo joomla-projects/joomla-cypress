@@ -4,7 +4,10 @@
 	"description": "Helpers for using Cypress with Joomla for testing",
 	"main": "src/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"clean": "rm -rf node_modules tests/cypress.config.mjs tests/screenshots",
+		"test": "npx cypress run --config-file tests/cypress.config.mjs",
+		"open": "npx cypress open --config-file tests/cypress.config.mjs",
+		"cypress:install": "cypress install"
 	},
 	"repository": {
 		"type": "git",
@@ -24,7 +27,7 @@
 		"src"
 	],
 	"dependencies": {
-		"cypress": "^13.15.0",
+		"cypress": "^13.16.0",
 		"cypress-file-upload": "^5.0.8"
 	}
 }
