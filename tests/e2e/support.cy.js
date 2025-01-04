@@ -22,6 +22,7 @@ describe("Test the Cypress custom commands from 'support.js' file", () => {
     cy.clickToolbarButton('Save');
     cy.clickToolbarButton('Versions');
     cy.get('.joomla-dialog-header').should('contain.text', 'Versions');
+    cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'");
   });
 
   it('checkForPhpNoticesOrWarnings()', () => {
