@@ -13,10 +13,18 @@ beforeEach(() => {
 });
 
 describe("Test the Cypress custom commands from 'support.js' file", () => {
+
+  afterEach(() => cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'"));
+
   it('clickToolbarButton()', () => {
     cy.visit('/administrator/index.php?option=com_banners&view=banners');
     cy.clickToolbarButton('new');
     cy.clickToolbarButton('cancel');
+    cy.visit('/administrator/index.php?option=com_content&task=article.add');
+    cy.get('#jform_title').clear().type('Test article versions');
+    cy.clickToolbarButton('Save');
+    cy.clickToolbarButton('Versions');
+    cy.get('.joomla-dialog-header').should('contain.text', 'Versions');
   });
 
   it('checkForPhpNoticesOrWarnings()', () => {

@@ -74,6 +74,9 @@ const supportCommands = () => {
       case "transition":
         cy.get(".button-transition.transition-" + subselector).click()
         break
+      case "versions":
+        cy.get("#toolbar-versions").click()
+        break
     }
 
     cy.log('--Click on a toolbar button--')
