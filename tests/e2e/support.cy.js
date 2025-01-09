@@ -12,6 +12,8 @@ beforeEach(() => {
   cy.doAdministratorLogin(config.username, config.password, false);
 });
 
+afterEach(() => cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'"));
+
 describe("Test the Cypress custom commands from 'support.js' file", () => {
   it('clickToolbarButton()', () => {
     cy.visit('/administrator/index.php?option=com_banners&view=banners');
@@ -22,7 +24,6 @@ describe("Test the Cypress custom commands from 'support.js' file", () => {
     cy.clickToolbarButton('Save');
     cy.clickToolbarButton('Versions');
     cy.get('.joomla-dialog-header').should('contain.text', 'Versions');
-    cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'");
   });
 
   it('checkForPhpNoticesOrWarnings()', () => {
