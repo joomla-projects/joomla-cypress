@@ -769,9 +769,12 @@ cy.doAdministratorLogin()
 
 #### `checkAllResults`
 
-Joomla list views are page by page.
-The command `checkAllResults` displays all list entries in one page by marking 'All' entries in the Joomla list view.
-As a prerequisite, the list must be open.
+The `checkAllResults` command is used to select all entries in a Joomla list for performing bulk actions.
+It checks the selection box in the heading of the list view.
+
+Prerequisites:
+* The list view must be open.
+* The list must contain at least one entry.
 
 ##### Usage
 
@@ -782,10 +785,12 @@ cy.checkAllResults()
 ##### Example
 
 ```javascript
-// Show all extensions in one single page:
-cy.doAdministratorLogin
-  .visit('/administrator/index.php?option=com_installer&view=manage')
-  .checkAllResults();
+// Trash all 'Test' tags
+cy.visit('/administrator/index.php?option=com_tags');
+cy.searchForItem('Test');
+cy.checkAllResults();
+cy.clickToolbarButton('Action');
+cy.contains('Trash').click();
 ```
 
 ---
