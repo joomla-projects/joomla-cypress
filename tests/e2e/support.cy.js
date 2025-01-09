@@ -12,9 +12,10 @@ beforeEach(() => {
   cy.doAdministratorLogin(config.username, config.password, false);
 });
 
-afterEach(() => cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'"));
-
 describe("Test the Cypress custom commands from 'support.js' file", () => {
+
+  afterEach(() => cy.task('queryDB', "DELETE FROM #__content WHERE title = 'Test article versions'"));
+
   it('clickToolbarButton()', () => {
     cy.visit('/administrator/index.php?option=com_banners&view=banners');
     cy.clickToolbarButton('new');
