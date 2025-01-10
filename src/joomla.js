@@ -1,3 +1,64 @@
+/*
+ * Performs the primary Joomla installation steps.
+ * This function is utilised by both installJoomla() and installJoomlaMultilingualSite().
+ * - installJoomla(): Continues with completing the installation for stable releases.
+ * - installJoomlaMultilingualSite(): Continues by installing additional languages without
+ *   needing to handle cancelling the tour or disabling statistics at this stage.
+ */
+function doInstallation(config) {
+  // Load installation page and check for language dropdown
+  cy.visit('installation/index.php')
+  cy.get('#jform_language').should('be.visible')
+
+  // Select en-GB as installation language
+  cy.get('#jform_language').select('en-GB')
+  cy.get('#jform_language-lbl').should('contain', 'Select Language')
+
+  // Fill Sitename
+  cy.get('#jform_site_name').type(config.sitename)
+  cy.get('#step1').click()
+
+  // Fill Admin credentials
+  cy.get('#jform_admin_user').type(config.name)
+  cy.get('#jform_admin_username').type(config.username)
+  cy.get('#jform_admin_password').type(config.password)
+  cy.get('#jform_admin_email').type(config.email)
+  cy.get('#step2').click()
+
+  // Fill database connection settings
+  let connection = config.db_host
+  const isPortSet = config.db_port && config.db_port.trim() !== "";
+  // If the host is an IPv6 address, not already in square brackets, 
+  // and it's not PostgreSQL without a port number, add square brackets around it.
+  if (connection.split(':').length > 2 && !connection.includes('[') &&
+      (isPortSet || (config.db_type !== 'PostgreSQL (PDO)') && (config.db_type !== 'pgsql'))) {
+    // MariaDB and MySQL require square brackets around IPv6 addresses, even if no port is set
+    // For PostgreSQL, square brackets are used only if a port number is provided
+    // (see PR https://github.com/joomla-framework/database/pull/315)
+    connection = `[${connection}]`;
+  }
+  if (isPortSet) {
+    connection += `:${config.db_port.trim()}`;
+  }
+  cy.get('#jform_db_type').select(config.db_type)
+  cy.get('#jform_db_host').clear().type(connection)
+  cy.get('#jform_db_user').type(config.db_user)
+  if (config.db_password) {
+    cy.get('#jform_db_pass').type(config.db_password)
+  }
+
+  cy.get('#jform_db_name').clear().type(config.db_name)
+  cy.get('#jform_db_prefix').clear().type(config.db_prefix)
+  cy.intercept('index.php?task=installation.create*').as('ajax_create')
+  cy.intercept('index.php?task=installation.populate1*').as('ajax_populate1')
+  cy.intercept('index.php?task=installation.populate2*').as('ajax_populate2')
+  cy.intercept('index.php?task=installation.populate3*').as('ajax_populate3')
+  cy.intercept('index.php?view=remove&layout=default').as('finished')
+  cy.get('#setupButton').click()
+  cy.wait(['@ajax_create', '@ajax_populate1', '@ajax_populate2', '@ajax_populate3', '@finished'], {timeout: 120000})
+  cy.get('#installCongrat').should('be.visible')
+}
+
 const joomlaCommands = () => {
 
   // Install Joomla via the user interface
@@ -5,57 +66,7 @@ const joomlaCommands = () => {
     cy.log('**Install Joomla**')
     cy.log('Config: ' + config)
 
-    // Load installation page and check for language dropdown
-    cy.visit('installation/index.php')
-    cy.get('#jform_language').should('be.visible')
-
-    // Select en-GB as installation language
-    cy.get('#jform_language').select('en-GB')
-    cy.get('#jform_language-lbl').should('contain', 'Select Language')
-
-    // Fill Sitename
-    cy.get('#jform_site_name').type(config.sitename)
-    cy.get('#step1').click()
-
-    // Fill Admin credentials
-    cy.get('#jform_admin_user').type(config.name)
-    cy.get('#jform_admin_username').type(config.username)
-    cy.get('#jform_admin_password').type(config.password)
-    cy.get('#jform_admin_email').type(config.email)
-    cy.get('#step2').click()
-
-    // Fill database connection settings
-    let connection = config.db_host
-    const isPortSet = config.db_port && config.db_port.trim() !== "";
-    // If the host is an IPv6 address, not already in square brackets, 
-    // and it's not PostgreSQL without a port number, add square brackets around it.
-    if (connection.split(':').length > 2 && !connection.includes('[') &&
-        (isPortSet || (config.db_type !== 'PostgreSQL (PDO)') && (config.db_type !== 'pgsql'))) {
-      // MariaDB and MySQL require square brackets around IPv6 addresses, even if no port is set
-      // For PostgreSQL, square brackets are used only if a port number is provided
-      // (see PR https://github.com/joomla-framework/database/pull/315)
-      connection = `[${connection}]`;
-    }
-    if (isPortSet) {
-      connection += `:${config.db_port.trim()}`;
-    }
-    cy.get('#jform_db_type').select(config.db_type)
-    cy.get('#jform_db_host').clear().type(connection)
-    cy.get('#jform_db_user').type(config.db_user)
-    if (config.db_password) {
-      cy.get('#jform_db_pass').type(config.db_password)
-    }
-
-    cy.get('#jform_db_name').clear().type(config.db_name)
-    cy.get('#jform_db_prefix').clear().type(config.db_prefix)
-    cy.intercept('index.php?task=installation.create*').as('ajax_create')
-    cy.intercept('index.php?task=installation.populate1*').as('ajax_populate1')
-    cy.intercept('index.php?task=installation.populate2*').as('ajax_populate2')
-    cy.intercept('index.php?task=installation.populate3*').as('ajax_populate3')
-    cy.intercept('index.php?view=remove&layout=default').as('finished')
-    cy.get('#setupButton').click()
-    cy.wait(['@ajax_create', '@ajax_populate1', '@ajax_populate2', '@ajax_populate3', '@finished'], {timeout: 120000})
-    cy.get('#installCongrat').should('be.visible')
+    doInstallation(config);
 
     // In case of Stable release the Joomla Web Installer needs one more click to complete the installation
     cy.get('button.complete-installation').then($button => {
@@ -175,7 +186,7 @@ const joomlaCommands = () => {
         languages = ['French']
     }
 
-    cy.installJoomla(config)
+    doInstallation(config);
 
     cy.get('#installAddFeatures').then(($btn) => {
       cy.wrap($btn.text().trim()).as('installAddFeaturesBtnText')
