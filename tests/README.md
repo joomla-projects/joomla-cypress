@@ -1,9 +1,9 @@
-# Cypress tests
+# Testing the `joomla-cypress` NPM Module Itself
 
 The testing of the NPM module `joomla-cypress` is implemented using Cypress as well.
 Each Cypress custom command is executed at least once and the result is checked.
 
-## Running the tests
+## Running the Tests
 
 Requirements:
 * PHP (a Joomla-supported version)
@@ -16,15 +16,16 @@ Requirements:
 
 Ensure Firefox is installed system-wide (check with `npx cypress info`).
 
-For Joomla sources the following commands are sufficient:
+Clone the Joomla source into web server's served directory `joomla-cms` and
+install the required PHP and JavaScript dependencies:
 ```
 git clone https://github.com/joomla/joomla-cms --depth 1
 cd joomla-cms
 composer install
 npm ci
 ```
-No additional configuration for Joomla is necessary, as the parameters
-are defined in the `joomla-cypress/tests/cypress.config.mjs` Cypress configuration file.
+No configuration for Joomla is necessary, as the parameters
+are defined in the `joomla-cypress/tests/cypress.config.mjs` Cypress test suite configuration file.
 A Joomla installation is not required
 if you start by running the entire test suite or the `tests/e2e/joomla.cy.js` test spec.
 
@@ -39,7 +40,7 @@ if you start by running the entire test suite or the `tests/e2e/joomla.cy.js` te
 
 ### Installation
 
-Install the JavaScript dependencies:
+Clone the NPM module and install the JavaScript dependencies:
 ```
 git clone https://github.com/joomla-projects/joomla-cypress
 cd joomla-cypress
@@ -56,9 +57,9 @@ cp tests/cypress.config.dist.mjs tests/cypress.config.mjs
 Adapt the environment variables in the file `cypress.config.mjs`,
 they should point to the site, user data and database environment.
 Most configurations are the same as with Joomla System Tests `cypress.config.mjs` file.
-Additional variables are
-* `installationPath` contains the file system path to your Joomla installation
-  (used to delete the `configuration.php` file before installing Joomla)
+Additional variables are:
+* `installationPath` contains the absolute file system path to the Joomla `joomla-cms` directory
+  (used to delete the `configuration.php` file before installing Joomla).
 * `instance` specifies the Joomla major and minor version number, e.g. `53` for Joomla 5.3.
 
 ### Tests
@@ -85,7 +86,7 @@ Running tests with local Cypress GUI:
 npm run open
 ```
 
-## Running the tests using JBT
+## Running the Tests Using JBT
 
 JBT has integrated the testing of the NPM module `joomla-cypress`.
 In the `installation/joomla-cypress` directory the latest main branch version is already installed.
@@ -136,12 +137,12 @@ CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
 
 1. Ensure that you have installed the version of `joomla-cypress` to be tested 
    and patched if necessary.
-2. If one test step fails, the target Joomla installation may reach a state
+2. If one test step fails, the Joomla installation may reach a state
    causes subsequent tests to fail. Dependecies include
    deleting Joomla `installation` folder, deleting the `configuration.php` file,
    cancelling guided tours and disabling Joomla statistics.
-   In such cases open the target Joomla installation administration
-   to investigate or reinstall the target Joomla sources.
+   In such cases open the Joomla installation administration
+   to investigate or reinstall the Joomla sources.
 3. For failed tests you can inspect the screenshots in `tests/screenshots` folder or
    run Cypresss GUI to observe the issue.
 4. If the `installExtensionFromFolder()` test fails as the Joomla web server cannot
