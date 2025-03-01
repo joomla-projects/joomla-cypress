@@ -236,7 +236,7 @@ cy.installJoomla(config)
 - **`config`** *(object)*: Configuration object containing sitename, name, username, password, email,
   db_type, db_host, db_port, db_user, db_password, db_name and db_prefix.
 
-:point_right: The use of `db_port` for a non-standard database port currently (August 2024) only works for MariaDB and MySQL.
+:point_right: Using the `db_port` option to specify a non-standard database port is supported for MariaDB and MySQL, as well as for PostgreSQL when using Joomla 5.3 or later.
 
 ##### Example
 
@@ -283,7 +283,7 @@ cy.installJoomlaMultilingualSite(config, languages)
   db_type, db_host, db_port, db_user, db_password, db_name and db_prefix.
 - **`languages`** *(string[], optional, default: ["French"])*: Array of additional languages to be installed.
 
-:point_right: The use of `db_port` for a non-standard database port currently (August 2024) only works for MariaDB and MySQL.
+:point_right: Using the `db_port` option to specify a non-standard database port is supported for MariaDB and MySQL, as well as for PostgreSQL when using Joomla 5.3 or later.
 
 ##### Example
 
