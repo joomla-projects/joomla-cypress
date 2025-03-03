@@ -8,11 +8,12 @@
 function doInstallation(config) {
   // Load installation page and check for language dropdown
   cy.visit('installation/index.php')
+  cy.get('#languageForm button').click()
   cy.get('#jform_language').should('be.visible')
 
   // Select en-GB as installation language
   cy.get('#jform_language').select('en-GB')
-  cy.get('#jform_language-lbl').should('contain', 'Select Language')
+  cy.get('#step1').should('contain', 'Setup Login Data')
 
   // Fill Sitename
   cy.get('#jform_site_name').type(config.sitename)
