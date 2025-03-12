@@ -55,7 +55,7 @@ describe("Test the Cypress custom commands from 'joomla.js' file", () => {
   });
 
   /*
-   * For develpment branches with not yet released Joomla versions there are no
+   * For development branches with not yet released Joomla versions there are no
    * language packages available and installation will fail with 'Unable to detect manifest file.'.
    * Testing this spec can be prevented with 'export CYPRESS_SKIP_INSTALL_LANGUAGES=1'.
    */

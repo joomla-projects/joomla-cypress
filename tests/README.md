@@ -119,7 +119,7 @@ without the `installLanguage` and `installJoomlaMultilingualSite` tests,
 if the language package is not yet available, on Unix-based systems:
 
 ```
-CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/test 53 60 joomla-cypress 
+CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/test 53 60 joomla-cypress
 ```
 
 Running tests with local Cypress GUI, e.g. on macOS or Linux:
@@ -135,10 +135,10 @@ CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
 
 # Troubleshooting
 
-1. Ensure that you have installed the version of `joomla-cypress` to be tested 
+1. Ensure that you have installed the version of `joomla-cypress` to be tested
    and patched if necessary.
 2. If one test step fails, the Joomla installation may reach a state
-   causes subsequent tests to fail. Dependecies include
+   causes subsequent tests to fail. Dependencies include
    deleting Joomla `installation` folder, deleting the `configuration.php` file,
    cancelling guided tours and disabling Joomla statistics.
    In such cases open the Joomla installation administration
@@ -146,7 +146,7 @@ CYPRESS_SKIP_INSTALL_LANGUAGES=1 scripts/cypress 60 joomla-cypress
 3. For failed tests you can inspect the screenshots in `tests/screenshots` folder or
    run Cypresss GUI to observe the issue.
 4. If the `installExtensionFromFolder()` test fails as the Joomla web server cannot
-   find the `mod_hello_world` package folder, set the folder with the enviroment
+   find the `mod_hello_world` package folder, set the folder with the environment
    variable `CYPRESS_SERVER_UPLOAD_FOLDER`. For example on Unix-based systems:
    ```
    export CYPRESS_SERVER_UPLOAD_FOLDER=/users/alice/joomla-cypress/tests/fixtures/mod_hello_world

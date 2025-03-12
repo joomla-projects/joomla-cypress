@@ -182,7 +182,7 @@ const extensionsCommands = () => {
     // as we have styled dropdown, not simple: cy.get('#jform_position').select(position)
     // 1st click the (not visible) dropdown to open it
     cy.get('joomla-field-fancy-select').click({force: true});
-    // 2nd select the desired (not visable) option from the dropdown
+    // 2nd select the desired (not visible) option from the dropdown
     cy.contains(position).click({force: true});
 
     // cy.get('#toolbar-dropdown-save-group .button-save').click()

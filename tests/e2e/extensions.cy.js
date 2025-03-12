@@ -75,7 +75,7 @@ describe("Test the Cypress custom commands from 'extensions.js' file", () => {
   });
 
   /*
-   * For develpment branches with not yet released Joomla versions there are no
+   * For development branches with not yet released Joomla versions there are no
    * language packages available and installation will fail with 'Unable to detect manifest file.'.
    * Testing this spec can be prevented with 'export CYPRESS_SKIP_INSTALL_LANGUAGES=1'.
    */
@@ -89,7 +89,7 @@ describe("Test the Cypress custom commands from 'extensions.js' file", () => {
 
   it('enablePlugin()', () => {
     const pluginName = 'Authentication - LDAP';
-    // Enabling only works once, so just in case we disbale first
+    // Enabling only works once, so just in case we disable first
     cy.visit('/administrator/index.php?option=com_plugins');
     cy.searchForItem(pluginName);
     cy.get('#cb0').click();
