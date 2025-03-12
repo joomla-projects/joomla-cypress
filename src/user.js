@@ -59,7 +59,7 @@ const userCommands = () => {
 
 
   /**
-   * Do frontent logout
+   * Do frontend logout
    *
    * @memberof cy
    * @method doFrontendLogin
