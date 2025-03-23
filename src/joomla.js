@@ -11,8 +11,17 @@ function doInstallation(config) {
   cy.get('#jform_language').should('be.visible')
 
   // Select en-GB as installation language
-  cy.get('#jform_language').select('en-GB')
-  cy.get('#jform_language-lbl').should('contain', 'Select Language')
+  cy.get('body').then($body => {
+    // Joomla >= 6.0 – Open minimised language selector
+    if ($body.find('button[data-joomla-dialog]').length > 0) {
+      cy.get('button[data-joomla-dialog]').click({ force: true })
+      cy.get('#jform_language').should('be.visible').select('en-GB')
+      cy.get('button[data-button-close]').click({ force: true })
+    } else {
+      // Joomla < 6.0
+      cy.get('#jform_language').should('be.visible').select('en-GB')
+    }
+  })
 
   // Fill Sitename
   cy.get('#jform_site_name').type(config.sitename)
