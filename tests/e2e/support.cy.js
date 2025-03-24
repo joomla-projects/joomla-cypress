@@ -25,7 +25,7 @@ describe("Test the Cypress custom commands from 'support.js' file", () => {
     cy.get('#jform_title').clear().type(testArticle);
     cy.clickToolbarButton('Save');
     cy.clickToolbarButton('Versions');
-    cy.get('.joomla-dialog-header').should('contain.text', 'Versions');
+    cy.contains('h3', 'Versions').should('exist');
     // Delete the test article, to clean-up and confirming once again that it was created with clickToolbarButton()
     cy.visit('/administrator/index.php?option=com_content&view=articles');
     cy.searchForItem(testArticle);
