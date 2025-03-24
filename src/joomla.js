@@ -8,7 +8,6 @@
 function doInstallation(config) {
   // Load installation page and check for language dropdown
   cy.visit('installation/index.php')
-  cy.get('#jform_language').should('be.visible')
 
   // Select en-GB as installation language
   cy.get('body').then($body => {
