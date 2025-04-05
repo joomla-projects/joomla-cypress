@@ -35,6 +35,61 @@ const userCommands = () => {
 
   Cypress.Commands.add('doAdministratorLogin', doAdministratorLogin)
 
+  /**
+   * Get Form Token
+   *
+   * @param {string} formid
+   * @param {string} password
+   * @param {boolean} useSnapshot
+   * @returns string
+   */
+  const getFormToken = (formid, body) => {
+    const $html = Cypress.$(body)
+    const token = $html.find('#' + formid).find('input:hidden[value="1"]').attr('name')
+    return token
+  }
+
+  /**
+   * Do administrator login by form without GUI
+   *
+   * @memberof cy
+   * @method doAdministratorLoginByForm
+   * @param {string} user
+   * @param {string} password
+   * @param {boolean} useSnapshot
+   * @returns Chainable
+   */
+  const doAdministratorLoginByForm = (user, password, useSnapshot = true) => {
+    user = user ? user : Cypress.env('username')
+    password = password ? password : Cypress.env('password')
+
+    Cypress.log({
+      name: 'AdministratorLoginByForm',
+      message: `AdministratorLoginByForm | user: ${user} | password: ${password}`,
+    })
+
+    if (useSnapshot) {
+      return cy.session([user, password, 'back2'], () => cy.doAdminLoginByForm(user, password, false), { cacheAcrossSpecs: true })
+    }
+
+    cy.request('GET', '/administrator/index.php?option=com_login')
+    .its('body')
+    .then((body) => {
+      const token = getFormToken('form-login', body)
+      return cy.request({
+        method: 'POST',
+        url: '/administrator/index.php?option=com_login&task=login',
+        form: true,
+        body: {
+          username: user,
+          passwd: password,
+          [token]: '1',
+        },
+      })
+    })
+  }
+
+  Cypress.Commands.add('doAdministratorLoginByForm', doAdministratorLoginByForm)
 
   /**
    * Do administrator logout
