@@ -11,8 +11,8 @@ const userCommands = () => {
    * @returns Chainable
    */
   const doAdministratorLogin = (user, password, useSnapshot = true) => {
-    user = user ? user : Cypress.env('username')
-    password = password ? password : Cypress.env('password')
+    user = user ? user : Cypress.expose('username')
+    password = password ? password : Cypress.expose('password')
 
     cy.log('**Do administrator login**')
     cy.log('User: ' + user)
@@ -69,8 +69,8 @@ const userCommands = () => {
    * @returns Chainable
    */
   const doFrontendLogin = (user, password, useSnapshot = true) => {
-    user = user ? user : Cypress.env('username')
-    password = password ? password : Cypress.env('password')
+    user = user ? user : Cypress.expose('username')
+    password = password ? password : Cypress.expose('password')
 
     cy.log('**Do frontend login**')
     cy.log('User: ' + user)

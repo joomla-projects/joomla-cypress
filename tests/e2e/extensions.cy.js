@@ -20,7 +20,7 @@ const modHelloWorld = 'mod_hello_world';
 describe("Test the Cypress custom commands from 'extensions.js' file", () => {
   it('installExtensionFromFolder()', () => {
     // Install the extension using 'CYPRESS_SERVER_UPLOAD_FOLDER' environment variable
-    let serverUploadFolder = Cypress.env('SERVER_UPLOAD_FOLDER');
+    let serverUploadFolder = Cypress.expose('SERVER_UPLOAD_FOLDER');
     if (!serverUploadFolder) {
       // Fallback to using the fixtures folder
       serverUploadFolder = `${Cypress.config('fixturesFolder')}/${modHelloWorld}`;
@@ -79,7 +79,7 @@ describe("Test the Cypress custom commands from 'extensions.js' file", () => {
    * language packages available and installation will fail with 'Unable to detect manifest file.'.
    * Testing this spec can be prevented with 'export CYPRESS_SKIP_INSTALL_LANGUAGES=1'.
    */
-  if (!Cypress.env('SKIP_INSTALL_LANGUAGES')) {
+  if (!Cypress.expose('SKIP_INSTALL_LANGUAGES')) {
     it('installLanguage()', () => {
       // Grüezi mitenand id Schwiiz
       cy.installLanguage('de-CH');

@@ -80,8 +80,8 @@ cy.doAdministratorLogin(user, password, useSnapshot)
 
 ##### Arguments
 
-- **`user`** *(string, optional, default: `Cypress.env('username')`)*: The username for logging in.
-- **`password`** *(string, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`user`** *(string, optional, default: `Cypress.expose('username')`)*: The username for logging in.
+- **`password`** *(string, optional, default: `Cypress.expose('password')`)*: The password for logging in.
 - **`useSnapshot`** *(boolean, optional, default: `true`)*:
   Boolean flag to determine if this users backend login session should be cached across specs.
 
@@ -141,8 +141,8 @@ cy.doFrontendLogin(user, password, useSnapshot)
 
 ##### Arguments
 
-- **`user`** *(string, optional, default: `Cypress.env('username')`)*: The user name for logging in.
-- **`password`** *(string, optional, default: `Cypress.env('password')`)*: The password for logging in.
+- **`user`** *(string, optional, default: `Cypress.expose('username')`)*: The user name for logging in.
+- **`password`** *(string, optional, default: `Cypress.expose('password')`)*: The password for logging in.
 - **`useSnapshot`** *(boolean, optional, default: `true`)*:
   Boolean flag to determine if this users frontend login session should be cached across specs.
 
@@ -152,7 +152,7 @@ cy.doFrontendLogin(user, password, useSnapshot)
 // Checks the welcome message with the user's name
 cy.doFrontendLogin()
   .visit("/")
-  .contains(`Hi ${Cypress.env('name')}`).should('be.visible');
+  .contains(`Hi ${Cypress.expose('name')}`).should('be.visible');
 ```
 
 ---
@@ -757,7 +757,7 @@ cy.setFilter(name, value)
 In the following example, the list of user entries is filtered to "State: Activated":
 
 ```javascript
-// Using 'username' and 'password' from Cypress.env()
+// Using 'username' and 'password' from Cypress.expose()
 cy.doAdministratorLogin()
   // Open user list
   .visit('/administrator/index.php?option=com_users')
