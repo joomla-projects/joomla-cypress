@@ -59,7 +59,7 @@ describe("Test the Cypress custom commands from 'joomla.js' file", () => {
    * language packages available and installation will fail with 'Unable to detect manifest file.'.
    * Testing this spec can be prevented with 'export CYPRESS_SKIP_INSTALL_LANGUAGES=1'.
    */
-  if (!Cypress.env('SKIP_INSTALL_LANGUAGES')) {
+  if (!Cypress.expose('SKIP_INSTALL_LANGUAGES')) {
     /*
      * This must be the final Joomla installation test, as it deletes the installation folder.
      * The Joomla installation folder must be restored before the next test run.
